@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElizaOS SADS Panel</title>
+    <style>
+        body {
+            font-family: var(--vscode-font-family);
+            color: var(--vscode-editor-foreground);
+            background-color: var(--vscode-editor-background);
+            padding: 1em;
+        }
+        .message-container {
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 4px;
+        }
+        .user-message {
+            background-color: var(--vscode-list-activeSelectionBackground);
+            color: var(--vscode-list-activeSelectionForeground);
+            text-align: right;
+        }
+        .agent-message {
+            background-color: var(--vscode-editorWidget-background);
+            border: 1px solid var(--vscode-editorWidget-border);
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background-color: var(--vscode-textCodeBlock-background);
+            padding: 0.5em;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>ElizaOS Agent Interaction</h1>
+    <div id="chat-history">
+        <!-- Messages will be appended here -->
+        <div class="message-container agent-message">Welcome to the ElizaOS IDE Liaison. Select code and use the context menu or command palette to interact with agents.</div>
+    </div>
+
+    <script>
+        const vscode = acquireVsCodeApi();
+        const chatHistory = document.getElementById('chat-history');
+
+        window.addEventListener('message', event => {
+            const message = event.data; // The json data that the extension sent
+            switch (message.type) {
+                case 'addMessage':
+                    const messageDiv = document.createElement('div');
+                    messageDiv.classList.add('message-container');
+                    if (message.isAgent) {
+                        messageDiv.classList.add('agent-message');
+                        messageDiv.innerHTML = \`<strong>\${message.sender || 'Agent'}:</strong><pre>\${escapeHtml(message.content)}</pre>\`;
+                    } else {
+                        messageDiv.classList.add('user-message');
+                        messageDiv.innerHTML = \`<strong>You:</strong><pre>\${escapeHtml(message.content)}</pre>\`;
+                    }
+                    chatHistory.appendChild(messageDiv);
+                    chatHistory.scrollTop = chatHistory.scrollHeight; // Scroll to bottom
+                    break;
+            }
+        });
+
+        function escapeHtml(unsafe) {
+            if (typeof unsafe !== 'string') {
+                try {
+                    unsafe = JSON.stringify(unsafe, null, 2);
+                } catch (e) {
+                    unsafe = String(unsafe);
+                }
+            }
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // Example: Post a message to the extension
+        // vscode.postMessage({ command: 'alert', text: 'Hello from webview' });
+    </script>
+</body>
+</html>
