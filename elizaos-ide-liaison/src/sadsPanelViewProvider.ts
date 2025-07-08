@@ -39,6 +39,7 @@ export class SadsPanelViewProvider implements vscode.WebviewViewProvider {
         // vscode.commands.executeCommand('elizaos-ide-liaison.sadsPanelReady');
 
         this.postMessageToPanel({
+            type: 'addMessage',
             content: "Welcome! Select code and use context menus or commands to interact with ElizaOS agents.",
             isInfo: true, // This will use the 'info-message' styling
             sender: "System"
@@ -153,17 +154,17 @@ export class SadsPanelViewProvider implements vscode.WebviewViewProvider {
         switch (mcpMessage.performative) {
             case "ACCEPT":
                 panelContent = `Task accepted by ${mcpMessage.sender}. Conversation ID: ${mcpMessage.conversation_id}`;
-                this.postMessageToPanel({ content: panelContent, isAgent: true, sender: mcpMessage.sender, isInfo: true });
+                this.postMessageToPanel({ type: 'addMessage', content: panelContent, isAgent: true, sender: mcpMessage.sender, isInfo: true });
                 this._currentConversationId = mcpMessage.conversation_id;
                 break;
             case "REJECT":
                 panelContent = `Task rejected by ${mcpMessage.sender}. Reason: ${mcpMessage.error?.message || 'No reason provided.'}`;
-                this.postMessageToPanel({ content: panelContent, isAgent: true, sender: mcpMessage.sender, isError: true });
+                this.postMessageToPanel({ type: 'addMessage', content: panelContent, isAgent: true, sender: mcpMessage.sender, isError: true });
                 this._currentConversationId = null;
                 break;
             case "FAILURE":
                 panelContent = `Task failed for agent ${mcpMessage.sender}. Error: ${mcpMessage.error?.message || 'Unknown error.'}`;
-                this.postMessageToPanel({ content: panelContent, isAgent: true, sender: mcpMessage.sender, isError: true });
+                this.postMessageToPanel({ type: 'addMessage', content: panelContent, isAgent: true, sender: mcpMessage.sender, isError: true });
                 this._currentConversationId = null;
                 break;
             case "INFORM_RESULT":
