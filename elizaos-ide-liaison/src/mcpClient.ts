@@ -154,7 +154,7 @@ export class McpClient {
                 return null;
             }
 
-            const responseData: McpMessage = await response.json();
+            const responseData = await response.json() as McpMessage;
             console.log('MCP Client: Received immediate response:', JSON.stringify(responseData, null, 2));
             // This immediate response could be ACCEPT, REJECT, or even a quick INFORM_RESULT.
             // The EventSource will handle subsequent messages like INFORM_RESULT for long-running tasks.

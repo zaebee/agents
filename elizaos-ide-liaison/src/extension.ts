@@ -44,7 +44,7 @@ export function activate(context: vscode.ExtensionContext) {
         const codingAgentId = mcpClient.getCodingAgentId();
         const userQuery = `Explain the following ${editor.document.languageId} code:\n\`\`\`${editor.document.languageId}\n${selectedText}\n\`\`\``;
 
-        sadsProvider.postMessageToPanel({ content: userQuery, isAgent: false });
+        sadsProvider.postMessageToPanel({ type: 'addMessage', content: userQuery, isAgent: false });
 
         const payload: ExplainCodePayload = {
             code_snippet: selectedText,
@@ -62,7 +62,7 @@ export function activate(context: vscode.ExtensionContext) {
                 sadsProvider.setCurrentConversationId(null);
             }
         } else {
-             sadsProvider.postMessageToPanel({ content: `Failed to send request to ${codingAgentId}. Check console for errors.`, isError: true, sender: "System" });
+              sadsProvider.postMessageToPanel({ type: 'addMessage', content: `Failed to send request to ${codingAgentId}. Check console for errors.`, isError: true, sender: "System" });
              sadsProvider.setCurrentConversationId(null);
         }
     });
@@ -82,7 +82,7 @@ export function activate(context: vscode.ExtensionContext) {
 
         const docsAgentId = mcpClient.getDocsAgentId();
         const userQuery = `Find documentation for: ${selectedText}`;
-        sadsProvider.postMessageToPanel({ content: userQuery, isAgent: false });
+        sadsProvider.postMessageToPanel({ type: 'addMessage', content: userQuery, isAgent: false });
 
         const payload: GetDocumentationPayload = {
             code_snippet: selectedText,
@@ -100,7 +100,7 @@ export function activate(context: vscode.ExtensionContext) {
                 sadsProvider.setCurrentConversationId(null);
             }
         } else {
-            sadsProvider.postMessageToPanel({ content: `Failed to send request to ${docsAgentId}. Check console for errors.`, isError: true, sender: "System" });
+            sadsProvider.postMessageToPanel({ type: 'addMessage', content: `Failed to send request to ${docsAgentId}. Check console for errors.`, isError: true, sender: "System" });
             sadsProvider.setCurrentConversationId(null);
        }
     });
@@ -120,7 +120,7 @@ export function activate(context: vscode.ExtensionContext) {
 
         const codingAgentId = mcpClient.getCodingAgentId();
         const userQuery = `Suggest refactorings for the following ${editor.document.languageId} code snippet:\n\`\`\`${editor.document.languageId}\n${selectedText}\n\`\`\``;
-        sadsProvider.postMessageToPanel({ content: userQuery, isAgent: false });
+        sadsProvider.postMessageToPanel({ type: 'addMessage', content: userQuery, isAgent: false });
 
         const payload: RefactorSuggestionPayload = {
             code_snippet: selectedText,
@@ -141,7 +141,7 @@ export function activate(context: vscode.ExtensionContext) {
             }
         } else {
             // Network error or client-side issue before sending
-            sadsProvider.postMessageToPanel({ content: `Failed to send refactor request to ${codingAgentId}. Check console.`, isError: true, sender: "System" });
+            sadsProvider.postMessageToPanel({ type: 'addMessage', content: `Failed to send refactor request to ${codingAgentId}. Check console.`, isError: true, sender: "System" });
             sadsProvider.setCurrentConversationId(null);
         }
     });

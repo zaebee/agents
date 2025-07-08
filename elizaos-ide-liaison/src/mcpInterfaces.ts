@@ -70,9 +70,11 @@ export interface RefactorSuggestion {
 
 // For communication with the SADS Panel Webview
 export interface PanelMessage {
-    type: string;
+    type: 'addMessage' | 'clearPanel'; // Specific types of messages to the panel
     requestId?: string; // To correlate requests and responses
     content?: any;
     isAgent?: boolean;
     sender?: string;
+    isError?: boolean; // Optional flag for error styling
+    isInfo?: boolean;  // Optional flag for info styling
 }

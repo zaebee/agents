@@ -131,7 +131,8 @@ export class SadsPanelViewProvider implements vscode.WebviewViewProvider {
     public postMessageToPanel(panelMessage: PanelMessage) {
         if (this._view) {
             this._view.show(true); // Make sure the view is visible
-            this._view.webview.postMessage({ type: 'addMessage', ...panelMessage });
+            // panelMessage already includes the 'type' property.
+            this._view.webview.postMessage(panelMessage);
         } else {
             vscode.window.showWarningMessage("ElizaOS Panel not available to display message.");
             console.warn("SADS Panel: Attempted to post message, but view is not available.", panelMessage);
@@ -171,7 +172,7 @@ export class SadsPanelViewProvider implements vscode.WebviewViewProvider {
                     // For now, we'll display it, but ideally, the panel might manage multiple conversations or focus.
                 }
                 panelContent = mcpMessage.payload; // Payload is expected to be the content to display.
-                this.postMessageToPanel({ content: panelContent, isAgent: true, sender: mcpMessage.sender });
+                this.postMessageToPanel({ type: 'addMessage', content: panelContent, isAgent: true, sender: mcpMessage.sender });
                 this._currentConversationId = null; // Conversation considered ended after result.
                 break;
             default:
