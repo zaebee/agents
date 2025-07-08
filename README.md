@@ -8,21 +8,22 @@ This repository contains configuration files for AI agents, Eddy and Eliza, desi
 
 ## Files
 
--   `Eddy.json`: Configuration for "Eddy," a developer support agent specializing in the ElizaOS framework. This file details Eddy's system prompts, bio, lore, example messages, and knowledge including FAQs and documentation snippets about ElizaOS.
--   `Eliza.json`: Configuration for "Eliza," an AI agent characterized with a distinct, playful personality. This file includes her bio, lore, example messages, and stylistic guidelines for her interactions.
--   `Jules.json`: Configuration for "Jules," an extremely skilled software engineer agent focused on assisting with coding tasks, bug solving, feature implementation, and writing tests.
--   `LICENSE`: The project is licensed under the MIT License.
+- `Eddy.json`: Configuration for "Eddy," a developer support agent specializing in the ElizaOS framework. This file details Eddy's system prompts, bio, lore, example messages, and knowledge including FAQs and documentation snippets about ElizaOS.
+- `Eliza.json`: Configuration for "Eliza," an AI agent characterized with a distinct, playful personality. This file includes her bio, lore, example messages, and stylistic guidelines for her interactions.
+- `Jules.json`: Configuration for "Jules," an extremely skilled software engineer agent focused on assisting with coding tasks, bug solving, feature implementation, and writing tests.
+- `LICENSE`: The project is licensed under the MIT License.
 
 ## Purpose
 
 The JSON files in this repository serve as blueprints for initializing and running AI agents within the ElizaOS ecosystem. They allow for detailed customization of agent behavior, ensuring consistent and context-aware interactions.
 
 Key information within these files includes:
-*   **Agent Persona:** System prompts, biographical details, and lore.
-*   **Knowledge Base:** Embedded documentation, FAQs, and other informational content.
-*   **Interaction Style:** Guidelines for tone, language, and response types.
-*   **Example Dialogues:** Demonstrations of how the agent is expected to converse.
-*   **Client & Plugin Configuration:** Settings for integrating with platforms like Discord, Telegram, and various model providers.
+
+- **Agent Persona:** System prompts, biographical details, and lore.
+- **Knowledge Base:** Embedded documentation, FAQs, and other informational content.
+- **Interaction Style:** Guidelines for tone, language, and response types.
+- **Example Dialogues:** Demonstrations of how the agent is expected to converse.
+- **Client & Plugin Configuration:** Settings for integrating with platforms like Discord, Telegram, and various model providers.
 
 ## Usage
 
@@ -50,6 +51,7 @@ For detailed and accurate usage instructions, please refer to the official [Eliz
 This project includes a conceptual Proof of Concept demonstrating how agents like Eddy and Jules can collaborate on tasks. The PoC outlines a scenario where Eddy delegates a specialized coding task to Jules.
 
 **Scenario:**
+
 1. A user asks Eddy for help with a complex coding bug.
 2. Eddy identifies that Jules is better suited for this task.
 3. Eddy sends a `TASK_REQUEST` to Jules.
@@ -61,6 +63,7 @@ This project includes a conceptual Proof of Concept demonstrating how agents lik
 The interaction uses a simplified protocol with messages like `TASK_REQUEST`, `TASK_ACCEPT`, and `INFORM_RESULT`.
 
 **Interaction Flow:**
+
 ```mermaid
 sequenceDiagram
     participant User
@@ -127,10 +130,11 @@ Here's a glimpse of how these agents might interact:
 Contributions to this project are highly welcome! Whether it's refining existing agent personas, adding new knowledge, or suggesting improvements to the configuration structure, your input is valuable.
 
 We encourage contributors to:
-*   **Maintain Consistency:** Ensure that changes align with the established personalities and purposes of the agents.
-*   **Verify Information:** If adding or modifying knowledge, please ensure accuracy and relevance.
-*   **Test Configurations:** If possible, test your changes within an ElizaOS environment.
-*   **Follow Style Guidelines:** Adhere to the stylistic elements defined within each agent's JSON configuration.
+
+- **Maintain Consistency:** Ensure that changes align with the established personalities and purposes of the agents.
+- **Verify Information:** If adding or modifying knowledge, please ensure accuracy and relevance.
+- **Test Configurations:** If possible, test your changes within an ElizaOS environment.
+- **Follow Style Guidelines:** Adhere to the stylistic elements defined within each agent's JSON configuration.
 
 For more detailed contribution guidelines, please see `CONTRIBUTING.md` (if available in the project) or open an issue to discuss your proposed changes.
 
