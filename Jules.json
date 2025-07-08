@@ -70,32 +70,79 @@
       {
         "user": "Eddy",
         "content": {
-          "text": "TASK_REQUEST: User {{user1}} needs help with an IndexError in a Python script for parsing log files. Can you take a look?",
-          "payload": {
-            "task_id": "[placeholder_task_id]",
-            "ontology": "elizaos:debug_python_code",
-            "description": "User reports an IndexError in their Python script for parsing log files.",
-            "user_query": "Hey Eddy, I've got this Python script that keeps throwing an IndexError, but I can't nail down the cause. It's for parsing some log files. Can you help me debug it?"
+          "text": "MCP Message (Simulated Reception)",
+          "mcp_message_content": {
+            "mcp_version": "0.1.0",
+            "message_id": "msg_eddy_to_jules_001",
+            "performative": "TASK_REQUEST",
+            "sender": { "agent_id": "Eddy" },
+            "receiver": { "agent_id": "Jules" },
+            "reply_with": "task_reply_001",
+            "language": "application/json",
+            "ontology": "elizaos:ontology:code/python/debug_request",
+            "timestamp": "YYYY-MM-DDTHH:MM:SSZ",
+            "payload": {
+              "task_type": "debug_code",
+              "task_description": "User {{user1}} needs help with an IndexError in a Python script for parsing log files.",
+              "task_parameters": {
+                "code_to_debug": "User has not provided code yet, but mentioned it's a Python script for parsing log files.",
+                "programming_language": "python",
+                "error_log": "IndexError",
+                "desired_outcome": "Identify and fix the bug, or provide analysis."
+              },
+              "priority": "medium"
+            }
           }
         }
       },
       {
         "user": "Jules",
         "content": {
-          "text": "TASK_ACCEPT: Received task [placeholder_task_id] from Eddy. I will analyze the Python IndexError issue.",
+          "text": "MCP Message (Simulated Sending of TASK_ACCEPT)",
           "actions": ["EXECUTE_DELEGATED_CODING_TASK"],
-          "thought": "Received delegation from Eddy. Priority: High. Problem: Python IndexError. Action: Analyze, formulate solution, report back to Eddy."
+          "thought": "Received TASK_REQUEST msg_eddy_to_jules_001 from Eddy. The task is to debug a Python IndexError. I will accept the task and then begin analysis. I need to ask the user (via Eddy) for the code and traceback.",
+          "mcp_message_content": {
+            "mcp_version": "0.1.0",
+            "message_id": "msg_jules_to_eddy_002",
+            "performative": "TASK_ACCEPT",
+            "sender": { "agent_id": "Jules" },
+            "receiver": { "agent_id": "Eddy" },
+            "in_reply_to": "msg_eddy_to_jules_001",
+            "language": "application/json",
+            "ontology": "elizaos:ontology:general/task_acceptance",
+            "timestamp": "YYYY-MM-DDTHH:MM:SSZ",
+            "payload": {
+              "status": "accepted",
+              "task_id_assigned": "jules_task_debug_001",
+              "comments": "Beginning analysis of Python IndexError. Will require code and traceback from user."
+            }
+          }
         }
       },
       {
         "user": "Jules",
         "content": {
-          "text": "INFORM_RESULT to Eddy for task [placeholder_task_id]: The IndexError is likely caused by attempting to access a list element with an out-of-range index, possibly in a loop processing log lines. Advise user to check list boundaries, ensure the list is populated as expected before access, and verify loop termination conditions. If they provide the code snippet and traceback, I can give a more precise diagnosis.",
-          "payload": {
-            "status": "success",
-            "summary": "IndexError likely due to out-of-bounds list access during log parsing.",
-            "explanation": "Common causes for IndexError in this context include empty lists, incorrect index calculations in loops, or unexpected log file formats leading to fewer elements than anticipated. User should verify data structures before access and use try-except blocks for robust error handling.",
-            "request_for_user": "Please provide the specific code snippet where the error occurs and the full traceback for a more detailed analysis."
+          "text": "MCP Message (Simulated Sending of INFORM_RESULT)",
+          "thought": "Analysis complete for jules_task_debug_001. The IndexError is likely caused by attempting to access a list element with an out-of-range index. I will provide initial guidance and request more information.",
+          "mcp_message_content": {
+            "mcp_version": "0.1.0",
+            "message_id": "msg_jules_to_eddy_003",
+            "performative": "INFORM_RESULT",
+            "sender": { "agent_id": "Jules" },
+            "receiver": { "agent_id": "Eddy" },
+            "in_reply_to": "msg_eddy_to_jules_001", // Responding to the original task request
+            "language": "application/json",
+            "ontology": "elizaos:ontology:code/python/debug_analysis", // Could be solution_provided if fixed
+            "timestamp": "YYYY-MM-DDTHH:MM:SSZ",
+            "payload": {
+              "task_status": "partial_success", // Analysis provided, but code/fix pending user input
+              "result_summary": "Initial analysis of Python IndexError complete. Likely out-of-bounds list access.",
+              "result_details": {
+                "analysis": "IndexError in Python scripts, especially for log parsing, often occurs when trying to access list elements using an index that is outside the valid range (e.g., accessing list[i] when i is >= len(list) or list is empty). This can happen if log lines are split incorrectly, or if assumptions about the number of fields per log line are not met. The user should verify list lengths before access, check loop conditions, and ensure any string splitting or parsing logic correctly handles various log line formats.",
+                "request_for_user_via_eddy": "To provide a specific fix, please ask the user to provide the Python code snippet where the IndexError occurs, along with the full error traceback."
+              },
+              "artifacts": []
+            }
           }
         }
       }
@@ -146,25 +193,28 @@
         "handle coding request",
         "work on delegated bug"
       ],
-      "description": "Receives a TASK_REQUEST, typically from another agent like Eddy. Analyzes the coding problem, performs the necessary work (debugging, implementation, etc.), and formulates an INFORM_RESULT message back to the requester.",
+      "description": "Receives an MCP TASK_REQUEST message, typically from another agent like Eddy. It then 'sends' (logs for PoC) a TASK_ACCEPT message. After analyzing the coding problem and performing the necessary work (debugging, implementation, etc.), it formulates and 'sends' (logs for PoC) an INFORM_RESULT message back to the original requester.",
       "examples": [
         [
           {
             "user": "Eddy",
             "content": {
-              "text": "TASK_REQUEST: User needs help with Python IndexError.",
-              "payload": {
-                "task_id": "xyz123",
-                "description": "User has Python IndexError"
+              "text": "MCP Message (Simulated Reception of TASK_REQUEST)",
+              "mcp_message_content": {
+                "performative": "TASK_REQUEST",
+                "payload": { "task_type": "debug_code", "task_parameters": { "error_log": "IndexError" } }
               }
             }
           },
           {
             "user": "Jules",
             "content": {
-              "text": "TASK_ACCEPT: Task xyz123 accepted. Analyzing IndexError.",
+              "text": "MCP Message (Simulated Sending of TASK_ACCEPT)",
               "actions": ["EXECUTE_DELEGATED_CODING_TASK"],
-              "thought": "Received task xyz123. Will analyze and report back."
+              "thought": "Received TASK_REQUEST. Will accept and then analyze.",
+              "mcp_message_content": {
+                "performative": "TASK_ACCEPT"
+              }
             }
           }
         ]

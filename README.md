@@ -46,62 +46,69 @@ elizaos project start --agents "Eddy.json,Eliza.json,Jules.json"
 
 For detailed and accurate usage instructions, please refer to the official [ElizaOS Documentation](https://eliza.how/docs/quickstart). <!-- Placeholder link -->
 
-## Agent Collaboration Proof of Concept (PoC)
+## Advanced Agent Collaboration Proof of Concept (PoC)
 
-This project includes a conceptual Proof of Concept demonstrating how agents like Eddy and Jules can collaborate on tasks. The PoC outlines a scenario where Eddy delegates a specialized coding task to Jules.
+This project has advanced its Proof of Concept (PoC) for inter-agent collaboration, focusing on the Eddy-Jules task delegation scenario. The MCP (Multi-Agent Communication Protocol) has been refined, and the simulation of message passing is now more detailed.
 
-**Scenario:**
+**Key Developments in this PoC Phase:**
 
-1. A user asks Eddy for help with a complex coding bug.
-2. Eddy identifies that Jules is better suited for this task.
-3. Eddy sends a `TASK_REQUEST` to Jules.
-4. Jules sends a `TASK_ACCEPT` to Eddy and processes the request.
-5. Jules sends an `INFORM_RESULT` back to Eddy with the solution or findings.
-6. Eddy relays this information to the user.
+1.  **Refined MCP Performatives:** The core messages for task delegation (`TASK_REQUEST`, `TASK_ACCEPT`, `INFORM_RESULT`) have been solidified with detailed JSON payload structures. Specific ontology terms (e.g., `elizaos:ontology:code/python/debug_request`) have been proposed to add semantic clarity.
+2.  **Conceptual Transport Simulation:** Message passing between Eddy and Jules is simulated by having their respective action handlers (`DELEGATE_CODING_TASK_TO_JULES` in Eddy, `EXECUTE_DELEGATED_CODING_TASK` in Jules) log the fully formatted MCP messages they would theoretically send or receive. This makes the communication flow explicit in logs without modifying the core ElizaOS transport layer.
+3.  **Updated Agent Configurations:** `Eddy.json` and `Jules.json` have been updated. Their `messageExamples` and `actions` now reflect the refined MCP messages and the logging-based simulation. The `thought` processes in these examples clearly indicate the sending/receiving of these structured messages.
 
-**Simplified Protocol:**
-The interaction uses a simplified protocol with messages like `TASK_REQUEST`, `TASK_ACCEPT`, and `INFORM_RESULT`.
+**Core Scenario (Eddy delegates a debugging task to Jules):**
 
-**Interaction Flow:**
+1.  **User Request:** A user asks Eddy for help with a complex Python coding bug (e.g., an `IndexError`).
+2.  **Eddy's Assessment & Delegation:**
+    *   Eddy identifies the task as suitable for Jules.
+    *   Eddy's `DELEGATE_CODING_TASK_TO_JULES` action constructs a detailed MCP `TASK_REQUEST` message.
+    *   Eddy logs this `TASK_REQUEST` message (simulating sending it to Jules).
+    *   Eddy informs the user that Jules will handle the task.
+3.  **Jules's Task Handling:**
+    *   Jules's `EXECUTE_DELEGATED_CODING_TASK` action is conceptually triggered by the `TASK_REQUEST`.
+    *   Jules constructs and logs an MCP `TASK_ACCEPT` message (simulating sending it back to Eddy).
+    *   Jules analyzes the debugging problem.
+    *   Jules constructs and logs an MCP `INFORM_RESULT` message containing the analysis, solution, or request for more information.
+4.  **Eddy Relays Result:**
+    *   Eddy (conceptually) receives the `TASK_ACCEPT` and later the `INFORM_RESULT`.
+    *   Eddy processes Jules's findings and relays them to the user.
+
+**Refined Interaction Flow (with MCP details):**
 
 ```mermaid
 sequenceDiagram
     participant User
     participant Eddy as Eddy (Agent)
     participant Jules as Jules (Agent)
-    participant ElizaOS_MCP_Bus as (Conceptual) MCP Bus / Runtime
+    participant User
+    participant Eddy as Eddy (Agent)
+    participant Jules as Jules (Agent)
+    participant SystemLog as System Log (MCP Simulation)
 
     User->>Eddy: "Hey Eddy, I need help with a Python IndexError."
     activate Eddy
-    Eddy-->>Eddy: Identifies task as suitable for Jules.
-    Eddy->>ElizaOS_MCP_Bus: TASK_REQUEST (to=Jules, task_id="t123", payload={user_query: "...", desc: "Python IndexError"})
-    activate ElizaOS_MCP_Bus
+    Eddy-->>Eddy: Identifies task for Jules. Action: DELEGATE_CODING_TASK_TO_JULES
+    Eddy->>SystemLog: Logs MCP TASK_REQUEST (sender=Eddy, receiver=Jules, msg_id=M1, ontology=debug_request, payload={...details...})
     Note over Eddy: Informs User: "Okay, I'll ask Jules to look into this."
-    ElizaOS_MCP_Bus->>Jules: Forwards TASK_REQUEST (from=Eddy, task_id="t123", ...)
-    deactivate ElizaOS_MCP_Bus
-    activate Jules
-    Jules-->>Jules: Processes request, begins analysis.
-    Jules->>ElizaOS_MCP_Bus: TASK_ACCEPT (to=Eddy, in_reply_to="t123", payload={status: "Accepted"})
-    activate ElizaOS_MCP_Bus
-    ElizaOS_MCP_Bus->>Eddy: Forwards TASK_ACCEPT (from=Jules, in_reply_to="t123")
-    deactivate ElizaOS_MCP_Bus
     deactivate Eddy
-    Note over Jules: (Simulated work: Analyzes Python bug)
-    Jules-->>Jules: Completes analysis.
-    Jules->>ElizaOS_MCP_Bus: INFORM_RESULT (to=Eddy, in_reply_to="t123", status="success", payload={summary: "...", explanation: "..."})
-    activate ElizaOS_MCP_Bus
+
+    activate Jules
+    Jules-->>Jules: (Conceptually) Receives TASK_REQUEST M1. Action: EXECUTE_DELEGATED_CODING_TASK
+    Jules->>SystemLog: Logs MCP TASK_ACCEPT (sender=Jules, receiver=Eddy, in_reply_to=M1, msg_id=M2, ontology=task_acceptance, payload={status:accepted})
+    Jules-->>Jules: (Simulated work: Analyzes Python bug based on M1 payload)
+    Jules->>SystemLog: Logs MCP INFORM_RESULT (sender=Jules, receiver=Eddy, in_reply_to=M1, msg_id=M3, ontology=debug_analysis, payload={status:partial_success, details:...})
     deactivate Jules
-    ElizaOS_MCP_Bus->>Eddy: Forwards INFORM_RESULT (from=Jules, in_reply_to="t123")
-    deactivate ElizaOS_MCP_Bus
+
     activate Eddy
-    Eddy-->>Eddy: Processes Jules's result.
-    Eddy->>User: "Jules looked at your Python issue. He suggests..."
+    Eddy-->>Eddy: (Conceptually) Receives TASK_ACCEPT M2. Updates internal state.
+    Eddy-->>Eddy: (Conceptually) Receives INFORM_RESULT M3. Processes Jules's findings.
+    Eddy->>User: "Jules looked at your Python issue. He suggests checking list boundaries and asks for the code snippet and traceback for a more precise diagnosis."
     deactivate Eddy
 ```
 
-For more details on the proposed Multi-Agent Communication Protocol (MCP) and its potential for integrating with external tools like IDEs, please see the [MCP_DRAFT.md](MCP_DRAFT.md) file.
+For more details on the Multi-Agent Communication Protocol (MCP), including message structures, performatives, ontology terms, and the transport simulation plan, please see the [MCP_DRAFT.md](MCP_DRAFT.md) file.
 
-The agent JSON files (`Eddy.json` and `Jules.json`) have been updated with example interactions and action definitions that reflect this conceptual collaboration.
+The agent JSON files (`Eddy.json` and `Jules.json`) have been updated. Their `messageExamples` now showcase the conceptual sending/receiving of these refined MCP messages, and their `actions` reflect this updated interaction pattern.
 
 ## Examples of Agent Output
 
