@@ -31,9 +31,9 @@ To implement a Strandbeest leg, you would need to create a physical model with t
 
 For a virtual implementation, you can use a physics engine to simulate the movement of the linkage. The following resources may be helpful:
 
-*   [Animation of one leg](https://upload.wikimedia.org/wikipedia/commons/6/61/Strandbeest-Walking-Animation.gif)
-*   [Length of the rods](https://upload.wikimedia.org/wikipedia/commons/2/23/Strandbeest_Leg_Proportions.svg)
-*   [Animation of six legs](https://upload.wikimedia.org/wikipedia/commons/9/93/Strandbeest_walking_with_six_legs.gif)
+*   ![Animation of one leg](https://upload.wikimedia.org/wikipedia/commons/6/61/Strandbeest-Walking-Animation.gif)
+*   ![Length of the rods](https://upload.wikimedia.org/wikipedia/commons/2/23/Strandbeest_Leg_Proportions.svg)
+*   ![Animation of six legs](https://upload.wikimedia.org/wikipedia/commons/9/93/Strandbeest_walking_with_six_legs.gif)
 
 ## Conclusion
 
