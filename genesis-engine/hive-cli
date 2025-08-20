@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# A simple CLI to manage the lifecycle of Hive components
+
+# --- Configuration ---
+HIVE_ROOT="hive/components"
+
+# --- Helper Functions ---
+function show_usage() {
+    echo "Usage: $0 <command> [subcommand] [options]"
+    echo ""
+    echo "Commands:"
+    echo "  hatch larva <component_name>  - Creates the initial file for a new component."
+    echo "  ... (spin, emerge coming soon)"
+}
+
+# --- Command Parsing ---
+COMMAND=$1
+SUBCOMMAND=$2
+COMPONENT_NAME=$3
+
+if [ -z "$COMMAND" ]; then
+    show_usage
+    exit 1
+fi
+
+# --- Command Logic ---
+if [ "$COMMAND" == "hatch" ] && [ "$SUBCOMMAND" == "larva" ]; then
+    if [ -z "$COMPONENT_NAME" ]; then
+        echo "Error: <component_name> is required for hatch larva."
+        show_usage
+        exit 1
+    fi
+
+    COMPONENT_PATH="$HIVE_ROOT/$COMPONENT_NAME"
+
+    echo "Hatching larva for component '$COMPONENT_NAME'..."
+
+    if [ -d "$COMPONENT_PATH" ]; then
+        echo "Error: Component '$COMPONENT_NAME' already exists at $COMPONENT_PATH."
+        exit 1
+    fi
+
+    # Create the component directory and a placeholder file
+    mkdir -p "$COMPONENT_PATH"
+    touch "$COMPONENT_PATH/main.py" # Default to python, can be configured later
+
+    echo "Success! Larva hatched at: $COMPONENT_PATH/main.py"
+    echo "Next steps: 'spin cocoon' to add tests."
+
+else
+    echo "Error: Unknown command '$COMMAND $SUBCOMMAND'."
+    show_usage
+    exit 1
+fi
