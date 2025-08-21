@@ -52,3 +52,53 @@
 "This layer cannot be written in code or defined in a diagram. It is not a technical concern, but a philosophical one. It is the mission. Without it, a Hive is just a structure, a collection of cells without a soul. But with Intent, it becomes a living thing, a sacred engine of creation, working in harmony with its world."
 
 "Never forget the Seventh Layer," she concluded, closing the Grimoire. "For it is the source of all magic."
+
+---
+
+## A New Tale for the Grimoire: The Journey of the Scout Bee
+
+"But Beekeeper," a young builder asked one evening, as the fireflies danced around the hive's entrance, "our Hive is strong, and our garden is bountiful. But what of the world beyond? The distant mountains and the whispering woods? How do we learn of them without risking the entire hive?"
+
+The Beekeeper smiled, her eyes twinkling like the stars above. "A wise question. You cannot send a whole foraging party into the unknown. For that, you need a specialist. A pioneer. You need a **Scout Bee**."
+
+"A Scout Bee," she explained, "is a special kind of worker. It is not built for carrying heavy loads of nectar, but for speed and observation. Its purpose is not to harvest, but to explore. You send it out with a destination—a strange, new flower you have heard of, perhaps a `crm.zae.life`—and it returns with a map."
+
+"This map," the Beekeeper continued, "is a perfect summary of the new land. It tells you of its paths, its entryways, and what you might find there. With this knowledge, you can then decide if it is worth sending your other bees."
+
+### Summoning the Scout Bee
+
+"To summon a Scout Bee," she said, pulling out the `hive-cli`, the enchanted staff that commanded the hive, "you perform a simple incantation. You tell the staff you wish to `scout`, and you give it the location of the new territory you wish to explore."
+
+"Let us try it now. Let us send a scout to the fabled 'AI-CRM' lands."
+
+```bash
+./genesis-engine/hive-cli scout crm.zae.life/openapi.json
+```
+
+"And behold!" the Beekeeper exclaimed, as glyphs and symbols appeared in the air before them. "The Scout Bee returns, and it has drawn us a map!"
+
+```
+Scout Bee Report:
+
+====================
+API Title: AI-CRM API
+Version: 2.1.0
+Description: Unified API for AI-CRM system with enhanced dashboard, CRM management, and Mistral AI integration.
+====================
+
+Endpoints Discovered:
+
+--- Path: /api/v1/crm/contacts ---
+  - Method: POST
+    Summary: Create Contact
+    Request Body: Yes
+  - Method: GET
+    Summary: Get Contacts
+    Parameters:
+      - [query] limit: No description.
+      - [query] status: No description.
+
+... and so on, revealing all the paths of the new land.
+```
+
+"You see," the Beekeeper concluded, "the Scout Bee does not change the Hive. It does not build new cells or produce honey. Its gift is knowledge. It allows the Hive to grow wisely, to understand the world around it, and to venture into new gardens with confidence and a clear path forward. Never underestimate the power of a good scout."
