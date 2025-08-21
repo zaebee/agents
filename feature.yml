@@ -1,0 +1,19 @@
+feature_name: ShippingNotifier
+description: "A feature that sends an email when an order is shipped."
+author: "The Beekeeper"
+
+# This section defines the architectural patterns (codons)
+# that make up this feature. The generator script will use this
+# to create the boilerplate code.
+codons:
+  - type: ReactToEvent
+    description: "Listens for when an order is shipped to trigger a notification."
+    listens_to: OrderShipped
+    calls_aggregate: NotificationAggregate
+    produces_event: NotificationSent
+
+  - type: HandleCommand
+    description: "Provides a direct way to send a welcome email to a new user."
+    command_name: SendWelcomeEmail
+    calls_aggregate: UserAggregate
+    produces_event: WelcomeEmailSent
