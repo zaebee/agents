@@ -76,14 +76,44 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
+        .code-block-wrapper {
+            position: relative;
+            margin-top: 20px;
+        }
+
         pre {
             background: #2c1810;
             color: #f5f1e8;
-            padding: 15px;
+            padding: 20px;
+            padding-top: 45px; /* space for the button */
             border-radius: 5px;
             overflow-x: auto;
             border: 1px solid var(--dark-honey);
             box-shadow: inset 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--dark-honey);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s, background-color 0.2s;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .copy-button:hover {
+            opacity: 1;
+        }
+
+        .copy-button.copied {
+            background-color: #28a745;
+            opacity: 1;
         }
 
         code {
@@ -112,6 +142,10 @@
             padding: 20px;
             border-radius: 8px;
             border: 1px solid var(--dark-honey);
+        }
+
+        li {
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -282,8 +316,9 @@
 
         <h4>A: Aggregate</h4>
         <p>An <code>Aggregate</code> encapsulates state and enforces its own rules (invariants).</p>
-        <pre><code class="language-typescript">
-// The state of our Order
+        <div class="code-block-wrapper">
+            <button class="copy-button">Copy</button>
+            <pre><code class="language-typescript">// The state of our Order
 interface OrderState {
   id: string;
   items: string[];
@@ -319,13 +354,14 @@ class OrderAggregate {
   private apply(event: OrderShippedEvent): void {
     this.state.status = "shipped";
   }
-}
-        </code></pre>
+}</code></pre>
+        </div>
 
         <h4>C: Connector</h4>
         <p>A <code>Connector</code> translates external input into domain commands.</p>
-        <pre><code class="language-typescript">
-// A driving connector for a REST API
+        <div class="code-block-wrapper">
+            <button class="copy-button">Copy</button>
+            <pre><code class="language-typescript">// A driving connector for a REST API
 class RestConnector {
   private orderService: OrderService; // A service that finds and uses aggregates
 
@@ -345,8 +381,8 @@ class RestConnector {
       }
     });
   }
-}
-        </code></pre>
+}</code></pre>
+        </div>
 
         <h3>The "Pollen Protocol": A Note on Inter-Hive Communication</h3>
         <p>The <strong>Pollen Protocol</strong> is a simple, powerful idea: just as flowers have a predictable structure that bees understand, our <code>Genesis Events</code> should have a predictable structure so other services (Hives) can understand them.</p>
@@ -360,6 +396,7 @@ class RestConnector {
             <li><code>payload</code>: The data specific to this event.</li>
         </ul>
         <p>By enforcing this simple contract, we create a healthy ecosystem where new services can easily consume events from existing ones without creating tight coupling.</p>
+        <p>A final thought on this metaphor: If the Pollen Protocol defines the <em>genes</em> (the structure of an event), then the raw, serialized data that travels over the wire—the JSON string, the Protobuf bytes—is the <em>genetic sequence</em> itself. It is the <code>tataaaaataaaataaaaaa...</code> of our system, the physical expression of the logical gene.</p>
 
         <h3>Sequence Diagram: From Request to Waggle Dance</h3>
         <p>This diagram shows the full flow: a user's request comes in through a <code>Connector</code>, is handled by an <code>Aggregate</code>, which produces a <code>Genesis Event</code> that is then published for other parts of the system to consume.</p>
@@ -381,7 +418,69 @@ class RestConnector {
                 Note over Events_G: Other Hives (e.g., Shipping) listen for this "waggle dance"
                 Events_G-->>-REST_C:
         </div>
+
+        <h3>The Beekeeper's Grand Vision: Self-Creating Systems</h3>
+        <p>The final, most profound secret of the hive is this: if the architecture is pure enough, the system can begin to build itself. The "Metamorphosis -> ATCG" mapping is not just a metaphor for a manual process; it is a blueprint for automation.</p>
+        <p>Imagine a developer who wishes to create a new "bee" (feature). Instead of writing boilerplate code, they simply create a declarative definition, perhaps in a YAML file, specifying the ATCG primitives required:</p>
+        <div class="code-block-wrapper">
+            <button class="copy-button">Copy</button>
+            <pre><code class="language-yaml"># A declarative definition for a new "ShippingNotification" feature
+kind: WorkerBee
+name: ShippingNotifier
+description: "A bee that sends a notification when an order is shipped."
+
+listens_to: # Genesis Events this bee reacts to
+  - eventType: OrderShipped
+    eventVersion: 1.0
+
+produces: # New Genesis Events this bee can create
+  - eventType: NotificationSent
+    eventVersion: 1.0
+
+# Connectors required to interact with the outside world
+connectors:
+  - name: email_service
+    type: driven # This bee drives an external service
+    port: SmtpPort</code></pre>
+        </div>
+        <p>An automated <strong>"Queen Bee"</strong> system—a sophisticated CI/CD operator—reads this definition and orchestrates the entire Metamorphosis:</p>
+        <ul>
+            <li><strong>Egg:</strong> It receives the YAML and generates the initial project scaffolding, creating all the necessary files from templates.</li>
+            <li><strong>Larva:</strong> It takes the core business logic written by the developer (the one part that requires human creativity) and injects it into the generated code. It then runs a suite of automated tests against the new component.</li>
+            <li><strong>Pupa:</strong> Upon successful testing, it packages the component into a hardened, deployable container.</li>
+            <li><strong>Adult:</strong> It deploys this new container into the production environment, where it comes to life and begins listening for its specified events.</li>
+        </ul>
+        <p>This is the ultimate goal: an architecture so well-defined that it becomes a living factory for its own components. This is the convergence of Domain-Driven Design, GitOps, and Model-Driven Development, creating a system that is not just built, but truly <em>grown</em>.</p>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const allCodeBlocks = document.querySelectorAll('.code-block-wrapper');
+
+            allCodeBlocks.forEach(wrapper => {
+                const button = wrapper.querySelector('.copy-button');
+                const pre = wrapper.querySelector('pre');
+                if (!button || !pre) return;
+
+                const code = pre.querySelector('code');
+                const textToCopy = code.innerText;
+
+                button.addEventListener('click', () => {
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        button.textContent = 'Copied!';
+                        button.classList.add('copied');
+
+                        setTimeout(() => {
+                            button.textContent = 'Copy';
+                            button.classList.remove('copied');
+                        }, 2000);
+                    }).catch(err => {
+                        console.error('Failed to copy text: ', err);
+                        button.textContent = 'Error';
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 </html>
