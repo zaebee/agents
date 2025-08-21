@@ -1,35 +1,29 @@
-# The "Input Sense" of our Genesis Engine - The CLI Connector
+# The CLI Connector (Primary/Driving Adapter)
 
-import click
-from typing import Callable
-from dataclasses import dataclass
-
-# This would be a real, importable class
+# We need the definition of the command to create it.
 from ..aggregates.compiler_aggregate import HatchCommand
 
 class CliConnector:
     """
-    This connector's job is to translate user input from the command line
-    into domain Commands for the aggregate to handle.
+    Translates user input from the command line into a formal command
+    and passes it to the command handler (our application service).
     """
-    def __init__(self, command_handler: Callable):
-        self._command_handler = command_handler
-        print("  - CliConnector initialized.")
+    def __init__(self, command_handler):
+        self.command_handler = command_handler
 
     def hatch(self, codon_type: str, component_name: str):
-        """Translates a CLI call into a HatchCommand."""
-        print(f"\n> CLI Connector received 'hatch {codon_type}' for '{component_name}'")
+        """
+        The entry point for the 'hatch' command from the CLI.
+        """
+        print(f"CliConnector: Received hatch request for '{component_name}' with codon '{codon_type}'.")
+        # 1. Translate the raw CLI input into a formal Command object.
+        command = HatchCommand(codon_type=codon_type, component_name=component_name)
 
-        # 1. Translate to command
-        command = HatchCommand(
-            codon_type=codon_type,
-            component_name=component_name
-        )
-
-        # 2. Pass to handler (in our case, the aggregate)
-        self._command_handler(command)
+        # 2. Pass the command to the application's command handler.
+        self.command_handler(command)
 
     def spin(self, component_name: str):
-        """A placeholder for the spin command translation."""
-        print(f"\n> CLI Connector received 'spin cocoon' for '{component_name}'")
-        print("  - (Spin command logic is under construction in this new architecture)")
+        """
+        Placeholder for the 'spin' command.
+        """
+        print(f"Spin command for '{component_name}' is under construction.")

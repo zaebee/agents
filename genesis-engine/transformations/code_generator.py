@@ -1,63 +1,88 @@
-# The "Enzyme" of our Genesis Engine - The Code Generation Transformation
-
-import os
-from typing import List, Dict, Any, Tuple
 from dataclasses import dataclass, field
+import os
+from jinja2 import Environment, FileSystemLoader
+from typing import List
 
-# This would be a real, importable class from our dna-core library
-from ..aggregates.compiler_aggregate import ComponentHatchingInitiated
+# --- Data Class for Events ---
 
 @dataclass
 class CodeGenerated:
-    """An event indicating that the code for a file has been generated."""
-    component_path: str
-    file_name: str
-    file_content: str
-    event_type: str = field(default="CodeGenerated", init=False)
+    """Event indicating a file's content has been generated."""
+    filepath: str
+    content: str
+    event_type: str = "CodeGenerated"
+
+# --- Transformation ---
 
 class CodeGenerationTransformation:
     """
-    This transformation listens for hatching events and generates the
-    code for the new component's files from tRNA templates.
+    Takes a 'ComponentHatchingInitiated' event and transforms it into
+    'CodeGenerated' events by rendering templates.
     """
     def __init__(self, template_dir: str):
-        self._template_dir = template_dir
-        print("  - CodeGenerationTransformation initialized.")
+        self.template_path = os.path.join("genesis-engine", template_dir)
+        self.jinja_env = Environment(
+            loader=FileSystemLoader(self.template_path),
+            trim_blocks=True,
+            lstrip_blocks=True
+        )
 
-    def process(self, event: ComponentHatchingInitiated) -> List[CodeGenerated]:
+    def process(self, hatching_event) -> List[CodeGenerated]:
         """
-        Reads the tRNA templates and generates the code for each file.
+        Processes the hatching event and returns a list of CodeGenerated events.
         """
-        print(f"  - CodeGenerator processing event '{event.event_type}'...")
-        generated_files: List[CodeGenerated] = []
+        component_name = hatching_event.component_name
+        target_dir = hatching_event.component_path
+        templates_to_render = hatching_event.templates
 
-        for template_name in event.templates:
-            template_path = os.path.join(self._template_dir, template_name)
+        generated_events = []
+        print(f"  - CodeGenerator: Processing {len(templates_to_render)} templates for '{component_name}'.")
 
+        for template_file in templates_to_render:
             try:
-                with open(template_path, 'r') as f:
-                    template_content = f.read()
+                template = self.jinja_env.get_template(template_file)
+            except Exception as e:
+                print(f"FATAL: Could not load template '{template_file}'. Error: {e}")
+                continue # Skip this template
 
-                # This is where the "honey" would be injected in a real system.
-                # We would replace placeholders like {class_name} here.
-                # For now, we just use the raw template content.
-                final_content = template_content.replace("{class_name}", event.component_name.capitalize())
+            # Prepare context for rendering. A real implementation would be more sophisticated.
+            class_name_base = component_name.replace('-', ' ').title().replace(' ', '')
+            context = {
+                "component_name": component_name,
+                "class_name": class_name_base,
+                "data_class": f"{class_name_base}Data",
+                "data_class_lower": component_name.replace('-', '_'),
+                "primary_key": "id",
+                "command_purpose": "do something amazing",
+                "query_purpose": "get something valuable",
+                "dto_purpose": "some valuable data"
+            }
 
-                # The filename should be based on the component name, not the template name.
-                # e.g., A.py.tpl -> create_order_aggregate.py
-                # This logic is simplified for now.
-                output_filename = template_name.replace('.tpl', '')
+            content = template.render(context)
 
-                generated_files.append(
-                    CodeGenerated(
-                        component_path=event.component_path,
-                        file_name=output_filename,
-                        file_content=final_content
-                    )
-                )
-                print(f"    - Generated code from template: {template_name}")
+            # The output filename is derived from the template name. This is a simple heuristic.
+            # e.g., 'chronicler/quest.yaml.j2' -> 'quest.yaml'
+            # e.g., 'C.py.tpl' -> 'connector.py'
 
-            except FileNotFoundError:
-                print(f"Warning: Template not found at {template_path}. Skipping.")
+            # A simple mapping for better filenames
+            filename_map = {
+                "A.py.tpl": "aggregate.py",
+                "C.py.tpl": "connector.py",
+                "G.py.tpl": "event.py",
+                "T.py.tpl": "transformer.py",
+                "command.py.tpl": "command.py",
+                "query.py.tpl": "query.py",
+                "dto.py.tpl": "dto.py",
+                "immune.py.tpl": "immune_aggregate.py",
+                "quest.yaml.j2": "quest.yaml"
+            }
 
-        return generated_files
+            base_template_name = os.path.basename(template_file)
+            output_filename = filename_map.get(base_template_name, base_template_name.replace('.j2', '').replace('.tpl', ''))
+
+            filepath = os.path.join(target_dir, output_filename)
+
+            generated_events.append(CodeGenerated(filepath=filepath, content=content))
+            print(f"    - Generated code for {filepath}")
+
+        return generated_events

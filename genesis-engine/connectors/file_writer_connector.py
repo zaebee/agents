@@ -1,41 +1,29 @@
-# The "Output Sense" of our Genesis Engine - The File Writer Connector
-
 import os
-from typing import List
 
-# This would be a real, importable class
-from ..transformations.code_generator import CodeGenerated
+# The File Writer Connector (Secondary/Driven Adapter)
 
 class FileWriterConnector:
     """
-    This connector's job is to take generated code (from a CodeGenerated event)
-    and perform the infrastructure task of writing it to the file system.
+    Receives events containing generated code and writes them to files.
+    This is a "driven" adapter because it is called by the application
+    core in response to an event.
     """
-    def __init__(self):
-        print("  - FileWriterConnector initialized.")
-
-    def handle(self, events: List[CodeGenerated]):
+    def handle(self, generated_code_events):
         """
-        Receives a list of CodeGenerated events and writes each to disk.
+        Handles events that contain code to be written to disk.
         """
-        print("  - FileWriterConnector handling generated code...")
-        if not events:
-            print("    - No code to write.")
-            return
+        for event in generated_code_events:
+            if event.event_type == "CodeGenerated":
+                filepath = event.filepath
+                content = event.content
 
-        component_path = events[0].component_path
+                # Ensure the directory exists before writing the file.
+                dir_name = os.path.dirname(filepath)
+                if not os.path.exists(dir_name):
+                    os.makedirs(dir_name)
+                    print(f"FileWriterConnector: Created directory {dir_name}")
 
-        # 1. Ensure the target directory exists
-        if not os.path.exists(component_path):
-            print(f"    - Creating directory: {component_path}")
-            os.makedirs(component_path)
-
-        # 2. Write each file
-        for event in events:
-            file_path = os.path.join(event.component_path, event.file_name)
-            print(f"    - Writing file: {file_path}")
-            with open(file_path, 'w') as f:
-                f.write(event.file_content)
-
-        print(f"\nSuccess! New codon hatched at: {component_path}")
-        print("Next steps: 'spin cocoon' to add tests.")
+                # Write the file.
+                with open(filepath, "w") as f:
+                    f.write(content)
+                print(f"FileWriterConnector: Wrote file {filepath}")

@@ -78,6 +78,11 @@ def hatch_event_cli(component_name):
 def hatch_immune_cli(component_name):
     cli_connector.hatch('immune', component_name)
 
+@hatch.command(name='chronicler', help="Scaffolds a 'Choreography' pattern (Saga).")
+@click.argument('component_name')
+def hatch_chronicler_cli(component_name):
+    cli_connector.hatch('chronicler', component_name)
+
 # Placeholder for the spin command
 @cli.command(help="Adds testing or other infrastructure to a component (Under Construction).")
 @click.argument('component_name')

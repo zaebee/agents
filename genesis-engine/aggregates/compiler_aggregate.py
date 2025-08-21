@@ -32,7 +32,8 @@ class CompilerAggregate:
         'command': ['C.py.tpl', 'A.py.tpl', 'G.py.tpl', 'command.py.tpl'],
         'query':   ['C.py.tpl', 'T.py.tpl', 'query.py.tpl', 'dto.py.tpl'],
         'event':   ['G.py.tpl', 'C.py.tpl', 'A.py.tpl', 'command.py.tpl'],
-        'immune':  ['C.py.tpl', 'immune.py.tpl', 'command.py.tpl']
+        'immune':  ['C.py.tpl', 'immune.py.tpl', 'command.py.tpl'],
+        'chronicler': ['chronicler/quest.yaml.j2']
     }
 
     def __init__(self):
