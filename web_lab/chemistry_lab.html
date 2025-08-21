@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 Hive Chemistry Laboratory</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Monaco', 'Menlo', monospace;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .lab-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            grid-template-rows: auto 1fr auto;
+            height: 100vh;
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .lab-header {
+            grid-column: 1 / -1;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .lab-header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .periodic-table {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        
+        .periodic-table h3 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #f1c40f;
+        }
+        
+        .element-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .element {
+            background: linear-gradient(45deg, #f1c40f, #f39c12);
+            border: 2px solid #d4a017;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+        
+        .element:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(241, 196, 15, 0.5);
+        }
+        
+        .element.selected {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            border-color: #a93226;
+        }
+        
+        .element-symbol {
+            font-size: 2em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .element-name {
+            font-size: 0.8em;
+            margin-top: 5px;
+            color: #34495e;
+        }
+        
+        .element-bonds {
+            font-size: 0.7em;
+            color: #7f8c8d;
+        }
+        
+        .reaction-workspace {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .workspace-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .reaction-equation {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 1.2em;
+            text-align: center;
+            margin-bottom: 20px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #3498db;
+        }
+        
+        .molecular-canvas {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            position: relative;
+            min-height: 300px;
+            overflow: hidden;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+        
+        .btn.danger {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+        }
+        
+        .btn.success {
+            background: linear-gradient(45deg, #27ae60, #229954);
+        }
+        
+        .results-panel {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        
+        .results-panel h3 {
+            color: #2ecc71;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .reaction-result {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #2ecc71;
+        }
+        
+        .reaction-result.error {
+            border-left-color: #e74c3c;
+        }
+        
+        .energy-meter {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .energy-bar {
+            height: 20px;
+            background: linear-gradient(90deg, #e74c3c, #f39c12, #f1c40f, #2ecc71);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .energy-level {
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+        
+        .molecule {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: move;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        
+        .molecule.aggregate { background: linear-gradient(45deg, #fff3cd, #f1c40f); color: #333; }
+        .molecule.transformation { background: linear-gradient(45deg, #fff9e6, #f39c12); color: #333; }
+        .molecule.connector { background: linear-gradient(45deg, #f1c40f, #f39c12); color: #333; }
+        .molecule.genesis { background: linear-gradient(45deg, #ffeb99, #f1c40f); color: #333; }
+        
+        .molecule:hover {
+            transform: scale(1.1);
+        }
+        
+        .bond-line {
+            position: absolute;
+            height: 3px;
+            background: #3498db;
+            transform-origin: left center;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+        
+        .stats-display {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .stat-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .stat-label {
+            font-size: 0.8em;
+            color: #bdc3c7;
+        }
+        
+        @keyframes moleculeGlow {
+            0%, 100% { box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+            50% { box-shadow: 0 4px 20px rgba(52, 152, 219, 0.6); }
+        }
+        
+        .molecule.reacting {
+            animation: moleculeGlow 1s ease-in-out infinite;
+        }
+        
+        .footer {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 10px;
+            color: #bdc3c7;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="lab-container">
+        <header class="lab-header">
+            <h1>🧪 Hive Chemistry Laboratory</h1>
+            <p>Molecular Architecture Design & Testing Environment</p>
+        </header>
+        
+        <div class="periodic-table">
+            <h3>🧬 ATCG Periodic Table</h3>
+            <div class="element-grid">
+                <div class="element" data-element="A" onclick="selectElement('A')">
+                    <div class="element-symbol">A</div>
+                    <div class="element-name">Aggregate</div>
+                    <div class="element-bonds">4 bonds</div>
+                </div>
+                <div class="element" data-element="T" onclick="selectElement('T')">
+                    <div class="element-symbol">T</div>
+                    <div class="element-name">Transformation</div>
+                    <div class="element-bonds">1 bond</div>
+                </div>
+                <div class="element" data-element="C" onclick="selectElement('C')">
+                    <div class="element-symbol">C</div>
+                    <div class="element-name">Connector</div>
+                    <div class="element-bonds">2 bonds</div>
+                </div>
+                <div class="element" data-element="G" onclick="selectElement('G')">
+                    <div class="element-symbol">G</div>
+                    <div class="element-name">Genesis Event</div>
+                    <div class="element-bonds">3 bonds</div>
+                </div>
+            </div>
+            
+            <div class="energy-meter">
+                <h4 style="margin-bottom: 10px;">⚡ Reaction Energy</h4>
+                <div class="energy-bar">
+                    <div class="energy-level" id="energyLevel" style="width: 0%"></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-top: 5px; font-size: 0.8em;">
+                    <span>0 kJ/mol</span>
+                    <span id="energyValue">0</span>
+                    <span>500 kJ/mol</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="reaction-workspace">
+            <div class="workspace-header">
+                <h3>⚗️ Reaction Workspace</h3>
+                <select id="reactionSelect" onchange="loadReaction()">
+                    <option value="">Select a reaction template...</option>
+                    <option value="hexagonal">Hexagonal Architecture</option>
+                    <option value="command">Command Handler</option>
+                    <option value="query">Query Handler</option>
+                    <option value="immune">Immune Cell</option>
+                    <option value="decomposition">Monolith Decomposition</option>
+                </select>
+            </div>
+            
+            <div class="reaction-equation" id="reactionEquation">
+                Drop elements here to build your reaction...
+            </div>
+            
+            <div class="molecular-canvas" id="molecularCanvas">
+                <!-- Molecules will be dynamically added here -->
+            </div>
+            
+            <div class="controls">
+                <button class="btn success" onclick="runReaction()">🔥 Run Reaction</button>
+                <button class="btn" onclick="analyzeStability()">🔬 Analyze Stability</button>
+                <button class="btn" onclick="generateHoneyprint()">🐝 Generate Honeyprint</button>
+                <button class="btn danger" onclick="clearWorkspace()">🧹 Clear</button>
+            </div>
+        </div>
+        
+        <div class="results-panel">
+            <h3>📊 Analysis Results</h3>
+            
+            <div id="resultsContainer">
+                <div class="reaction-result">
+                    <strong>System Ready</strong><br>
+                    Select elements and design your molecular reaction.
+                </div>
+            </div>
+            
+            <div class="stats-display">
+                <div class="stat-item">
+                    <div class="stat-value" id="stabilityScore">85</div>
+                    <div class="stat-label">Stability Score</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="complexityScore">42</div>
+                    <div class="stat-label">Complexity</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="bondCount">6</div>
+                    <div class="stat-label">Bonds</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="energyTotal">150</div>
+                    <div class="stat-label">Bond Energy</div>
+                </div>
+            </div>
+        </div>
+        
+        <footer class="footer">
+            <p>🐝 Powered by Hive Architecture Molecular Chemistry Engine | Built with Royal Jelly 🍯</p>
+        </footer>
+    </div>
+
+    <script>
+        let selectedElements = [];
+        let molecules = [];
+        let bonds = [];
+        let reactionEnergy = 0;
+        
+        const reactions = {
+            hexagonal: {
+                reactants: ['A', 'C', 'C', 'C', 'C', 'C', 'C'],
+                products: ['HexCore(A1C6)'],
+                energy: 120,
+                description: 'Forms stable hexagonal architecture (like benzene)'
+            },
+            command: {
+                reactants: ['C', 'A', 'G'],
+                products: ['CommandHandler(C1A1G1)'],
+                energy: 85,
+                description: 'Creates command handler pattern'
+            },
+            query: {
+                reactants: ['C', 'T', 'C'],
+                products: ['QueryHandler(C1T1C1)'],
+                energy: 70,
+                description: 'Creates query handler pattern'
+            },
+            immune: {
+                reactants: ['G', 'C', 'A', 'C'],
+                products: ['ImmuneCell(G1C1A1C1)'],
+                energy: 95,
+                description: 'Forms immune system component'
+            },
+            decomposition: {
+                reactants: ['Monolith(A5T8C3G2)'],
+                products: ['Service1(A1T2C1G1)', 'Service2(A1T3C1G1)', 'Service3(A3T3C1G0)'],
+                energy: -85,
+                description: 'Decomposes monolith into microservices'
+            }
+        };
+        
+        function selectElement(element) {
+            // Toggle element selection
+            const elementDiv = document.querySelector(`[data-element="${element}"]`);
+            
+            if (selectedElements.includes(element)) {
+                selectedElements = selectedElements.filter(e => e !== element);
+                elementDiv.classList.remove('selected');
+            } else {
+                selectedElements.push(element);
+                elementDiv.classList.add('selected');
+                addMoleculeToCanvas(element);
+            }
+            
+            updateReactionEquation();
+        }
+        
+        function addMoleculeToCanvas(element) {
+            const canvas = document.getElementById('molecularCanvas');
+            const molecule = document.createElement('div');
+            
+            molecule.className = `molecule ${getElementClass(element)}`;
+            molecule.textContent = element;
+            molecule.id = `molecule-${molecules.length}`;
+            
+            // Random position
+            const x = Math.random() * (canvas.offsetWidth - 60);
+            const y = Math.random() * (canvas.offsetHeight - 60);
+            
+            molecule.style.left = x + 'px';
+            molecule.style.top = y + 'px';
+            
+            // Make draggable
+            makeDraggable(molecule);
+            
+            canvas.appendChild(molecule);
+            molecules.push({ element, id: molecule.id, x, y });
+        }
+        
+        function getElementClass(element) {
+            const classes = {
+                'A': 'aggregate',
+                'T': 'transformation', 
+                'C': 'connector',
+                'G': 'genesis'
+            };
+            return classes[element] || 'aggregate';
+        }
+        
+        function makeDraggable(element) {
+            let isDragging = false;
+            let currentX, currentY, initialX, initialY, xOffset = 0, yOffset = 0;
+            
+            element.addEventListener('mousedown', dragStart);
+            document.addEventListener('mousemove', dragMove);
+            document.addEventListener('mouseup', dragEnd);
+            
+            function dragStart(e) {
+                initialX = e.clientX - xOffset;
+                initialY = e.clientY - yOffset;
+                
+                if (e.target === element) {
+                    isDragging = true;
+                }
+            }
+            
+            function dragMove(e) {
+                if (isDragging) {
+                    e.preventDefault();
+                    currentX = e.clientX - initialX;
+                    currentY = e.clientY - initialY;
+                    
+                    xOffset = currentX;
+                    yOffset = currentY;
+                    
+                    setTranslate(currentX, currentY, element);
+                }
+            }
+            
+            function dragEnd(e) {
+                initialX = currentX;
+                initialY = currentY;
+                isDragging = false;
+            }
+            
+            function setTranslate(xPos, yPos, el) {
+                el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
+            }
+        }
+        
+        function updateReactionEquation() {
+            const equation = document.getElementById('reactionEquation');
+            if (selectedElements.length === 0) {
+                equation.textContent = 'Drop elements here to build your reaction...';
+                return;
+            }
+            
+            const reactantsStr = selectedElements.join(' + ');
+            equation.innerHTML = `${reactantsStr} → <span style="color: #2ecc71;">?</span>`;
+        }
+        
+        function loadReaction() {
+            const select = document.getElementById('reactionSelect');
+            const reactionType = select.value;
+            
+            if (!reactionType || !reactions[reactionType]) return;
+            
+            clearWorkspace();
+            
+            const reaction = reactions[reactionType];
+            
+            // Add reactants
+            reaction.reactants.forEach(element => {
+                if (['A', 'T', 'C', 'G'].includes(element)) {
+                    selectElement(element);
+                }
+            });
+            
+            // Update energy
+            reactionEnergy = reaction.energy;
+            updateEnergyMeter();
+            
+            // Show reaction description
+            addResult(reaction.description, 'info');
+        }
+        
+        function runReaction() {
+            if (selectedElements.length === 0) {
+                addResult('No reactants selected!', 'error');
+                return;
+            }
+            
+            // Animate molecules
+            const moleculeElements = document.querySelectorAll('.molecule');
+            moleculeElements.forEach(mol => mol.classList.add('reacting'));
+            
+            setTimeout(() => {
+                moleculeElements.forEach(mol => mol.classList.remove('reacting'));
+                
+                // Simulate reaction results
+                const products = predictProducts(selectedElements);
+                const success = products.length > 0;
+                
+                if (success) {
+                    addResult(`✅ Reaction successful! Products: ${products.join(', ')}`, 'success');
+                    updateStats(products);
+                } else {
+                    addResult('❌ Reaction failed - insufficient reactants or invalid combination', 'error');
+                }
+            }, 2000);
+        }
+        
+        function predictProducts(reactants) {
+            const products = [];
+            
+            // Simple reaction prediction logic
+            if (reactants.includes('A') && reactants.filter(r => r === 'C').length >= 6) {
+                products.push('HexCore(A1C6)');
+            } else if (reactants.includes('C') && reactants.includes('A') && reactants.includes('G')) {
+                products.push('CommandHandler(C1A1G1)');
+            } else if (reactants.includes('C') && reactants.includes('T')) {
+                products.push('QueryHandler(C1T1C1)');
+            } else if (reactants.length >= 2) {
+                products.push(`Compound(${reactants.slice(0,3).join('')})`);
+            }
+            
+            return products;
+        }
+        
+        function analyzeStability() {
+            if (molecules.length === 0) {
+                addResult('No molecules to analyze!', 'error');
+                return;
+            }
+            
+            // Simulate stability analysis
+            const stabilityScore = Math.floor(Math.random() * 40) + 60; // 60-100
+            const bondStrength = Math.floor(Math.random() * 50) + 50;
+            
+            addResult(`🔬 Stability Analysis Complete:
+                       Stability Score: ${stabilityScore}/100
+                       Bond Strength: ${bondStrength} kJ/mol
+                       Architecture: ${stabilityScore > 80 ? 'Aromatic (Extra Stable)' : 'Stable'}`, 'info');
+            
+            document.getElementById('stabilityScore').textContent = stabilityScore;
+        }
+        
+        function generateHoneyprint() {
+            if (molecules.length === 0) {
+                addResult('No molecules to visualize!', 'error');
+                return;
+            }
+            
+            addResult('🐝 Honeyprint SVG generated! Check the molecular canvas for updated visualization.', 'success');
+            
+            // Simulate honeyprint generation
+            drawBonds();
+            updateStats();
+        }
+        
+        function drawBonds() {
+            // Remove existing bonds
+            document.querySelectorAll('.bond-line').forEach(bond => bond.remove());
+            
+            const canvas = document.getElementById('molecularCanvas');
+            const moleculeElements = document.querySelectorAll('.molecule');
+            
+            // Create bonds between nearby molecules
+            for (let i = 0; i < moleculeElements.length; i++) {
+                for (let j = i + 1; j < moleculeElements.length; j++) {
+                    const mol1 = moleculeElements[i];
+                    const mol2 = moleculeElements[j];
+                    
+                    const rect1 = mol1.getBoundingClientRect();
+                    const rect2 = mol2.getBoundingClientRect();
+                    const canvasRect = canvas.getBoundingClientRect();
+                    
+                    const x1 = rect1.left - canvasRect.left + 30;
+                    const y1 = rect1.top - canvasRect.top + 30;
+                    const x2 = rect2.left - canvasRect.left + 30;
+                    const y2 = rect2.top - canvasRect.top + 30;
+                    
+                    const distance = Math.sqrt((x2-x1)**2 + (y2-y1)**2);
+                    
+                    if (distance < 150) { // Draw bond if molecules are close
+                        const bond = document.createElement('div');
+                        bond.className = 'bond-line';
+                        
+                        const length = distance;
+                        const angle = Math.atan2(y2-y1, x2-x1) * 180/Math.PI;
+                        
+                        bond.style.width = length + 'px';
+                        bond.style.left = x1 + 'px';
+                        bond.style.top = y1 + 'px';
+                        bond.style.transform = `rotate(${angle}deg)`;
+                        
+                        canvas.appendChild(bond);
+                    }
+                }
+            }
+        }
+        
+        function clearWorkspace() {
+            selectedElements = [];
+            molecules = [];
+            bonds = [];
+            reactionEnergy = 0;
+            
+            // Clear visual elements
+            document.querySelectorAll('.element').forEach(el => el.classList.remove('selected'));
+            document.getElementById('molecularCanvas').innerHTML = '';
+            document.getElementById('reactionEquation').textContent = 'Drop elements here to build your reaction...';
+            document.getElementById('resultsContainer').innerHTML = '<div class="reaction-result"><strong>Workspace Cleared</strong><br>Ready for new experiments.</div>';
+            
+            updateEnergyMeter();
+        }
+        
+        function updateEnergyMeter() {
+            const energyLevel = document.getElementById('energyLevel');
+            const energyValue = document.getElementById('energyValue');
+            
+            const percentage = Math.min(100, Math.abs(reactionEnergy) / 5);
+            energyLevel.style.width = percentage + '%';
+            energyValue.textContent = reactionEnergy + ' kJ/mol';
+        }
+        
+        function updateStats(products = []) {
+            document.getElementById('bondCount').textContent = document.querySelectorAll('.bond-line').length;
+            document.getElementById('complexityScore').textContent = molecules.length * 12 + products.length * 8;
+            document.getElementById('energyTotal').textContent = Math.abs(reactionEnergy) + Math.floor(Math.random() * 100);
+        }
+        
+        function addResult(message, type = 'info') {
+            const container = document.getElementById('resultsContainer');
+            const result = document.createElement('div');
+            
+            result.className = `reaction-result ${type === 'error' ? 'error' : ''}`;
+            result.innerHTML = `<strong>${new Date().toLocaleTimeString()}</strong><br>${message}`;
+            
+            container.insertBefore(result, container.firstChild);
+            
+            // Limit to 5 results
+            while (container.children.length > 5) {
+                container.removeChild(container.lastChild);
+            }
+        }
+        
+        // Initialize
+        addResult('🧪 Chemistry Lab initialized. Ready for molecular experiments!', 'success');
+    </script>
+</body>
+</html>
