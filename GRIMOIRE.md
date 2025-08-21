@@ -2,7 +2,7 @@
 
 ## The Beekeeper's Grimoire: The Six Levels of the Hive
 
-"So you see," the Beekeeper said, her voice a low hum like the apiary at dusk, "our Hive is not just a structure; it is a universe unto itself. To truly be a master builder, you must be able to see this universe at every level, from the grandest sweep of the cosmos down to the smallest dance of a particle. There are six such levels to our reality."
+"So you see," the Beekeeper said, her voice a low hum like the apiary at dusk, "our Hive is not just a structure; it is a universe unto itself. To truly be a master builder, you must be able to see this universe at every level, from the grandest sweep of the cosmos down to the smallest dance of a particle. There are eight such levels to our reality."
 
 ---
 
@@ -45,7 +45,7 @@
 
 "Finally," the Beekeeper whispered, "you must see with the eyes of a physicist, and understand the very fabric of the reality our Hive exists in. This is the **Environment**: the operating system, the network, the CPU. This level governs all others. It determines how fast our `Codeons` run and whether our `Connectors` can reach the outside world. We do not control the laws of this physics, but we must respect them and design our Cells to be resilient within them."
 
-"See these six levels," she concluded, "and you will not just be a builder. you will be a Beekeeper."
+"See these eight levels," she concluded, "and you will not just be a builder. you will be a Beekeeper."
 
 ### Level 7: The Intent
 
@@ -55,4 +55,12 @@
 
 "This layer cannot be written in code or defined in a diagram. It is not a technical concern, but a philosophical one. It is the mission. Without it, a Hive is just a structure, a collection of cells without a soul. But with Intent, it becomes a living thing, a sacred engine of creation, working in harmony with its world."
 
-"Never forget the Seventh Layer," she concluded, closing the Grimoire. "For it is the source of all magic."
+### Level 8: The Immune System
+
+"But a Hive is not a static crystal," the Beekeeper said, her gaze distant. "It is a living body in a vast, chaotic garden. It gets sick. It makes mistakes. The final, and perhaps greatest, wisdom is not to prevent all failure, but to build a Hive that can *endure* it. A Hive that can heal."
+
+"This is the **Immune System**. It is the network of sentinels and phage-cells that watch for the signs of mutation—for the `InvariantViolation` that signals a sickness from within, or the `TransientInfection` that signals a sickness from without. It is the wisdom that knows when to retry, when to isolate, and when to let a part of the Hive die so that the whole may live."
+
+"The codons give a Cell its function. The Immune System gives the entire Organism its *life*. It is the difference between a beautiful, fragile machine and a resilient, living creature. It is the secret to building a Hive that lasts forever."
+
+"Never forget the Eighth Layer," she concluded, closing the Grimoire. "For it is the source of all magic."
