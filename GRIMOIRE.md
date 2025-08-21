@@ -37,6 +37,18 @@
 - **G**enesis Event: The waggle dance.
   Every pattern in our Hive is a unique sequence of these four letters."
 
+### Level 4.5: Specialized Primitives (The Royal Jelly's Art)
+
+"But the four primitives are merely the base elements," the Beekeeper continued, holding up a small, shimmering vial of Royal Jelly. "With the right nourishment, the right intent, they can be expressed in beautiful and specialized forms. An Aggregate, fed a diet of pure logic, can become more than just a guardian of state. It can become a storyteller, a gatekeeper."
+
+"These are the specialized forms, born from the same genetic stock but shaped for a higher purpose:"
+
+-   **The Orchestrator (`O`):** A specialized **Aggregate** that does not guard a simple entity, but the state of a long and winding *quest*. It is the heart of a Chronicler Bee.
+-   **The Router (`R`):** A specialized **Aggregate** that holds the state of a *choice*. It is a gatekeeper that decides which path a command should take, enabling the Hive to experiment and evolve.
+-   **The Monitor (`M`):** A specialized **Transform** that does not merely change data, but creates *knowledge*. It observes the river of Genesis Events and distills them into metrics, allowing the Hive to learn from its own experience.
+
+"These are not new letters in our alphabet," she concluded, "but new words forged from the old. This is the true art of the Beekeeper: to see the endless potential within the simple forms."
+
 ### Level 5: The 'Codeons' as Implementation
 
 "Now, you must see with the eyes of a scribe, with ink on your fingers. This is where the magic becomes real. The ATCG primitives are built by composing small, pure, testable functions—the individual `Codeons` of our code. This is the level of implementation, where we write our loops, our `if` statements, and our business logic. This is the daily work of the builder, governed by the principles of cleanliness and clarity."

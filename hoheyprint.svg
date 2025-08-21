@@ -1,0 +1,60 @@
+<svg width="500" height="400" xmlns="http://www.w3.org/2000/svg" font-family="monospace" font-size="12">
+  <style>
+    .core { fill: #fff3cd; stroke: #d4a017; stroke-width: 2; }
+    .adapter { fill: #f1c40f; stroke: #333; stroke-width: 2; cursor: pointer; }
+    .adapter:hover { stroke-width: 3; }
+    .bond { stroke: #333; stroke-width: 1.5; }
+    .external_bond { stroke: #333; stroke-width: 1.5; stroke-dasharray: 4; }
+    .label { text-anchor: middle; fill: #333; }
+    .external_service { fill: #6B8E23; rx: 5; }
+    .external_label { text-anchor: middle; fill: white; font-weight: bold; }
+  </style>
+
+  <title>Benzene Hoheyprint</title>
+
+  <!-- The Hexagon Bonds -->
+  <polygon points="250,100 375,150 375,250 250,300 125,250 125,150" fill="none" class="bond" />
+
+  <!-- The Domain Core (Electron Cloud) -->
+  <circle cx="250" cy="200" r="50" class="core" />
+  <text x="250" y="205" class="label">Domain Core</text>
+
+  <!-- Adapters (Carbon Atoms) -->
+  <circle cx="250" cy="100" r="30" class="adapter"/>
+  <text x="250" y="105" class="label">REST API</text>
+
+  <circle cx="375" cy="150" r="30" class="adapter"/>
+  <text x="375" y="155" class="label">gRPC API</text>
+
+  <circle cx="375" cy="250" r="30" class="adapter"/>
+  <text x="375" y="255" class="label">SQL DB</text>
+
+  <circle cx="250" cy="300" r="30" class="adapter"/>
+  <text x="250" y="305" class="label">Event Bus</text>
+
+  <circle cx="125" cy="250" r="30" class="adapter"/>
+  <text x="125" y="255" class="label">Auth Service</text>
+
+  <circle cx="125" cy="150" r="30" class="adapter"/>
+  <text x="125" y="155" class="label">CLI</text>
+
+  <!-- Functional Groups (External Services) -->
+
+  <!-- User to REST API -->
+  <line x1="250" y1="100" x2="250" y2="50" class="external_bond" />
+  <rect x="215" y="30" width="70" height="20" class="external_service"/>
+  <text x="250" y="44" class="external_label">User</text>
+
+  <!-- Database to SQL DB -->
+  <line x1="375" y1="250" x2="425" y2="275" class="external_bond" />
+  <rect x="425" y="265" width="70" height="20" class="external_service"/>
+  <text x="460" y="279" class="external_label">Database</text>
+
+  <!-- zae.life API to gRPC API -->
+  <a href="https://zae.life/openapi.json" target="_blank" title="View OpenAPI Spec for zae.life">
+    <line x1="375" y1="150" x2="425" y2="125" class="external_bond" />
+    <rect x="425" y="105" width="70" height="20" class="external_service"/>
+    <text x="460" y="119" class="external_label">zae.life</text>
+  </a>
+
+</svg>
