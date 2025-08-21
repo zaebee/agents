@@ -176,7 +176,7 @@ The Hexagonal Hive teaches us to protect our core logic. The ATCG genetic code g
 
 ## For Curious Minds: The Beekeeper's Technical Grimoire
 
-*This section breaks from our fairy tale to provide a more technical look at the patterns we've discussed.*
+_This section breaks from our fairy tale to provide a more technical look at the patterns we've discussed._
 
 ### ATCG Primitives in Pseudo-code
 
@@ -211,7 +211,7 @@ class OrderAggregate {
     const event = new OrderShippedEvent({
       orderId: this.state.id,
       shippingId: command.shippingId,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
 
     this.apply(event);
@@ -269,7 +269,7 @@ A Pollen Protocol-compliant event should always contain:
 
 By enforcing this simple contract, we create a healthy ecosystem where new services can easily consume events from existing ones without creating tight coupling.
 
-A final thought on this metaphor: If the Pollen Protocol defines the *genes* (the structure of an event), then the raw, serialized data that travels over the wire—the JSON string, the Protobuf bytes—is the *genetic sequence* itself. It is the `tataaaaataaaataaaaaa...` of our system, the physical expression of the logical gene.
+A final thought on this metaphor: If the Pollen Protocol defines the _genes_ (the structure of an event), then the raw, serialized data that travels over the wire—the JSON string, the Protobuf bytes—is the _genetic sequence_ itself. It is the `tataaaaataaaataaaaaa...` of our system, the physical expression of the logical gene.
 
 ### Sequence Diagram: From Request to Waggle Dance
 
@@ -328,4 +328,4 @@ An automated **"Queen Bee"** system—a sophisticated CI/CD operator—reads thi
 - **Pupa:** Upon successful testing, it packages the component into a hardened, deployable container.
 - **Adult:** It deploys this new container into the production environment, where it comes to life and begins listening for its specified events.
 
-This is the ultimate goal: an architecture so well-defined that it becomes a living factory for its own components. This is the convergence of Domain-Driven Design, GitOps, and Model-Driven Development, creating a system that is not just built, but truly *grown*.
+This is the ultimate goal: an architecture so well-defined that it becomes a living factory for its own components. This is the convergence of Domain-Driven Design, GitOps, and Model-Driven Development, creating a system that is not just built, but truly _grown_.
