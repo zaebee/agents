@@ -16,11 +16,15 @@
 
 ### Level 3: The Architectural 'Codons'
 
-"Now, you must see with the eyes of a geneticist, and understand the 'words' that give the Cell its function. These are the three primary **Codons**, the fundamental patterns of action. Every task a Cell performs is an expression of one of these:
+"Now, you must see with the eyes of a geneticist, and understand the 'words' that give the Cell its function. These are the four primary **Codons**, the fundamental patterns of action. Every task a Cell performs is an expression of one of these:
 
 - **The 'Handle Command' Codon (`C -> A -> G`):** The word for 'to change'.
 - **The 'Query Data' Codon (`C -> T -> C`):** The word for 'to see'.
 - **The 'React to Event' Codon (`G -> C -> A -> G`):** The word for 'to listen'.
+- **The 'Choreography' Codon:** The word for 'to become'.
+
+"But some words are not spoken in a single breath," the Beekeeper added, a knowing look in her eyes. "Some are stories, unfolding over time. The 'Choreography' codon is such a word. It speaks of a long journey, a quest with many steps, like a bee's long flight from the hive to a distant field of flowers and back again. It is the pattern of becoming."
+
   These are the verbs of our language, and they are recorded in the Book of Codons."
 
 ### Level 4: The ATCG Primitives
