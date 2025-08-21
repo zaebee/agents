@@ -116,8 +116,7 @@ Inspired by FIPA ACL and KQML, the initial set of performatives for the PoC and 
       // "error_encountered": "Details of why it failed",
       // "analysis": "Any insights gained despite failure"
     },
-    "artifacts": [
-      // Optional: list of paths or references to created/modified files or resources
+    "artifacts": [ // Optional: list of paths or references to created/modified files or resources
       // {"type": "file", "path": "/path/to/fixed_script.py"},
       // {"type": "log", "content": "..."}
     ]
@@ -126,6 +125,7 @@ Inspired by FIPA ACL and KQML, the initial set of performatives for the PoC and 
 - **Example Use:** Jules informs Eddy of the result of the debugging task.
 - **Ontology Example (Success):** `elizaos:ontology:code/python/solution_provided`
 - **Ontology Example (Failure/Analysis):** `elizaos:ontology:code/python/debug_analysis`
+
 
 ### 4.4. `QUERY_IF` / `QUERY_REF`
 
@@ -175,7 +175,7 @@ Inspired by FIPA ACL and KQML, the initial set of performatives for the PoC and 
     "error_text": "description_of_the_failure"
   }
   ```
-- **Example Use:** Jules informs Eddy that it failed to process the debugging task request due to an internal system crash (distinct from `INFORM_RESULT` with `task_status: "failure"` which would mean Jules _tried_ to debug but couldn't find a solution).
+- **Example Use:** Jules informs Eddy that it failed to process the debugging task request due to an internal system crash (distinct from `INFORM_RESULT` with `task_status: "failure"` which would mean Jules *tried* to debug but couldn't find a solution).
 - **Ontology Example:** `elizaos:ontology:general/action_execution_failure`
 
 ### 4.7. `NOT_UNDERSTOOD`
@@ -300,15 +300,13 @@ For the initial PoC involving Eddy delegating a debugging task to Jules, the foc
 
 ### 7.2. MCP Transport Simulation via Logging (Conceptual Plan)
 
-Given that direct ElizaOS runtime modification for a message bus is out of scope for this PoC, the inter-agent communication will be simulated by enhancing agent action handlers to log the exact MCP messages they _would_ send or _have conceptually received_.
+Given that direct ElizaOS runtime modification for a message bus is out of scope for this PoC, the inter-agent communication will be simulated by enhancing agent action handlers to log the exact MCP messages they *would* send or *have conceptually received*.
 
 **Logging Mechanism:**
-
 - Agents will use their standard logging capabilities.
 - MCP messages will be logged as structured JSON strings, prefixed with a clear indicator like `MCP_MESSAGE_SENT:` or `MCP_MESSAGE_RECEIVED:`.
 
 **Eddy's `DELEGATE_CODING_TASK_TO_JULES` Action Handler:**
-
 1.  When triggered, this action will construct a full MCP `TASK_REQUEST` message destined for Jules.
     - This includes generating a unique `message_id`, setting `sender` to "Eddy", `receiver` to "Jules", appropriate `ontology`, and the detailed `payload` as defined in Section 4.1.
 2.  Instead of sending this message over a transport layer, Eddy's handler will log:
@@ -316,13 +314,12 @@ Given that direct ElizaOS runtime modification for a message bus is out of scope
 3.  Eddy's `thought` process (as seen in `Eddy.json` message examples) will be updated to reflect that it has "sent" this message and is now awaiting a `TASK_ACCEPT` and subsequently an `INFORM_RESULT` from Jules, referencing the `message_id` or `reply_with` of the sent `TASK_REQUEST`.
 
 **Jules's `EXECUTE_DELEGATED_CODING_TASK` Action Handler:**
-
 1.  Conceptually, this action is triggered upon "receiving" a `TASK_REQUEST` from Eddy. For the PoC, this will be simulated by having an example in `Jules.json` that shows an incoming `TASK_REQUEST` (as if logged by a transport layer).
 2.  Upon activation (conceptually, after parsing the incoming `TASK_REQUEST`):
     - Jules's handler will first construct an MCP `TASK_ACCEPT` message.
-      - This message will reference the `in_reply_to` field with the `message_id` from Eddy's `TASK_REQUEST`.
+        - This message will reference the `in_reply_to` field with the `message_id` from Eddy's `TASK_REQUEST`.
     - Jules will log:
-      `MCP_MESSAGE_SENT: [JSON string of the TASK_ACCEPT message to Eddy]`
+        `MCP_MESSAGE_SENT: [JSON string of the TASK_ACCEPT message to Eddy]`
 3.  Jules will then proceed with the core logic of the task (analyzing the coding problem).
 4.  After completing the analysis/work, Jules's handler will construct an MCP `INFORM_RESULT` message.
     - This message will also reference the `in_reply_to` field with the `message_id` from Eddy's original `TASK_REQUEST`.
@@ -331,9 +328,8 @@ Given that direct ElizaOS runtime modification for a message bus is out of scope
     `MCP_MESSAGE_SENT: [JSON string of the INFORM_RESULT message to Eddy]`
 
 **Simulated Reception at Eddy:**
-
 - While Jules logs sent messages, Eddy won't automatically pick them up.
-- The PoC will demonstrate the _expected_ reception by updating Eddy's `messageExamples` to show how Eddy would react _if_ it received the `TASK_ACCEPT` and `INFORM_RESULT` messages from Jules. This part remains conceptual in terms of actual message handling but will be clear in the JSON examples. For instance, Eddy's subsequent turn might show a `thought` like: "Received TASK_ACCEPT from Jules for message_id X. Now awaiting INFORM_RESULT." and later "Received INFORM_RESULT from Jules for message_id X. Forwarding result to user."
+- The PoC will demonstrate the *expected* reception by updating Eddy's `messageExamples` to show how Eddy would react *if* it received the `TASK_ACCEPT` and `INFORM_RESULT` messages from Jules. This part remains conceptual in terms of actual message handling but will be clear in the JSON examples. For instance, Eddy's subsequent turn might show a `thought` like: "Received TASK_ACCEPT from Jules for message_id X. Now awaiting INFORM_RESULT." and later "Received INFORM_RESULT from Jules for message_id X. Forwarding result to user."
 
 This logging approach will make the intended MCP flow visible and verifiable through agent logs, achieving the PoC's goal of demonstrating structured inter-agent communication without deep OS modifications.
 

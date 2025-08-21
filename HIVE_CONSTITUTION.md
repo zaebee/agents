@@ -27,19 +27,15 @@ The Beekeeper smiled. "Aha, that is the deepest secret of all. Every living thin
 "But before we learn the primitives," she added, her eyes twinkling, "you must understand the **Quaternary Principle**. The hive's power comes from having **four** distinct primitives, which gives us immense variety. But its stability comes from the **Duality Principle** of how they connect. An action requires a record, a request requires a response. Remember this balance of variety and validation. Now, for the primitives themselves:"
 
 ### A is for Aggregate
-
 "An **Aggregate** is like a vital organ in a bee—its heart or its wings. It's a bundle of tiny parts that work together as one. You don't tell a bee's wing-part to flap; you tell the bee to fly! The Aggregate is the master of its own little world, ensuring all its internal rules are followed. It is the fundamental unit of consistency."
 
 ### T is for Transformation
-
 "A **Transformation** is like a magical enzyme. It's a pure, stateless process that helps a bee do its work. Imagine an enzyme that turns nectar into honey. The enzyme itself doesn't change, it just performs its one, perfect task. Transformations hold business logic that doesn't belong to any single organ."
 
 ### C is for Connector
-
 "A **Connector** is the bee's senses—its antennae that smell the flowers or its eyes that see the sun. It's the bridge between the bee's inner world and the garden outside. Connectors are the translators, turning the language of the outside world (like HTTP requests or database queries) into signals the bee's organs can understand."
 
 ### G is for Genesis Event
-
 "A **Genesis Event** is the famous 'waggle dance' of the honeybee. It's a message, a broadcast to the entire hive that something important has happened—'I've found a field of delicious flowers!' or 'An order has been placed!'. It's an immutable fact, a piece of history that other bees can react to, allowing the hive to work together without being tightly coupled."
 
 ## The Royal Jelly Framework
@@ -141,15 +137,14 @@ The Beekeeper smiled. "A new bee is not simply built. It is born. It undergoes a
 
 She explained that every new feature, every new worker bee, follows the same four-stage lifecycle:
 
-1. **The Egg (Initialization):** A new, empty honeycomb cell is created. This is the initial file structure, the scaffolding for our new bee. It holds nothing but a promise.
-2. **The Larva (Development):** The egg hatches! The larva is fed with Royal Jelly (the core framework) and bee bread (business logic). This is where the code is written, the tests are crafted, and the bee begins to take shape, its ATCG code defining its purpose.
-3. **The Pupa (Transformation):** The larva spins a cocoon. This is the build and containerization phase. The code is compiled, dependencies are locked, and it's packaged into a deployable unit—a Docker image, safe and ready for the world.
-4. **The Adult (Deployment):** The bee emerges, fully formed! It is released into the hive to perform its duties. The feature is deployed to production, becoming a living, breathing part of the system.
+1.  **The Egg (Initialization):** A new, empty honeycomb cell is created. This is the initial file structure, the scaffolding for our new bee. It holds nothing but a promise.
+2.  **The Larva (Development):** The egg hatches! The larva is fed with Royal Jelly (the core framework) and bee bread (business logic). This is where the code is written, the tests are crafted, and the bee begins to take shape, its ATCG code defining its purpose.
+3.  **The Pupa (Transformation):** The larva spins a cocoon. This is the build and containerization phase. The code is compiled, dependencies are locked, and it's packaged into a deployable unit—a Docker image, safe and ready for the world.
+4.  **The Adult (Deployment):** The bee emerges, fully formed! It is released into the hive to perform its duties. The feature is deployed to production, becoming a living, breathing part of the system.
 
 "This lifecycle ensures that every bee, no matter its function, is born strong, tested, and ready to contribute to the hive's prosperity," the Beekeeper concluded.
 
 Here is the lifecycle in a simple diagram:
-
 ```mermaid
 stateDiagram-v2
     direction LR
@@ -176,14 +171,13 @@ The Hexagonal Hive teaches us to protect our core logic. The ATCG genetic code g
 
 ## For Curious Minds: The Beekeeper's Technical Grimoire
 
-_This section breaks from our fairy tale to provide a more technical look at the patterns we've discussed._
+*This section breaks from our fairy tale to provide a more technical look at the patterns we've discussed.*
 
 ### ATCG Primitives in Pseudo-code
 
 Here is a conceptual look at how our primitives might be implemented. We'll use a TypeScript-like syntax for clarity.
 
 #### A: Aggregate
-
 An `Aggregate` encapsulates state and enforces its own rules (invariants).
 
 ```typescript
@@ -211,7 +205,7 @@ class OrderAggregate {
     const event = new OrderShippedEvent({
       orderId: this.state.id,
       shippingId: command.shippingId,
-      timestamp: new Date(),
+      timestamp: new Date()
     });
 
     this.apply(event);
@@ -227,7 +221,6 @@ class OrderAggregate {
 ```
 
 #### C: Connector
-
 A `Connector` translates external input into domain commands.
 
 ```typescript
@@ -259,7 +252,6 @@ class RestConnector {
 The **Pollen Protocol** is a simple, powerful idea: just as flowers have a predictable structure that bees understand, our `Genesis Events` should have a predictable structure so other services (Hives) can understand them.
 
 A Pollen Protocol-compliant event should always contain:
-
 - `eventId`: A unique identifier for this specific event instance.
 - `eventType`: A clear, past-tense name (e.g., `OrderShipped`).
 - `eventVersion`: A version number (`1.0`, `2.1`) to handle schema evolution.
@@ -269,7 +261,7 @@ A Pollen Protocol-compliant event should always contain:
 
 By enforcing this simple contract, we create a healthy ecosystem where new services can easily consume events from existing ones without creating tight coupling.
 
-A final thought on this metaphor: If the Pollen Protocol defines the _genes_ (the structure of an event), then the raw, serialized data that travels over the wire—the JSON string, the Protobuf bytes—is the _genetic sequence_ itself. It is the `tataaaaataaaataaaaaa...` of our system, the physical expression of the logical gene
+A final thought on this metaphor: If the Pollen Protocol defines the *genes* (the structure of an event), then the raw, serialized data that travels over the wire—the JSON string, the Protobuf bytes—is the *genetic sequence* itself. It is the `tataaaaataaaataaaaaa...` of our system, the physical expression of the logical gene.
 
 ### Sequence Diagram: From Request to Waggle Dance
 
@@ -323,10 +315,9 @@ connectors:
 
 An automated **"Queen Bee"** system—a sophisticated CI/CD operator—reads this definition and orchestrates the entire Metamorphosis:
 
-- **Egg:** It receives the YAML and generates the initial project scaffolding, creating all the necessary files from templates.
+*   **Egg:** It receives the YAML and generates the initial project scaffolding, creating all the necessary files from templates.
+*   **Larva:** It takes the core business logic written by the developer (the one part that requires human creativity) and injects it into the generated code. It then runs a suite of automated tests against the new component.
+*   **Pupa:** Upon successful testing, it packages the component into a hardened, deployable container.
+*   **Adult:** It deploys this new container into the production environment, where it comes to life and begins listening for its specified events.
 
-- **Larva:** It takes the core business logic written by the developer (the one part that requires human creativity) and injects it into the generated code. It then runs a suite of automated tests against the new component.
-- **Pupa:** Upon successful testing, it packages the component into a hardened, deployable container.
-- **Adult:** It deploys this new container into the production environment, where it comes to life and begins listening for its specified events.
-
-This is the ultimate goal: an architecture so well-defined that it becomes a living factory for its own components. This is the convergence of Domain-Driven Design, GitOps, and Model-Driven Development, creating a system that is not just built, but truly _grown_.
+This is the ultimate goal: an architecture so well-defined that it becomes a living factory for its own components. This is the convergence of Domain-Driven Design, GitOps, and Model-Driven Development, creating a system that is not just built, but truly *grown*.
