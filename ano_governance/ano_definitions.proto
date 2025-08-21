@@ -1,0 +1,147 @@
+syntax = "proto3";
+
+package anokto_gRPC;
+
+import "google/protobuf/timestamp.proto";
+
+// Enums
+
+// Тип участника (Устав 3.2)
+enum UchastnikType {
+  UCHASTNIK_TYPE_UNSPECIFIED = 0;
+  PHYSICAL_PERSON = 1; // Физическое лицо
+  LEGAL_ENTITY = 2;    // Юридическое лицо
+}
+
+// Статус предложения (для contract_v2.tact getProposalStatus)
+enum ProposalStatus {
+  PROPOSAL_STATUS_UNSPECIFIED = 0;
+  ACTIVE = 1;                      // Голосование активно
+  EXECUTED = 2;                    // Исполнено
+  PASSED_PENDING_EXECUTION = 3;    // Одобрено, ожидает исполнения
+  FAILED_QUORUM_NOT_MET = 4;       // Провалено, не набран кворум
+  FAILED_AGAINST = 5;              // Провалено, большинство против
+  FAILED_TIE = 6;                  // Провалено, ничья
+  FAILED_NO_VOTERS = 7;            // Провалено, нет голосующих
+}
+
+// Core Data Messages
+
+// Участник АНО (Устав Глава 3, contract_v2.tact members map)
+message Uchastnik {
+  string address = 1;          // Адрес в блокчейне (если применимо)
+  int32 voting_power = 2;      // Сила голоса в смарт-контракте
+  string name = 3;             // Имя/Наименование (для информации)
+  UchastnikType type = 4;      // Тип участника
+  google.protobuf.Timestamp member_since = 5; // Дата вступления (опционально)
+}
+
+// Предложение для голосования (Устав 4.2, contract_v2.tact Proposal struct)
+message Predlozhenie {
+  string proposal_id = 1;        // ID предложения (в контракте это Int, здесь string для гибкости)
+  string description = 2;        // Описание предложения
+  string proposer_address = 3;   // Адрес инициатора
+  google.protobuf.Timestamp creation_time = 4;    // Время создания
+  google.protobuf.Timestamp voting_deadline = 5;  // Время окончания голосования
+  int32 votes_for = 6;           // Голосов "за"
+  int32 votes_against = 7;       // Голосов "против"
+  bool is_executed = 8;          // Исполнено ли предложение
+  ProposalStatus status = 9;     // Текущий статус предложения
+  string contract_address = 10;  // Адрес смарт-контракта, где это предложение
+}
+
+// Цель АНО (Устав 2.1, contract_v2.tact AnoktoGoal struct)
+message AnoktoGoal {
+  string goal_id = 1;            // ID цели
+  string description = 2;        // Описание цели
+}
+
+// Вид деятельности АНО (Устав 2.2, contract_v2.tact AnoktoActivity struct)
+message AnoktoActivity {
+  string activity_id = 1;        // ID вида деятельности
+  string description = 2;        // Описание вида деятельности
+}
+
+// Учредитель АНО (Устав 3.1)
+message Uchreditel {
+  string name = 1;                 // Имя учредителя
+  string address = 2;              // Адрес (блокчейн или юридический, если применимо)
+  string role_description = 3;     // Описание роли (напр., "Первоначальный учредитель")
+  // Паспортные данные и прочая PII здесь не хранятся
+}
+
+// AI Agent Tool (Устав 3.3, Протокол УС 4.4)
+message AIAgentTool {
+  string agent_id = 1;             // Уникальный идентификатор ИИ-инструмента (н.п., "github_copilot_registrar")
+  string name = 2;                 // Имя инструмента (н.п., "GitHub Copilot")
+  string description = 3;          // Описание его функций или предоставленных прав
+}
+
+
+// Document/Event Messages (derived from Protocol_Founding_Meeting.md)
+
+// Протокол Собрания
+message ProtokolSobraniya {
+  string protocol_id = 1;        // Уникальный ID протокола (н.п., "uchreditelnoye_sobranie_04_07_2025")
+  string document_title = 2;     // Заголовок документа
+  google.protobuf.Timestamp data_provedeniya = 3; // Дата проведения
+  string mesto_provedeniya = 4;  // Место проведения
+  repeated UchastnikProtokola prisutstvovali = 5; // Список присутствовавших
+  repeated PunktPovestkiDnya povestka_dnya = 6;   // Повестка дня
+  repeated Reshenie resheniya = 7;               // Принятые решения
+  string ssylka_na_ustav = 8;    // Ссылка на утвержденный устав (если применимо)
+}
+
+// Участник, присутствовавший на собрании (для Протокола)
+message UchastnikProtokola {
+  string name = 1;                  // Имя присутствовавшего
+  string role_v_sobranii = 2;       // Роль на собрании (н.п., "Учредитель", "Секретарь")
+  // Дополнительные идентификаторы можно добавить при необходимости
+}
+
+// Пункт повестки дня (для Протокола)
+message PunktPovestkiDnya {
+  string position = 1;              // Номер пункта (н.п., "1", "2.1")
+  string description = 2;           // Текст пункта повестки
+}
+
+// Решение, принятое на собрании (для Протокола)
+message Reshenie {
+  string po_punktu_povestki_id = 1; // ID пункта повестки, к которому относится решение
+  string tip_resheniya = 2;         // Тип решения (н.п., "Учреждение организации", "Утверждение устава")
+  string tekst_resheniya = 3;       // Полный текст решения
+  // Для сложных решений, можно добавить структурированные поля или json_details
+  // string details_json = 4;
+  string entity_involved_name = 5;  // Имя сущности, к которой относится решение (н.п., имя избранного председателя)
+  string entity_involved_role = 6;  // Роль этой сущности (н.п., "Председатель Правления")
+  string ai_agent_tool_id_authorized = 7; // ID ИИ-инструмента, если решение о наделении его правами
+}
+
+
+// Placeholder for potential gRPC Service Definitions
+/*
+service AnoContractService {
+  // Управление Участниками
+  rpc AddMember (Uchastnik) returns (GenericResponse);
+  rpc GetMember (GetMemberRequest) returns (Uchastnik);
+  rpc UpdateMemberVotingPower (UpdateVotingPowerRequest) returns (GenericResponse);
+  rpc RemoveMember (RemoveMemberRequest) returns (GenericResponse);
+
+  // Управление Предложениями
+  rpc CreateProposal (CreateProposalRequest) returns (Predlozhenie);
+  rpc GetProposal (GetProposalRequest) returns (Predlozhenie);
+  rpc VoteOnProposal (VoteRequest) returns (GenericResponse);
+  rpc MarkProposalExecuted (MarkProposalExecutedRequest) returns (GenericResponse);
+
+  // Управление Целями и Активностями
+  rpc AddAnoktoGoal (AnoktoGoal) returns (AnoktoGoal);
+  rpc GetAnoktoGoal (GetAnoktoGoalRequest) returns (AnoktoGoal);
+  // ... и так далее для Activities
+}
+
+message GenericResponse {
+  bool success = 1;
+  string message = 2;
+}
+// ... Request messages for Get/Update/Remove operations
+*/

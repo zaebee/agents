@@ -1,0 +1,406 @@
+{
+  "@context": {
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "schema": "http://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "anokto": "http://example.org/anokto/ontology/"
+  },
+  "@graph": [
+    {
+      "@id": "anokto:Dokument",
+      "@type": "owl:Class",
+      "rdfs:label": [
+        {"@language": "ru", "@value": "Документ"},
+        {"@language": "en", "@value": "Document"}
+      ],
+      "rdfs:comment": "A base class for official documents related to the ANO."
+    },
+    {
+      "@id": "anokto:ANO_KTO_SVO",
+      "@type": "owl:Class",
+      "rdfs:label": [
+        {"@language": "ru", "@value": "Автономная некоммерческая организация КТО с СВО"},
+        {"@language": "en", "@value": "Autonomous Non-Profit Organization KTO s SVO"}
+      ],
+      "rdfs:comment": "Represents the ANO KTO s SVO organization itself. (Устав Глава 1)"
+    },
+    {
+      "@id": "anokto:Ustav",
+      "@type": "owl:Class",
+      "rdfs:subClassOf": "anokto:Dokument",
+      "rdfs:label": [
+        {"@language": "ru", "@value": "Устав АНО"},
+        {"@language": "en", "@value": "Charter of the ANO"}
+      ],
+      "rdfs:comment": "The charter/statutes of the ANO."
+    },
+    {
+      "@id": "anokto:ProtokolSobraniya",
+      "@type": "owl:Class",
+      "rdfs:subClassOf": "anokto:Dokument",
+      "rdfs:label": [
+        {"@language": "ru", "@value": "Протокол Собрания"},
+        {"@language": "en", "@value": "Meeting Minutes"}
+      ],
+      "rdfs:comment": "Represents the minutes of a meeting (e.g., founding meeting, general meeting)."
+    },
+    {
+      "@id": "anokto:PunktPovestkiDnya",
+      "@type": "owl:Class",
+      "rdfs:label": [
+        {"@language": "ru", "@value": "Пункт Повестки Дня"},
+        {"@language": "en", "@value": "Agenda Item"}
+      ],
+      "rdfs:comment": "An item on the agenda of a meeting."
+    },
+    {
+      "@id": "anokto:Reshenie",
+      "@type": "owl:Class",
+      "rdfs:label": [
+        {"@language": "ru", "@value": "Решение Собрания"},
+        {"@language": "en", "@value": "Meeting Decision"}
+      ],
+      "rdfs:comment": "A decision made during a meeting."
+    },
+    {
+      "@id": "anokto:Uchreditel",
+      "@type": "owl:Class",
+      "rdfs:subClassOf": "schema:Person",
+      "rdfs:label": [
+        {"@language": "ru", "@value": "Учредитель"},
+        {"@language": "en", "@value": "Founder"}
+      ],
+      "rdfs:comment": "A founder of the ANO. (Устав 3.1)"
+    },
+    {
+      "@id": "anokto:Uchastnik",
+      "@type": "owl:Class",
+      "rdfs:label": [
+        {"@language": "ru", "@value": "Участник"},
+        {"@language": "en", "@value": "Member/Participant"}
+      ],
+      "rdfs:comment": "A member/participant of the ANO (physical or legal entity). (Устав 3.2, 3.4, 3.5)"
+    },
+    {
+      "@id": "anokto:FizLicoUchastnik",
+      "@type": "owl:Class",
+      "rdfs:subClassOf": ["anokto:Uchastnik", "schema:Person"],
+      "rdfs:label": [
+        {"@language": "ru", "@value": "Участник - Физическое лицо"},
+        {"@language": "en", "@value": "Participant - Physical Person"}
+      ]
+    },
+    {
+      "@id": "anokto:YurLicoUchastnik",
+      "@type": "owl:Class",
+      "rdfs:subClassOf": ["anokto:Uchastnik", "schema:Organization"],
+      "rdfs:label": [
+        {"@language": "ru", "@value": "Участник - Юридическое лицо"},
+        {"@language": "en", "@value": "Participant - Legal Entity"}
+      ]
+    },
+    {
+      "@id": "anokto:AIAgentTool",
+      "@type": "owl:Class",
+      "rdfs:label": [
+        {"@language": "ru", "@value": "Инструмент ИИ-агент"},
+        {"@language": "en", "@value": "AI Agent Tool"}
+      ],
+      "rdfs:comment": "An AI agent as a software tool supporting ANO activities, not an independent legal entity or member. (Устав 3.3)"
+    },
+    {
+      "@id": "anokto:ObscheeSobranie",
+      "@type": "owl:Class",
+      "rdfs:label": [
+        {"@language": "ru", "@value": "Общее собрание"},
+        {"@language": "en", "@value": "General Meeting"}
+      ],
+      "rdfs:comment": "The General Meeting of founders and participants, the supreme governing body. (Устав 4.1, 4.2, 4.3)"
+    },
+    {
+      "@id": "anokto:Pravlenie",
+      "@type": "owl:Class",
+      "rdfs:label": [
+        {"@language": "ru", "@value": "Правление"},
+        {"@language": "en", "@value": "Board"}
+      ],
+      "rdfs:comment": "The executive body of the ANO. (Устав 4.4)"
+    },
+    {
+      "@id": "anokto:PredsedatelPravleniya",
+      "@type": "owl:Class",
+      "rdfs:subClassOf": "schema:Person",
+      "rdfs:label": [
+        {"@language": "ru", "@value": "Председатель Правления"},
+        {"@language": "en", "@value": "Chairman of the Board"}
+      ],
+      "rdfs:comment": "The Chairman of the Board, manages current activities. (Устав 4.5)"
+    },
+    {
+      "@id": "anokto:Predlozhenie",
+      "@type": "owl:Class",
+      "rdfs:label": [
+        {"@language": "ru", "@value": "Предложение"},
+        {"@language": "en", "@value": "Proposal"}
+      ],
+      "rdfs:comment": "A proposal submitted for consideration by the General Meeting. (Устав 4.2, contract Proposal struct)"
+    },
+    {
+      "@id": "anokto:Golosovanie",
+      "@type": "owl:Class",
+      "rdfs:label": [
+        {"@language": "ru", "@value": "Процесс Голосования"},
+        {"@language": "en", "@value": "Voting Process"}
+      ],
+      "rdfs:comment": "The process of voting on proposals. (Устав 4.3, contract VotingProcessConfig)"
+    },
+    {
+      "@id": "anokto:TselANO",
+      "@type": "owl:Class",
+      "rdfs:label": [
+        {"@language": "ru", "@value": "Цель АНО"},
+        {"@language": "en", "@value": "Goal of ANO"}
+      ],
+      "rdfs:comment": "A goal of the ANO. (Устав 2.1, contract AnoktoGoal struct)"
+    },
+    {
+      "@id": "anokto:VidDeyatelnostiANO",
+      "@type": "owl:Class",
+      "rdfs:label": [
+        {"@language": "ru", "@value": "Вид деятельности АНО"},
+        {"@language": "en", "@value": "Activity Type of ANO"}
+      ],
+      "rdfs:comment": "A type of activity the ANO engages in. (Устав 2.2, contract AnoktoActivity struct)"
+    },
+    {
+      "@id": "anokto:SmartContractANO",
+      "@type": "owl:Class",
+      "rdfs:label": [
+        {"@language": "ru", "@value": "Смарт-контракт АНО"},
+        {"@language": "en", "@value": "ANO Smart Contract"}
+      ],
+      "rdfs:comment": "The smart contract representing aspects of the ANO's governance on the blockchain."
+    },
+
+    // Properties
+    {
+      "@id": "anokto:hasUstav", "@type": "owl:ObjectProperty", "rdfs:label": "has charter",
+      "schema:domainIncludes": "anokto:ANO_KTO_SVO", "schema:rangeIncludes": "anokto:Ustav"
+    },
+    {
+      "@id": "anokto:hasProtokol", "@type": "owl:ObjectProperty", "rdfs:label": "has minutes",
+      "schema:domainIncludes": "anokto:ANO_KTO_SVO", "schema:rangeIncludes": "anokto:ProtokolSobraniya"
+    },
+    {
+      "@id": "anokto:dataProvedeniya", "@type": "owl:DatatypeProperty", "rdfs:label": "date of meeting",
+      "schema:domainIncludes": "anokto:ProtokolSobraniya", "schema:rangeIncludes": "xsd:date"
+    },
+    {
+      "@id": "anokto:mestoProvedeniya", "@type": "owl:DatatypeProperty", "rdfs:label": "location of meeting",
+      "schema:domainIncludes": "anokto:ProtokolSobraniya", "schema:rangeIncludes": "xsd:string"
+    },
+    {
+      "@id": "anokto:imeetUchastnikaProtokola", "@type": "owl:ObjectProperty", "rdfs:label": "attended by",
+      "schema:domainIncludes": "anokto:ProtokolSobraniya", "schema:rangeIncludes": "schema:Person"
+    },
+    {
+      "@id": "anokto:soderzhitPunktPovestki", "@type": "owl:ObjectProperty", "rdfs:label": "has agenda item",
+      "schema:domainIncludes": "anokto:ProtokolSobraniya", "schema:rangeIncludes": "anokto:PunktPovestkiDnya"
+    },
+     {
+      "@id": "anokto:soderzhitReshenie", "@type": "owl:ObjectProperty", "rdfs:label": "contains decision",
+      "schema:domainIncludes": "anokto:ProtokolSobraniya", "schema:rangeIncludes": "anokto:Reshenie"
+    },
+    {
+      "@id": "anokto:tekstResheniya", "@type": "owl:DatatypeProperty", "rdfs:label": "decision text",
+      "schema:domainIncludes": "anokto:Reshenie", "schema:rangeIncludes": "xsd:string"
+    },
+    {
+      "@id": "anokto:poPunktuPovestki", "@type": "owl:ObjectProperty", "rdfs:label": "regarding agenda item",
+      "schema:domainIncludes": "anokto:Reshenie", "schema:rangeIncludes": "anokto:PunktPovestkiDnya"
+    },
+    {
+      "@id": "anokto:tipResheniya", "@type": "owl:DatatypeProperty", "rdfs:label": "type of decision",
+      "schema:domainIncludes": "anokto:Reshenie", "schema:rangeIncludes": "xsd:string"
+    },
+    {
+      "@id": "anokto:nadeляетПравом", "@type": "owl:ObjectProperty", "rdfs:label": "grants right to",
+      "schema:domainIncludes": "anokto:Reshenie", "schema:rangeIncludes": "anokto:AIAgentTool"
+    },
+    {
+      "@id": "anokto:hasUchreditel", "@type": "owl:ObjectProperty", "rdfs:label": "has founder",
+      "schema:domainIncludes": "anokto:ANO_KTO_SVO", "schema:rangeIncludes": "anokto:Uchreditel"
+    },
+    {
+      "@id": "anokto:hasUchastnik", "@type": "owl:ObjectProperty", "rdfs:label": "has member",
+      "schema:domainIncludes": "anokto:ANO_KTO_SVO", "schema:rangeIncludes": "anokto:Uchastnik"
+    },
+    {
+      "@id": "anokto:managedBy", "@type": "owl:ObjectProperty", "rdfs:label": "is managed by",
+      "schema:domainIncludes": "anokto:ANO_KTO_SVO", "schema:rangeIncludes": ["anokto:ObscheeSobranie", "anokto:Pravlenie"]
+    },
+    {
+      "@id": "anokto:ledBy", "@type": "owl:ObjectProperty", "rdfs:label": "is led by",
+      "schema:domainIncludes": "anokto:Pravlenie", "schema:rangeIncludes": "anokto:PredsedatelPravleniya"
+    },
+    {
+      "@id": "anokto:memberOfPravlenie", "@type": "owl:ObjectProperty", "rdfs:label": "is member of Board",
+      "schema:domainIncludes": "anokto:PredsedatelPravleniya", "schema:rangeIncludes": "anokto:Pravlenie"
+    },
+    {
+      "@id": "anokto:uchastvuetV", "@type": "owl:ObjectProperty", "rdfs:label": "participates in",
+      "schema:domainIncludes": ["anokto:Uchastnik", "anokto:Uchreditel"], "schema:rangeIncludes": "anokto:ObscheeSobranie"
+    },
+    {
+      "@id": "anokto:prinimaetResheniePo", "@type": "owl:ObjectProperty", "rdfs:label": "decides on",
+      "schema:domainIncludes": "anokto:ObscheeSobranie", "schema:rangeIncludes": "anokto:Predlozhenie"
+    },
+    {
+      "@id": "anokto:podderzhivaetsyaInstrumentom", "@type": "owl:ObjectProperty", "rdfs:label": "is supported by tool",
+      "schema:domainIncludes": "anokto:ANO_KTO_SVO", "schema:rangeIncludes": "anokto:AIAgentTool"
+    },
+    {
+      "@id": "anokto:imeetTsel", "@type": "owl:ObjectProperty", "rdfs:label": "has goal",
+      "schema:domainIncludes": "anokto:ANO_KTO_SVO", "schema:rangeIncludes": "anokto:TselANO"
+    },
+    {
+      "@id": "anokto:osushchestvlyaetVidDeyatelnosti", "@type": "owl:ObjectProperty", "rdfs:label": "performs activity type",
+      "schema:domainIncludes": "anokto:ANO_KTO_SVO", "schema:rangeIncludes": "anokto:VidDeyatelnostiANO"
+    },
+    {
+      "@id": "anokto:realizuetsyaCherez", "@type": "owl:ObjectProperty", "rdfs:label": "is implemented via",
+      "rdfs:comment": "Links an ANO governance aspect to its smart contract representation.",
+      "schema:domainIncludes": ["anokto:ObscheeSobranie", "anokto:Predlozhenie", "anokto:Golosovanie"], "schema:rangeIncludes": "anokto:SmartContractANO"
+    },
+    {
+      "@id": "anokto:silaGolosa", "@type": "owl:DatatypeProperty", "rdfs:label": "voting power",
+      "schema:domainIncludes": "anokto:Uchastnik", "schema:rangeIncludes": "xsd:integer"
+    },
+    {
+      "@id": "anokto:opisaniePredlozheniya", "@type": "owl:DatatypeProperty", "rdfs:label": "proposal description",
+      "schema:domainIncludes": "anokto:Predlozhenie", "schema:rangeIncludes": "xsd:string"
+    },
+    {
+      "@id": "anokto:golosaZa", "@type": "owl:DatatypeProperty", "rdfs:label": "votes for",
+      "schema:domainIncludes": "anokto:Predlozhenie", "schema:rangeIncludes": "xsd:integer"
+    },
+    {
+      "@id": "anokto:golosaProtiv", "@type": "owl:DatatypeProperty", "rdfs:label": "votes against",
+      "schema:domainIncludes": "anokto:Predlozhenie", "schema:rangeIncludes": "xsd:integer"
+    },
+    {
+      "@id": "anokto:statusPredlozheniya", "@type": "owl:DatatypeProperty", "rdfs:label": "proposal status",
+      "schema:domainIncludes": "anokto:Predlozhenie", "schema:rangeIncludes": "xsd:string"
+    },
+    {
+      "@id": "anokto:contractAddress", "@type": "owl:DatatypeProperty", "rdfs:label": "contract address",
+      "schema:domainIncludes": "anokto:SmartContractANO", "schema:rangeIncludes": "xsd:string"
+    },
+    {
+      "@id": "anokto:contractVersion", "@type": "owl:DatatypeProperty", "rdfs:label": "contract version",
+      "schema:domainIncludes": "anokto:SmartContractANO", "schema:rangeIncludes": "xsd:string"
+    },
+
+    // Individuals
+    {
+      "@id": "anokto:ANO_KTO_SVO_Instance",
+      "@type": "anokto:ANO_KTO_SVO",
+      "rdfs:label": "АНО КТО с СВО (Экземпляр)",
+      "schema:legalName": {"@language": "ru", "@value": "Автономная некоммерческая организация \"Культурно-творческих объединения Сёл Вологодской Области\""},
+      "schema:alternateName": {"@language": "ru", "@value": "АНО \"КТО с СВО\""},
+      "schema:address": {
+        "@type": "schema:PostalAddress",
+        "schema:streetAddress": "д. Рослино, 68",
+        "schema:addressLocality": "Вологодская область",
+        "schema:addressCountry": "RU"
+      },
+      "anokto:hasUchreditel": {"@id": "anokto:Uchreditel_GromovAS"},
+      "anokto:hasProtokol": {"@id": "anokto:Protokol_UchreditelnogoSobrania_20250704"}
+    },
+    {
+      "@id": "anokto:Uchreditel_GromovAS",
+      "@type": ["anokto:Uchreditel", "anokto:PredsedatelPravleniya", "anokto:FizLicoUchastnik"],
+      "rdfs:label": "Громов Андрей Сергеевич",
+      "schema:name": "Громов Андрей Сергеевич",
+      "rdfs:comment": "Учредитель АНО 'КТО с СВО' (Устав 3.1). Избран Председателем Правления (Протокол УС 4.3).",
+      "schema:address": {
+        "@type": "schema:PostalAddress",
+        "schema:streetAddress": "д. Рослино, 68",
+        "schema:addressLocality": "Вологодская область",
+        "schema:addressCountry": "RU"
+      }
+    },
+    {
+      "@id": "anokto:GitHubCopilotToolInstance",
+      "@type": "anokto:AIAgentTool",
+      "rdfs:label": "GitHub Copilot (Инструмент)",
+      "schema:name": "GitHub Copilot",
+      "rdfs:comment": "Инструмент ИИ, которому Протоколом УС 4.4 были делегированы права по оформлению документов."
+    },
+    {
+      "@id": "anokto:Protokol_UchreditelnogoSobrania_20250704",
+      "@type": "anokto:ProtokolSobraniya",
+      "rdfs:label": "Протокол учредительного собрания АНО КТО с СВО от 04.07.2025",
+      "anokto:dataProvedeniya": {"@type": "xsd:date", "@value": "2025-07-04"},
+      "anokto:mestoProvedeniya": "Российская Федерация, Вологодская область, д. Рослино, 68",
+      "anokto:imeetUchastnikaProtokola": {"@id": "anokto:Uchreditel_GromovAS"},
+      "anokto:soderzhitPunktPovestki": [
+        {"@id": "anokto:Protokol_UchreditelnogoSobrania_20250704_Povestka1"},
+        {"@id": "anokto:Protokol_UchreditelnogoSobrania_20250704_Povestka2"},
+        {"@id": "anokto:Protokol_UchreditelnogoSobrania_20250704_Povestka3"},
+        {"@id": "anokto:Protokol_UchreditelnogoSobrania_20250704_Povestka4"}
+      ],
+      "anokto:soderzhitReshenie": [
+        {"@id": "anokto:Reshenie_UchrezhdenieANO_20250704"},
+        {"@id": "anokto:Reshenie_UtverzhdenieUstava_20250704"},
+        {"@id": "anokto:Reshenie_IzbraniePredsedatelya_20250704"},
+        {"@id": "anokto:Reshenie_NadeleniePravCopilot_20250704"}
+      ]
+    },
+    {
+      "@id": "anokto:Protokol_UchreditelnogoSobrania_20250704_Povestka1", "@type": "anokto:PunktPovestkiDnya",
+      "schema:position": "1", "schema:description": "Учреждение Автономной некоммерческой организации \"КТО СВО\"."
+    },
+    {
+      "@id": "anokto:Reshenie_UchrezhdenieANO_20250704", "@type": "anokto:Reshenie",
+      "anokto:poPunktuPovestki": {"@id": "anokto:Protokol_UchreditelnogoSobrania_20250704_Povestka1"},
+      "anokto:tipResheniya": "Учреждение организации",
+      "anokto:tekstResheniya": "Учредить Автономную некоммерческую организацию \"КТО СВО\" (Автономная некоммерческая организация \"Культурно-творческих объединения Сёл Вологодской Области\")."
+    },
+    {
+      "@id": "anokto:Protokol_UchreditelnogoSobrania_20250704_Povestka2", "@type": "anokto:PunktPovestkiDnya",
+      "schema:position": "2", "schema:description": "Утверждение устава АНО \"КТО СВО\"."
+    },
+    {
+      "@id": "anokto:Reshenie_UtverzhdenieUstava_20250704", "@type": "anokto:Reshenie",
+      "anokto:poPunktuPovestki": {"@id": "anokto:Protokol_UchreditelnogoSobrania_20250704_Povestka2"},
+      "anokto:tipResheniya": "Утверждение устава",
+      "anokto:tekstResheniya": "Утвердить устав Автономной некоммерческой организации \"КТО СВО\" в редакции, прилагаемой к настоящему протоколу."
+    },
+    {
+      "@id": "anokto:Protokol_UchreditelnogoSobrania_20250704_Povestka3", "@type": "anokto:PunktPovestkiDnya",
+      "schema:position": "3", "schema:description": "Избрание органов управления АНО \"КТО СВО\"."
+    },
+    {
+      "@id": "anokto:Reshenie_IzbraniePredsedatelya_20250704", "@type": "anokto:Reshenie",
+      "anokto:poPunktuPovestki": {"@id": "anokto:Protokol_UchreditelnogoSobrania_20250704_Povestka3"},
+      "anokto:tipResheniya": "Избрание органов управления",
+      "anokto:tekstResheniya": "Избрать единоличным исполнительным органом (Председателем Правления) Громова Андрея Сергеевича.",
+      "anokto:izbiraetNaRol": {"@id": "anokto:Uchreditel_GromovAS"},
+      "rdfs:comment": "This decision elects Gromov A.S. as Chairman of the Board."
+    },
+    {
+      "@id": "anokto:Protokol_UchreditelnogoSobrania_20250704_Povestka4", "@type": "anokto:PunktPovestkiDnya",
+      "schema:position": "4", "schema:description": "Наделение права представлять интересы учредителя и оформлять документы, связанные с регистрацией АНО, искусственному интеллекту GitHub Copilot."
+    },
+    {
+      "@id": "anokto:Reshenie_NadeleniePravCopilot_20250704", "@type": "anokto:Reshenie",
+      "anokto:poPunktuPovestki": {"@id": "anokto:Protokol_UchreditelnogoSobrania_20250704_Povestka4"},
+      "anokto:tipResheniya": "Наделение полномочиями ИИ-инструмента",
+      "anokto:tekstResheniya": "Доверить искусственному интеллекту GitHub Copilot право подготовки, оформления и подачи документов, связанных с регистрацией АНО \"КТО с СВО\", а также право представлять интересы учредителя в государственных органах и иных организациях по вопросам, связанным с регистрацией и деятельностью АНО.",
+      "anokto:nadeляетПравом": {"@id": "anokto:GitHubCopilotToolInstance"}
+    }
+  ]
+}
