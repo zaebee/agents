@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg" font-family="'Fira Code', monospace" font-size="12">
+    <defs>
+        <radialGradient id="coreGradient" cx="0.5" cy="0.3">
+            <stop offset="0%" style="stop-color:#fff3cd;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#f1c40f;stop-opacity:0.8" />
+        </radialGradient>
+        <radialGradient id="adapterGradient" cx="0.5" cy="0.3">
+            <stop offset="0%" style="stop-color:#3498db;stop-opacity:0.9" />
+            <stop offset="100%" style="stop-color:#2980b9;stop-opacity:0.7" />
+        </radialGradient>
+        <radialGradient id="externalGradient" cx="0.5" cy="0.3">
+            <stop offset="0%" style="stop-color:#2ecc71;stop-opacity:0.9" />
+            <stop offset="100%" style="stop-color:#27ae60;stop-opacity:0.7" />
+        </radialGradient>
+        <filter id="glow">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+            <feMerge> 
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.3)"/>
+        </filter>
+    </defs>
+    
+    <style>
+        .core { 
+            fill: url(#coreGradient); 
+            stroke: #d4a017; 
+            stroke-width: 4; 
+            filter: url(#shadow) url(#glow);
+        }
+        .adapter { 
+            fill: url(#adapterGradient); 
+            stroke: #1f4e79; 
+            stroke-width: 2; 
+            filter: url(#shadow);
+            transition: all 0.3s ease;
+        }
+        .external { 
+            fill: url(#externalGradient); 
+            stroke: #1e8449; 
+            stroke-width: 2; 
+            filter: url(#shadow);
+        }
+        .bond { 
+            stroke: #34495e; 
+            stroke-width: 3; 
+            opacity: 0.8;
+            stroke-linecap: round;
+        }
+        .aromatic-bond { 
+            stroke: #d4a017; 
+            stroke-width: 2; 
+            opacity: 0.9;
+            stroke-dasharray: 8,4;
+            stroke-linecap: round;
+        }
+        .label { 
+            text-anchor: middle; 
+            fill: #2c3e50; 
+            font-weight: bold; 
+            font-size: 11px;
+        }
+        .core-label { 
+            text-anchor: middle; 
+            fill: #8b4513; 
+            font-weight: bold; 
+            font-size: 14px;
+        }
+        .formula { 
+            text-anchor: middle; 
+            fill: #d4a017; 
+            font-size: 18px; 
+            font-weight: bold;
+        }
+        .title { 
+            text-anchor: middle; 
+            fill: #2c3e50; 
+            font-size: 22px; 
+            font-weight: bold;
+        }
+        .stats { 
+            fill: #34495e; 
+            font-size: 11px;
+        }
+    </style>
+    
+    <!-- Background -->
+    <rect width="800" height="600" fill="linear-gradient(135deg, #e8f5e8 0%, #f0f8ff 100%)"/>
+    
+    <!-- Title and Formula -->
+    <text x="400" y="40" class="title">🧬 UserServiceCore - Molecular Architecture</text>
+    <text x="400" y="65" class="formula">A1C6</text>
+    
+    <!-- Molecular structure -->
+    <line x1="400.0" y1="180.0" x2="503.9" y2="240.0" class="aromatic-bond"/>
+    <line x1="503.9" y1="240.0" x2="503.9" y2="360.0" class="aromatic-bond"/>
+    <line x1="503.9" y1="360.0" x2="400.0" y2="420.0" class="aromatic-bond"/>
+    <line x1="400.0" y1="420.0" x2="296.1" y2="360.0" class="aromatic-bond"/>
+    <line x1="296.1" y1="360.0" x2="296.1" y2="240.0" class="aromatic-bond"/>
+    <line x1="296.1" y1="240.0" x2="400.0" y2="180.0" class="aromatic-bond"/>
+    <circle cx="400" cy="300" r="50" class="core"/>
+    <text x="400" y="295" class="core-label">Domain</text>
+    <text x="400" y="310" class="core-label">Core</text>
+    <line x1="400" y1="300" x2="400.0" y2="180.0" class="bond"/>
+    <circle cx="400.0" cy="180.0" r="35" class="adapter"/>
+    <text x="400.0" y="183.0" class="label">REST_API</text>
+    <line x1="400.0" y1="180.0" x2="400.0" y2="80.0" class="bond"/>
+    <circle cx="400.0" cy="80.0" r="28" class="external"/>
+    <text x="400.0" y="75.0" class="label">Mobile</text>
+    <text x="400.0" y="88.0" class="label">App</text>
+    <line x1="400" y1="300" x2="503.9" y2="240.0" class="bond"/>
+    <circle cx="503.9" cy="240.0" r="35" class="adapter"/>
+    <text x="503.9" y="243.0" class="label">GraphQL</text>
+    <line x1="503.9" y1="240.0" x2="590.5" y2="190.0" class="bond"/>
+    <circle cx="590.5" cy="190.0" r="28" class="external"/>
+    <text x="590.5" y="185.0" class="label">Web</text>
+    <text x="590.5" y="198.0" class="label">Frontend</text>
+    <line x1="400" y1="300" x2="503.9" y2="360.0" class="bond"/>
+    <circle cx="503.9" cy="360.0" r="35" class="adapter"/>
+    <text x="503.9" y="363.0" class="label">Database</text>
+    <line x1="503.9" y1="360.0" x2="590.5" y2="410.0" class="bond"/>
+    <circle cx="590.5" cy="410.0" r="28" class="external"/>
+    <text x="590.5" y="405.0" class="label">PostgreSQL</text>
+    <line x1="400" y1="300" x2="400.0" y2="420.0" class="bond"/>
+    <circle cx="400.0" cy="420.0" r="35" class="adapter"/>
+    <text x="400.0" y="423.0" class="label">EventBus</text>
+    <line x1="400.0" y1="420.0" x2="400.0" y2="520.0" class="bond"/>
+    <circle cx="400.0" cy="520.0" r="28" class="external"/>
+    <text x="400.0" y="515.0" class="label">Message</text>
+    <text x="400.0" y="528.0" class="label">Queue</text>
+    <line x1="400" y1="300" x2="296.1" y2="360.0" class="bond"/>
+    <circle cx="296.1" cy="360.0" r="35" class="adapter"/>
+    <text x="296.1" y="355.0" class="label">Auth</text>
+    <text x="296.1" y="368.0" class="label">Service</text>
+    <line x1="296.1" y1="360.0" x2="209.5" y2="410.0" class="bond"/>
+    <circle cx="209.5" cy="410.0" r="28" class="external"/>
+    <text x="209.5" y="405.0" class="label">OAuth2</text>
+    <text x="209.5" y="418.0" class="label">Provider</text>
+    <line x1="400" y1="300" x2="296.1" y2="240.0" class="bond"/>
+    <circle cx="296.1" cy="240.0" r="35" class="adapter"/>
+    <text x="296.1" y="235.0" class="label">Cache</text>
+    <text x="296.1" y="248.0" class="label">Layer</text>
+    <line x1="296.1" y1="240.0" x2="209.5" y2="190.0" class="bond"/>
+    <circle cx="209.5" cy="190.0" r="28" class="external"/>
+    <text x="209.5" y="185.0" class="label">Redis</text>
+    <text x="209.5" y="198.0" class="label">Cluster</text>
+    <!-- Molecular Statistics -->
+    <rect x="20" y="480" width="200" height="100" fill="rgba(255,255,255,0.9)" rx="10" stroke="#bdc3c7" stroke-width="1"/>
+    <text x="30" y="500" class="stats" font-weight="bold">🔬 Molecular Analysis</text>
+    <text x="30" y="515" class="stats">Formula: A1C6</text>
+    <text x="30" y="530" class="stats">Stability: 92.5/100 (Aromatic)</text>
+    <text x="30" y="545" class="stats">Bond Energy: 630.0 kJ/mol</text>
+    <text x="30" y="560" class="stats">Atoms: 7 | Bonds: 12</text>
+    
+    <rect x="580" y="480" width="200" height="100" fill="rgba(255,255,255,0.9)" rx="10" stroke="#bdc3c7" stroke-width="1"/>
+    <text x="590" y="500" class="stats" font-weight="bold">⚗️ Synthesis Details</text>
+    <text x="590" y="515" class="stats">Catalyst: Royal Jelly</text>
+    <text x="590" y="530" class="stats">Temperature: 310K</text>
+    <text x="590" y="545" class="stats">Pattern: Hexagonal Core</text>
+    <text x="590" y="560" class="stats">Generated: 16:05:22</text>
+    
+    <!-- Legend -->
+    <rect x="20" y="100" width="180" height="85" fill="rgba(255,255,255,0.9)" rx="8" stroke="#bdc3c7" stroke-width="1"/>
+    <text x="30" y="118" class="stats" font-weight="bold">🧪 Molecular Legend</text>
+    <circle cx="40" cy="132" r="8" class="core"/>
+    <text x="55" y="137" class="stats">Domain Core (A)</text>
+    <circle cx="40" cy="147" r="8" class="adapter"/>
+    <text x="55" y="152" class="stats">Connectors (C)</text>
+    <circle cx="40" cy="162" r="8" class="external"/>
+    <text x="55" y="167" class="stats">External Systems</text>
+    
+</svg>
