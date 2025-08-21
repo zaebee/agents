@@ -84,7 +84,7 @@ def main():
     parser.add_argument("command", choices=["hatch"], help="The action to perform.")
     parser.add_argument(
         "codon_type",
-        choices=["command", "query", "event"],
+        choices=["command", "query", "event", "chronicler"],
         help="The type of codon to scaffold.",
     )
     parser.add_argument("component_name", help="The name of the new component (e.g., 'create-order').")
