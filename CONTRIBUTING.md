@@ -17,10 +17,10 @@ We do not write large, monolithic functions. We compose small, pure, testable fu
 
 A `Codeon` is a **design principle**, not a specific class. When writing code, strive to make your `Codeons` (your functions and methods) adhere to these rules:
 
-1.  **Small:** A `Codeon` should do one thing and do it well. Aim for functions with very few lines of code.
-2.  **Readable:** The name of the function should make its purpose immediately clear.
-3.  **Pure (when possible):** The best `Codeons` are pure functions. They take input, return output, and have no side effects (like writing to a database or a file). This makes them trivial to test and reason about.
-4.  **Composed:** Build complex logic by chaining these small `Codeons` together. The `process_order` example from our discussions is a perfect model for this.
+1. **Small:** A `Codeon` should do one thing and do it well. Aim for functions with very few lines of code.
+2. **Readable:** The name of the function should make its purpose immediately clear.
+3. **Pure (when possible):** The best `Codeons` are pure functions. They take input, return output, and have no side effects (like writing to a database or a file). This makes them trivial to test and reason about.
+4. **Composed:** Build complex logic by chaining these small `Codeons` together. The `process_order` example from our discussions is a perfect model for this.
 
 ## Mutations and Evolution
 
