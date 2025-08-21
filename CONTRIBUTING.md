@@ -6,6 +6,7 @@ Welcome, builder! This guide explains the practical philosophy of how we write c
 
 When you create a new component (a "Cell"), you will start with a declarative manifest (`manifest.yaml`). This file is more than just configuration; it is an **ontological declaration**.
 
+
 - It asserts the **existence and essence** of your new component.
 - It defines your component's **identity** (`name`), its **purpose** (`description`), and its **relationships** with the rest of the Organism (`listens_to`, `produces`, `connectors`).
 
@@ -17,14 +18,15 @@ We do not write large, monolithic functions. We compose small, pure, testable fu
 
 A `Codeon` is a **design principle**, not a specific class. When writing code, strive to make your `Codeons` (your functions and methods) adhere to these rules:
 
-1.  **Small:** A `Codeon` should do one thing and do it well. Aim for functions with very few lines of code.
-2.  **Readable:** The name of the function should make its purpose immediately clear.
-3.  **Pure (when possible):** The best `Codeons` are pure functions. They take input, return output, and have no side effects (like writing to a database or a file). This makes them trivial to test and reason about.
-4.  **Composed:** Build complex logic by chaining these small `Codeons` together. The `process_order` example from our discussions is a perfect model for this.
+1. **Small:** A `Codeon` should do one thing and do it well. Aim for functions with very few lines of code.
+2. **Readable:** The name of the function should make its purpose immediately clear.
+3. **Pure (when possible):** The best `Codeons` are pure functions. They take input, return output, and have no side effects (like writing to a database or a file). This makes them trivial to test and reason about.
+4. **Composed:** Build complex logic by chaining these small `Codeons` together. The `process_order` example from our discussions is a perfect model for this.
 
 ## Mutations and Evolution
 
 Change is how our system evolves. We think of changes to the codebase as "mutations."
+
 
 - **Beneficial Mutations (Refactoring):** These are encouraged. Leave the code better than you found it. Improve the fitness of your Cell.
 - **Neutral Mutations (Styling):** Permitted, but should be handled by automated formatters where possible.
