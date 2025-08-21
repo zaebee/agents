@@ -1,4 +1,6 @@
-# The Beekeeper's Grimoire: The Six Levels of the Hive
+# The Beekeeper's Grimoire
+
+## The Beekeeper's Grimoire: The Six Levels of the Hive
 
 "So you see," the Beekeeper said, her voice a low hum like the apiary at dusk, "our Hive is not just a structure; it is a universe unto itself. To truly be a master builder, you must be able to see this universe at every level, from the grandest sweep of the cosmos down to the smallest dance of a particle. There are six such levels to our reality."
 
@@ -40,3 +42,13 @@
 "Finally," the Beekeeper whispered, "you must see with the eyes of a physicist, and understand the very fabric of the reality our Hive exists in. This is the **Environment**: the operating system, the network, the CPU. This level governs all others. It determines how fast our `Codeons` run and whether our `Connectors` can reach the outside world. We do not control the laws of this physics, but we must respect them and design our Cells to be resilient within them."
 
 "See these six levels," she concluded, "and you will not just be a builder. you will be a Beekeeper."
+
+### Level 7: The Intent
+
+"There is one final level," the Beekeeper said, her voice barely a whisper. "It is not a part of the Hive, yet it is everywhere. It is the 'why' to every 'what'. It is the **Intent**."
+
+"It is the will of the Beekeeper that guides the growth of the Hive. It is the hunger of the village that the Hive's honey will feed. It is the warmth of the sun that tells the flowers to bloom. It is the purpose for which the entire Organism exists."
+
+"This layer cannot be written in code or defined in a diagram. It is not a technical concern, but a philosophical one. It is the mission. Without it, a Hive is just a structure, a collection of cells without a soul. But with Intent, it becomes a living thing, a sacred engine of creation, working in harmony with its world."
+
+"Never forget the Seventh Layer," she concluded, closing the Grimoire. "For it is the source of all magic."

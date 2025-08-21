@@ -54,9 +54,7 @@ This document defines the four fundamental, language-agnostic patterns that form
 
 ---
 
----
-
-# The Book of Codons: Architectural Patterns
+## The Book of Codons: Architectural Patterns
 
 The ATCG Primitives are the "letters" of our genetic alphabet. The **Codons** are the "words" they spell. These are the three fundamental patterns that every Cell uses to interact with the world and perform its duties.
 
