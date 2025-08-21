@@ -60,18 +60,18 @@ This project has advanced its Proof of Concept (PoC) for inter-agent collaborati
 
 1.  **User Request:** A user asks Eddy for help with a complex Python coding bug (e.g., an `IndexError`).
 2.  **Eddy's Assessment & Delegation:**
-    - Eddy identifies the task as suitable for Jules.
-    - Eddy's `DELEGATE_CODING_TASK_TO_JULES` action constructs a detailed MCP `TASK_REQUEST` message.
-    - Eddy logs this `TASK_REQUEST` message (simulating sending it to Jules).
-    - Eddy informs the user that Jules will handle the task.
+    *   Eddy identifies the task as suitable for Jules.
+    *   Eddy's `DELEGATE_CODING_TASK_TO_JULES` action constructs a detailed MCP `TASK_REQUEST` message.
+    *   Eddy logs this `TASK_REQUEST` message (simulating sending it to Jules).
+    *   Eddy informs the user that Jules will handle the task.
 3.  **Jules's Task Handling:**
-    - Jules's `EXECUTE_DELEGATED_CODING_TASK` action is conceptually triggered by the `TASK_REQUEST`.
-    - Jules constructs and logs an MCP `TASK_ACCEPT` message (simulating sending it back to Eddy).
-    - Jules analyzes the debugging problem.
-    - Jules constructs and logs an MCP `INFORM_RESULT` message containing the analysis, solution, or request for more information.
+    *   Jules's `EXECUTE_DELEGATED_CODING_TASK` action is conceptually triggered by the `TASK_REQUEST`.
+    *   Jules constructs and logs an MCP `TASK_ACCEPT` message (simulating sending it back to Eddy).
+    *   Jules analyzes the debugging problem.
+    *   Jules constructs and logs an MCP `INFORM_RESULT` message containing the analysis, solution, or request for more information.
 4.  **Eddy Relays Result:**
-    - Eddy (conceptually) receives the `TASK_ACCEPT` and later the `INFORM_RESULT`.
-    - Eddy processes Jules's findings and relays them to the user.
+    *   Eddy (conceptually) receives the `TASK_ACCEPT` and later the `INFORM_RESULT`.
+    *   Eddy processes Jules's findings and relays them to the user.
 
 **Refined Interaction Flow (with MCP details):**
 
