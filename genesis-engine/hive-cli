@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# The Genesis Engine: a CLI for managing the Hive codebase.
+# This is the main entrypoint, the "Cell Membrane." It sources its organelles
+# from the 'engine/' directory and dispatches commands accordingly.
+
+# Find the directory where the script is located
+SCRIPT_DIR=$(dirname "$0")
+
+# Source the organelles
+source "$SCRIPT_DIR/engine/config.sh"
+source "$SCRIPT_DIR/engine/helpers.sh"
+
+# --- Command Dispatcher ---
+COMMAND=$1
+shift # Removes the first argument, so the rest can be passed to sub-scripts
+
+case $COMMAND in
+    hatch)
+        # Execute the hatch command script, passing all remaining arguments
+        "$SCRIPT_DIR/engine/commands/hatch.sh" "$@"
+        ;;
+    spin)
+        # Execute the spin command script, passing all remaining arguments
+        "$SCRIPT_DIR/engine/commands/spin.sh" "$@"
+        ;;
+    "" | "-h" | "--help")
+        show_usage
+        ;;
+    *)
+        echo "Error: Unknown command '$COMMAND'."
+        show_usage
+        exit 1
+        ;;
+esac

@@ -41,17 +41,17 @@ graph TD
 ### Level 3: The Architectural 'Codons'
 "Now, you must see with the eyes of a geneticist, and understand the 'words' that give the Cell its function. These are the three primary **Codons**, the fundamental patterns of action. Every task a Cell performs is an expression of one of these:"
 
-*   **The 'Handle Command' Codon (`C -> A -> G`):** The word for 'to change'. An external request arrives at a **Connector (C)**, is translated to a command for an **Aggregate (A)**, which changes its state and emits a **Genesis Event (G)**.
+*   **The 'Handle Command' Codon (`C -> A -> G`):** The word for 'to change'.
     ```mermaid
     graph LR; C[C: Connector] --> A[A: Aggregate] --> G[G: Genesis Event];
     style C fill:#f1c40f,stroke:#333,stroke-width:2px; style A fill:#fff3cd,stroke:#d4a017,stroke-width:2px; style G fill:#ffeb99,stroke:#d4a017,stroke-width:2px,stroke-dasharray: 5 5;
     ```
-*   **The 'Query Data' Codon (`C -> T -> C`):** The word for 'to see'. A request enters a **Connector (C)**, is passed to a stateless **Transformation (T)** to fetch and format data, and is returned via a **Connector (C)**.
+*   **The 'Query Data' Codon (`C -> T -> C`):** The word for 'to see'.
     ```mermaid
     graph LR; C_In[C: In] --> T[T: Transformation] --> C_Out[C: Out];
     style C_In fill:#f1c40f,stroke:#333,stroke-width:2px; style T fill:#fff9e6,stroke:#d4a017,stroke-width:2px; style C_Out fill:#f1c40f,stroke:#333,stroke-width:2px;
     ```
-*   **The 'React to Event' Codon (`G -> C -> A -> G`):** The word for 'to listen'. A listening **Connector (C)** hears a **Genesis Event (G)**, translates it to a command for an **Aggregate (A)**, which may in turn emit its own **Genesis Event (G)**.
+*   **The 'React to Event' Codon (`G -> C -> A -> G`):** The word for 'to listen'.
     ```mermaid
     graph LR; G_In[G: In] --> C[C: Listener] --> A[A: Aggregate] --> G_Out[G: Out];
     style G_In fill:#ffeb99,stroke:#d4a017,stroke-width:2px,stroke-dasharray: 5 5; style C fill:#f1c40f,stroke:#333,stroke-width:2px; style A fill:#fff3cd,stroke:#d4a017,stroke-width:2px; style G_Out fill:#ffeb99,stroke:#d4a017,stroke-width:2px,stroke-dasharray: 5 5;
@@ -70,7 +70,9 @@ Every pattern in our Hive is a unique sequence of these four letters."
 ### Level 5: The 'Codeons' as Implementation
 "Now, you must see with the eyes of a scribe, with ink on your fingers. This is where the magic becomes real. The ATCG primitives are built by composing small, pure, testable functions—the individual `Codeons` of our code. This is the level of implementation, governed by the principles of cleanliness and clarity."
 
-This is the **Metamorphosis**: the life cycle of a single feature, from an idea to a living part of the hive.
+To complete the biological metaphor: if the `genesis_engine/main.py` script is the **Ribosome** (the factory), and the small functions in `genesis_engine/src/` are the **Amino Acids** (the building blocks), then the files in our `tRNA/` directory are the **tRNA molecules**. Each template is a specialized tRNA that reads an architectural Codon and fetches the correct structural "scaffold," onto which the specific details are then assembled. It is the final, crucial link between the genetic code and the living protein.
+
+This process of implementation is the **Metamorphosis**: the life cycle of a single feature, from an idea to a living part of the hive.
 ```mermaid
 stateDiagram-v2
     direction LR
@@ -102,10 +104,15 @@ stateDiagram-v2
 Our Grimoire is not just a book of philosophy; it contains tangible artifacts that bring these ideas to life.
 
 ### The Pollen Protocol (`pollen.proto`)
-To ensure all our Hives can speak to each other, we have a formal contract for our Genesis Events, defined using Protocol Buffers. This is the "Pollen Protocol". It guarantees that every "waggle dance" has a consistent structure.
+To ensure all our Hives can speak to each other, we have a formal contract for our Genesis Events, defined using Protocol Buffers. This guarantees that every "waggle dance" has a consistent structure.
 
-### The Genesis Engine (`hive-cli`)
-To accelerate the creation of new "bees" according to our architectural patterns, we have a command-line tool. The `hive-cli` is a "Connector" for the developer, allowing them to "hatch" the boilerplate for a new feature with a single command, such as:
-`./hive-cli hatch command MyNewFeature`
+### The Genesis Engine (`genesis-engine/`)
+To accelerate the creation of new "bees," we have a command-line tool. The `genesis-engine` is itself a Hive, built from its own principles. It contains:
+*   **`hive-cli`**: The main entrypoint, or "Cell Membrane".
+*   **`engine/`**: The "organelles" that contain the logic for commands, config, and helpers.
 
-This script embodies the "self-creating systems" idea, automating the Metamorphosis so developers can focus on what truly matters.
+This tool allows a developer to "hatch" the boilerplate for a new feature with a single command:
+`./genesis-engine/hive-cli hatch command MyNewFeature`
+
+### The Mermaid Compiler (`genesis_engine/main.py`)
+The ultimate spell in the Grimoire. This is the implementation of the Genesis Engine itself. It reads an architectural diagram from a `.md` file and compiles it into runtime code, proving that the architecture can be used to build itself. It is the ultimate proof of our philosophy: a system that grows itself.
