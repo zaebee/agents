@@ -8,6 +8,9 @@ from .transformations.code_generator import CodeGenerationTransformation
 from .connectors.cli_connector import CliConnector
 from .connectors.file_writer_connector import FileWriterConnector
 
+# Import molecular chemistry CLI commands
+from .molecular_cli import molecular
+
 # --- Configuration ---
 HIVE_ROOT = "hive/components"
 TEMPLATE_DIR = "tRNA"
@@ -49,8 +52,10 @@ cli_connector = CliConnector(command_handler=handle_hatch_command)
 @click.group()
 def cli():
     """
-    The Genesis Engine - The 'Connector' to the Hive.
-    This tool is built using the Hive Architecture itself.
+    🐝 The Genesis Engine - Molecular Architecture for the Hive
+    
+    Build software using nature-inspired molecular chemistry principles.
+    Traditional ATCG patterns + Advanced molecular analysis and visualization.
     """
     pass
 
@@ -83,6 +88,32 @@ def hatch_immune_cli(component_name):
 @click.argument('component_name')
 def spin(component_name):
     cli_connector.spin(component_name)
+
+# Add molecular chemistry commands to main CLI
+cli.add_command(molecular)
+
+# Add a quick demo command
+@cli.command()
+def demo():
+    """🎭 Run a quick demonstration of the molecular chemistry system"""
+    click.echo("🧪 Genesis Engine - Molecular Chemistry Demo")
+    click.echo("=" * 50)
+    
+    click.echo("\n🐝 Available Commands:")
+    click.echo("  genesis-engine hatch command <name>     - Traditional component scaffolding")
+    click.echo("  genesis-engine molecular queen build    - Molecular component building")
+    click.echo("  genesis-engine molecular honeyprint     - SVG visualization generation") 
+    click.echo("  genesis-engine molecular react run      - Chemical reaction execution")
+    click.echo("  genesis-engine molecular analyze        - Stability analysis")
+    click.echo("  genesis-engine molecular registry       - Component database")
+    click.echo("  genesis-engine molecular lab            - Interactive web lab")
+    
+    click.echo("\n🧬 Try this:")
+    click.echo("  python -m genesis-engine molecular queen blueprints")
+    click.echo("  python -m genesis-engine molecular queen build hexagonal_core MyService")
+    click.echo("  python -m genesis-engine molecular lab")
+    
+    click.echo("\n✨ The future of architecture is molecular! 🧪🐝")
 
 
 if __name__ == '__main__':
