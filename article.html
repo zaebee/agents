@@ -30,7 +30,10 @@
             background: linear-gradient(135deg, #f5f1e8 0%, #e8d5b7 100%);
         }
 
-        h1, h2, h3, h4 {
+        h1,
+        h2,
+        h3,
+        h4 {
             font-family: 'Patrick Hand', cursive;
             color: var(--comb-brown);
         }
@@ -85,11 +88,12 @@
             background: #2c1810;
             color: #f5f1e8;
             padding: 20px;
-            padding-top: 45px; /* space for the button */
+            padding-top: 45px;
+            /* space for the button */
             border-radius: 5px;
             overflow-x: auto;
             border: 1px solid var(--dark-honey);
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.3);
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
         }
 
         .copy-button {
@@ -150,6 +154,17 @@
             filter: drop-shadow(5px 5px 5px rgb(0 0 0 / 0.2));
         }
 
+        .mermaid .node rect,
+        .mermaid .node circle,
+        .mermaid .node polygon,
+        .mermaid .node ellipse {
+            filter: drop-shadow(3px 3px 2px rgb(0 0 0 / 0.4));
+        }
+
+        .mermaid .cluster rect {
+            filter: drop-shadow(5px 5px 5px rgb(0 0 0 / 0.2));
+        }
+
         li {
             margin-bottom: 10px;
         }
@@ -187,17 +202,41 @@
             transform: scale(0.5);
         }
 
-        #hex-a { fill: #f9c846; animation-delay: 0s; }
-        #text-a { animation-delay: 0.2s; }
+        #hex-a {
+            fill: #f9c846;
+            animation-delay: 0s;
+        }
 
-        #hex-t { fill: #d4a017; animation-delay: 0.3s; }
-        #text-t { animation-delay: 0.5s; }
+        #text-a {
+            animation-delay: 0.2s;
+        }
 
-        #hex-c { fill: #f1c40f; animation-delay: 0.6s; }
-        #text-c { animation-delay: 0.8s; }
+        #hex-t {
+            fill: #d4a017;
+            animation-delay: 0.3s;
+        }
 
-        #hex-g { fill: #ffeb99; animation-delay: 0.9s; }
-        #text-g { animation-delay: 1.1s; }
+        #text-t {
+            animation-delay: 0.5s;
+        }
+
+        #hex-c {
+            fill: #f1c40f;
+            animation-delay: 0.6s;
+        }
+
+        #text-c {
+            animation-delay: 0.8s;
+        }
+
+        #hex-g {
+            fill: #ffeb99;
+            animation-delay: 0.9s;
+        }
+
+        #text-g {
+            animation-delay: 1.1s;
+        }
 
         @keyframes fadeInScale {
             to {
@@ -238,36 +277,96 @@
     </div>
 
     <div class="content-wrapper">
-        <p>Once upon a time, in a sprawling digital kingdom, lived a guild of builders. Not of castles or bridges, but of intricate, invisible structures made of pure logic. They were software architects and developers, and their greatest challenge was to build systems that could grow and adapt without crumbling into chaos.</p>
-        <p>They toiled day and night, using all manner of blueprints and incantations, yet their creations often became tangled messes—brittle and difficult to change. They longed for a way to build software that was as resilient, organized, and full of life as a bustling beehive.</p>
-        <p>One day, a wise old architect, known only as the Beekeeper, gathered the young builders. "You strive to build great things," she said, her voice warm like summer honey. "But you build with stone and iron, when you should be building with life itself. Look to the bees. Their hives are masterpieces of design, built to last for generations. Let us learn their secrets."</p>
-        <p>And so begins our tale. A story not just about code, but about the timeless patterns of nature that can help us build better, more beautiful software. We will journey into the heart of the Hexagonal Hive, uncover its secret genetic code, and learn how to raise our own 'worker bees' that will serve our digital kingdom faithfully.</p>
+        <p>Once upon a time, in a sprawling digital kingdom, lived a guild of builders. Not of castles or bridges, but
+            of intricate, invisible structures made of pure logic. They were software architects and developers, and
+            their greatest challenge was to build systems that could grow and adapt without crumbling into chaos.</p>
+        <p>They toiled day and night, using all manner of blueprints and incantations, yet their creations often became
+            tangled messes—brittle and difficult to change. They longed for a way to build software that was as
+            resilient, organized, and full of life as a bustling beehive.</p>
+        <p>One day, a wise old architect, known only as the Beekeeper, gathered the young builders. "You strive to build
+            great things," she said, her voice warm like summer honey. "But you build with stone and iron, when you
+            should be building with life itself. Look to the bees. Their hives are masterpieces of design, built to last
+            for generations. Let us learn their secrets."</p>
+        <p>And so begins our tale. A story not just about code, but about the timeless patterns of nature that can help
+            us build better, more beautiful software. We will journey into the heart of the Hexagonal Hive, uncover its
+            secret genetic code, and learn how to raise our own 'worker bees' that will serve our digital kingdom
+            faithfully.</p>
     </div>
 
     <hr>
 
     <div class="content-wrapper">
         <h2>The Heart of the Hive: A Protected Kingdom</h2>
-        <p>"The first secret of the bees," the Beekeeper began, "is their home. A beehive is a fortress, a perfect hexagon. At its very center lies the most precious treasure: the honey and the royal nursery. This is the <strong>Domain Core</strong>, where the life and future of the hive is decided. It contains the pure, unchangeable business logic of your application."</p>
-        <p>"Around this core, the bees build protective layers of honeycomb wax. These are the <strong>Adapters</strong>. They are the hive's only connection to the outside world. Some adapters, the <strong>Primary Adapters</strong>, are like the hive's entrance, allowing friendly bees (like users or other applications) to come in and make requests. Others, the <strong>Secondary Adapters</strong>, are like the foraging bees that fly out to gather nectar from flowers (external databases, APIs, or services)."</p>
-        <p>"The magic of this design," she whispered, "is that you can change the garden, the flowers, or even the shape of the entrance, but the precious honey core remains untouched and safe. This is the way of the <strong>Hexagonal Hive</strong>."</p>
-
+        <p>"The first secret of the bees," the Beekeeper began, "is their home. A beehive is a fortress, a perfect
+            hexagon. At its very center lies the most precious treasure: the honey and the royal nursery. This is the
+            <strong>Domain Core</strong>, where the life and future of the hive is decided. It contains the pure,
+            unchangeable business logic of your application."</p>
+        <p>"Around this core, the bees build protective layers of honeycomb wax. These are the
+            <strong>Adapters</strong>. They are the hive's only connection to the outside world. Some adapters, the
+            <strong>Primary Adapters</strong>, are like the hive's entrance, allowing friendly bees (like users or other
+            applications) to come in and make requests. Others, the <strong>Secondary Adapters</strong>, are like the
+            foraging bees that fly out to gather nectar from flowers (external databases, APIs, or services)."</p>
+        <p>"The magic of this design," she whispered, "is that you can change the garden, the flowers, or even the shape
+            of the entrance, but the precious honey core remains untouched and safe. This is the way of the
+            <strong>Hexagonal Hive</strong>."</p>
+    </div>
+    <hr>
+    <div class="content-wrapper">
         <h2>The Secret Genetic Code: The Four Primitives of Life</h2>
         <p>"But how are the bees themselves made?" a young builder asked.</p>
-        <p>The Beekeeper smiled. "Aha, that is the deepest secret of all. Every living thing in the hive is built from a secret, four-part genetic code. This code is the source of truth, the very essence of life. We call it <strong>ATCG</strong>."</p>
+        <p>The Beekeeper smiled. "Aha, that is the deepest secret of all. Every living thing in the hive is built from a
+            secret, four-part genetic code. This code is the source of truth, the very essence of life. We call it
+            <strong>ATCG</strong>."</p>
         <p>"This code is made of four primitives:"</p>
 
         <h3>A is for Aggregate</h3>
-        <p>"An <strong>Aggregate</strong> is like a vital organ in a bee—its heart or its wings. It's a bundle of tiny parts that work together as one. You don't tell a bee's wing-part to flap; you tell the bee to fly! The Aggregate is the master of its own little world, ensuring all its internal rules are followed. It is the fundamental unit of consistency."</p>
+        <p>"An <strong>Aggregate</strong> is like a vital organ in a bee—its heart or its wings. It's a bundle of tiny
+            parts that work together as one. You don't tell a bee's wing-part to flap; you tell the bee to fly! The
+            Aggregate is the master of its own little world, ensuring all its internal rules are followed. It is the
+            fundamental unit of consistency."</p>
 
         <h3>T is for Transformation</h3>
-        <p>"A <strong>Transformation</strong> is like a magical enzyme. It's a pure, stateless process that helps a bee do its work. Imagine an enzyme that turns nectar into honey. The enzyme itself doesn't change, it just performs its one, perfect task. Transformations hold business logic that doesn't belong to any single organ."</p>
+        <p>"A <strong>Transformation</strong> is like a magical enzyme. It's a pure, stateless process that helps a bee
+            do its work. Imagine an enzyme that turns nectar into honey. The enzyme itself doesn't change, it just
+            performs its one, perfect task. Transformations hold business logic that doesn't belong to any single
+            organ."</p>
 
         <h3>C is for Connector</h3>
-        <p>"A <strong>Connector</strong> is the bee's senses—its antennae that smell the flowers or its eyes that see the sun. It's the bridge between the bee's inner world and the garden outside. Connectors are the translators, turning the language of the outside world (like HTTP requests or database queries) into signals the bee's organs can understand."</p>
+        <p>"A <strong>Connector</strong> is the bee's senses—its antennae that smell the flowers or its eyes that see
+            the sun. It's the bridge between the bee's inner world and the garden outside. Connectors are the
+            translators, turning the language of the outside world (like HTTP requests or database queries) into signals
+            the bee's organs can understand."</p>
 
         <h3>G is for Genesis Event</h3>
-        <p>"A <strong>Genesis Event</strong> is the famous 'waggle dance' of the honeybee. It's a message, a broadcast to the entire hive that something important has happened—'I've found a field of delicious flowers!' or 'An order has been placed!'. It's an immutable fact, a piece of history that other bees can react to, allowing the hive to work together without being tightly coupled."</p>
+        <p>"A <strong>Genesis Event</strong> is the famous 'waggle dance' of the honeybee. It's a message, a broadcast
+            to the entire hive that something important has happened—'I've found a field of delicious flowers!' or 'An
+            order has been placed!'. It's an immutable fact, a piece of history that other bees can react to, allowing
+            the hive to work together without being tightly coupled."</p>
+
+        <div class="atcg-container">
+            <svg class="atcg-svg" viewBox="0 0 400 200">
+                <!-- Hexagon A -->
+                <g transform="translate(100, 100)">
+                    <polygon id="hex-a" class="hexagon" points="50,0 25,43.3 -25,43.3 -50,0 -25,-43.3 25,-43.3" />
+                    <text id="text-a" class="hex-text" x="0" y="0">A</text>
+                </g>
+                <!-- Hexagon T -->
+                <g transform="translate(175, 56.7)">
+                    <polygon id="hex-t" class="hexagon" points="50,0 25,43.3 -25,43.3 -50,0 -25,-43.3 25,-43.3" />
+                    <text id="text-t" class="hex-text" x="0" y="0">T</text>
+                </g>
+                <!-- Hexagon C -->
+                <g transform="translate(250, 100)">
+                    <polygon id="hex-c" class="hexagon" points="50,0 25,43.3 -25,43.3 -50,0 -25,-43.3 25,-43.3" />
+                    <text id="text-c" class="hex-text" x="0" y="0">C</text>
+                </g>
+                <!-- Hexagon G -->
+                <g transform="translate(325, 56.7)">
+                    <polygon id="hex-g" class="hexagon" points="50,0 25,43.3 -25,43.3 -50,0 -25,-43.3 25,-43.3" />
+                    <text id="text-g" class="hex-text" x="0" y="0">G</text>
+                </g>
+            </svg>
+        </div>
 
         <div class="atcg-container">
             <svg class="atcg-svg" viewBox="0 0 400 200">
@@ -295,83 +394,93 @@
         </div>
 
         <h2>The Royal Jelly Framework</h2>
-        <p>"Finally," said the Beekeeper, "every Queen Bee, the mother of a whole domain, is born from the same magical substance: <strong>Royal Jelly</strong>."</p>
-        <p>"In our world, this is a tiny, powerful internal framework. It doesn't do any business logic itself, but it provides the essential nutrients—the base classes, the interfaces, the very essence of being an <code>Aggregate</code> or a <code>Genesis Event</code>. Every domain core in your kingdom is built upon this shared, sacred foundation, ensuring they all speak the same language and follow the same divine laws."</p>
+        <p>"Finally," said the Beekeeper, "every Queen Bee, the mother of a whole domain, is born from the same magical
+            substance: <strong>Royal Jelly</strong>."</p>
+        <p>"In our world, this is a tiny, powerful internal framework. It doesn't do any business logic itself, but it
+            provides the essential nutrients—the base classes, the interfaces, the very essence of being an
+            <code>Aggregate</code> or a <code>Genesis Event</code>. Every domain core in your kingdom is built upon this
+            shared, sacred foundation, ensuring they all speak the same language and follow the same divine laws."</p>
     </div>
 
     <hr>
 
     <div class="content-wrapper">
         <h2>The Apiary Map: A Portrait of the Hive</h2>
-        <p>"To truly understand," the Beekeeper said, pulling out an old, enchanted map, "you must see the hive in its entirety."</p>
-        <p>The map showed a living, breathing system. At the top was <strong>The Garden</strong>, the world outside the hive with its users, databases, and other systems. Below it lay <strong>The Great Hexagonal Hive</strong> itself. The outer layer was composed of <strong>Connectors (C)</strong>, the senses that guarded the hive. And at the very center was the <strong>Queen's Chamber</strong>, the domain core, where the vital <strong>Aggregates (A)</strong> and <strong>Transformations (T)</strong> lived, and where the <strong>Genesis Events (G)</strong> were born.</p>
+        <p>"To truly understand," the Beekeeper said, pulling out an old, enchanted map, "you must see the hive in its
+            entirety."</p>
+        <p>The map showed a living, breathing system. At the top was <strong>The Garden</strong>, the world outside the
+            hive with its users, databases, and other systems. Below it lay <strong>The Great Hexagonal Hive</strong>
+            itself. The outer layer was composed of <strong>Connectors (C)</strong>, the senses that guarded the hive.
+            And at the very center was the <strong>Queen's Chamber</strong>, the domain core, where the vital
+            <strong>Aggregates (A)</strong> and <strong>Transformations (T)</strong> lived, and where the
+            <strong>Genesis Events (G)</strong> were born.</p>
         <p>"Behold," she said. "The full picture of our architecture. A system designed by nature itself."</p>
         <div class="mermaid">
             graph TD
-                subgraph The Garden [The World Outside the Hive]
-                    direction LR
-                    User["🧑‍🌾 User <br/>(Web Browser)"]
-                    CLI["💻 The Wind <br/>(CLI Tool)"]
-                    ExternalAPI["🌐 Other Hives <br/>(External APIs)"]
-                    Database["🗃️ The River of Memory <br/>(Database)"]
-                end
+            subgraph The Garden [The World Outside the Hive]
+            direction LR
+            User["🧑‍🌾 User <br />(Web Browser)"]
+            CLI["💻 The Wind <br />(CLI Tool)"]
+            ExternalAPI["🌐 Other Hives <br />(External APIs)"]
+            Database["🗃️ The River of Memory <br />(Database)"]
+            end
 
-                subgraph The Hive [🏰 The Great Hexagonal Hive]
-                    direction TB
+            subgraph The Hive [🏰 The Great Hexagonal Hive]
+            direction TB
 
-                    subgraph Connectors [C: The Senses of the Hive]
-                        direction LR
-                        RestConnector["🔌 REST API Connector"]
-                        CliConnector["🔌 CLI Connector"]
-                        DbConnector["🗂️ Database Connector"]
-                        ApiClientConnector["🌍 API Client Connector"]
-                    end
+            subgraph Connectors [C: The Senses of the Hive]
+            direction LR
+            RestConnector["🔌 REST API Connector"]
+            CliConnector["🔌 CLI Connector"]
+            DbConnector["🗂️ Database Connector"]
+            ApiClientConnector["🌍 API Client Connector"]
+            end
 
-                    subgraph DomainCore ["👑 The Queen's Chamber (Domain Core)"]
-                        direction TB
+            subgraph DomainCore ["👑 The Queen's Chamber (Domain Core)"]
+            direction TB
 
-                        subgraph Aggregates [A: The Organs]
-                            OrderAggregate["Order Bee"]
-                            InventoryAggregate["Inventory Bee"]
-                        end
+            subgraph Aggregates [A: The Organs]
+            OrderAggregate["Order Bee"]
+            InventoryAggregate["Inventory Bee"]
+            end
 
-                        subgraph Transformations [T: The Enzymes]
-                            PricingTransformation["Honey-Making Logic <br/>(Pricing Calculator)"]
-                        end
+            subgraph Transformations [T: The Enzymes]
+            PricingTransformation["Honey-Making Logic <br />(Pricing Calculator)"]
+            end
 
-                        GenesisEvent["G: The Waggle Dance <br/>(Genesis Events)"]
+            GenesisEvent["G: The Waggle Dance <br />(Genesis Events)"]
 
-                        OrderAggregate -- produces --> GenesisEvent
-                        InventoryAggregate -- produces --> GenesisEvent
-                        PricingTransformation -- used by --> OrderAggregate
-                    end
-                end
+            OrderAggregate -- produces --> GenesisEvent
+            InventoryAggregate -- produces --> GenesisEvent
+            PricingTransformation -- used by --> OrderAggregate
+            end
+            end
 
-                User --> RestConnector
-                CLI --> CliConnector
-                RestConnector --> OrderAggregate
-                CliConnector --> InventoryAggregate
-                OrderAggregate -- "persists state via" --> DbConnector
-                InventoryAggregate -- "gets stock levels via" --> ApiClientConnector
-                DbConnector --> Database
-                ApiClientConnector --> ExternalAPI
+            User --> RestConnector
+            CLI --> CliConnector
+            RestConnector --> OrderAggregate
+            CliConnector --> InventoryAggregate
+            OrderAggregate -- "persists state via" --> DbConnector
+            InventoryAggregate -- "gets stock levels via" --> ApiClientConnector
+            DbConnector --> Database
+            ApiClientConnector --> ExternalAPI
 
-                classDef external fill:#6B8E23,stroke:#333,stroke-width:2px,color:white
-                classDef connector fill:#f1c40f,stroke:#333,stroke-width:2px,color:black
-                classDef domain fill:#f9c846,stroke:#d4a017,stroke-width:4px,color:black
-                classDef aggregate fill:#fff3cd,stroke:#d4a017,stroke-width:2px,color:black
-                classDef transformation fill:#fff9e6,stroke:#d4a017,stroke-width:2px,color:black
-                classDef event fill:#ffeb99,stroke:#d4a017,stroke-width:2px,stroke-dasharray: 5 5,color:black
+            classDef external fill:#6B8E23,stroke:#333,stroke-width:2px,color:white
+            classDef connector fill:#f1c40f,stroke:#333,stroke-width:2px,color:black
+            classDef domain fill:#f9c846,stroke:#d4a017,stroke-width:4px,color:black
+            classDef aggregate fill:#fff3cd,stroke:#d4a017,stroke-width:2px,color:black
+            classDef transformation fill:#fff9e6,stroke:#d4a017,stroke-width:2px,color:black
+            classDef event fill:#ffeb99,stroke:#d4a017,stroke-width:2px,stroke-dasharray: 5 5,color:black
 
-                class User,CLI,ExternalAPI,Database external;
-                class RestConnector,CliConnector,DbConnector,ApiClientConnector connector;
-                class DomainCore domain;
-                class OrderAggregate,InventoryAggregate aggregate;
-                class PricingTransformation transformation;
-                class GenesisEvent event;
+            class User,CLI,ExternalAPI,Database external;
+            class RestConnector,CliConnector,DbConnector,ApiClientConnector connector;
+            class DomainCore domain;
+            class OrderAggregate,InventoryAggregate aggregate;
+            class PricingTransformation transformation;
+            class GenesisEvent event;
 
-                style TheGarden fill:none,stroke:none
-                style TheHive fill:none,stroke:green,stroke-width:3px,stroke-dasharray: 10 10
+            style TheGarden fill:none,stroke:none
+            style TheHive fill:none,stroke:green,stroke-width:3px,stroke-dasharray: 10 10
         </div>
     </div>
 
@@ -379,29 +488,39 @@
 
     <div class="content-wrapper">
         <h2>The Metamorphosis: Birth of a Worker Bee</h2>
-        <p>"But how does a new bee—a new feature—come to life?" the young builder asked, his eyes wide with curiosity.</p>
-        <p>The Beekeeper smiled. "A new bee is not simply built. It is born. It undergoes a metamorphosis, a sacred journey of growth."</p>
+        <p>"But how does a new bee—a new feature—come to life?" the young builder asked, his eyes wide with curiosity.
+        </p>
+        <p>The Beekeeper smiled. "A new bee is not simply built. It is born. It undergoes a metamorphosis, a sacred
+            journey of growth."</p>
         <p>She explained that every new feature, every new worker bee, follows the same four-stage lifecycle:</p>
         <ol>
-            <li><strong>The Egg (Initialization):</strong> A new, empty honeycomb cell is created. This is the initial file structure, the scaffolding for our new bee. It holds nothing but a promise.</li>
-            <li><strong>The Larva (Development):</strong> The egg hatches! The larva is fed with Royal Jelly (the core framework) and bee bread (business logic). This is where the code is written, the tests are crafted, and the bee begins to take shape, its ATCG code defining its purpose.</li>
-            <li><strong>The Pupa (Transformation):</strong> The larva spins a cocoon. This is the build and containerization phase. The code is compiled, dependencies are locked, and it's packaged into a deployable unit—a Docker image, safe and ready for the world.</li>
-            <li><strong>The Adult (Deployment):</strong> The bee emerges, fully formed! It is released into the hive to perform its duties. The feature is deployed to production, becoming a living, breathing part of the system.</li>
+            <li><strong>The Egg (Initialization):</strong> A new, empty honeycomb cell is created. This is the initial
+                file structure, the scaffolding for our new bee. It holds nothing but a promise.</li>
+            <li><strong>The Larva (Development):</strong> The egg hatches! The larva is fed with Royal Jelly (the core
+                framework) and bee bread (business logic). This is where the code is written, the tests are crafted, and
+                the bee begins to take shape, its ATCG code defining its purpose.</li>
+            <li><strong>The Pupa (Transformation):</strong> The larva spins a cocoon. This is the build and
+                containerization phase. The code is compiled, dependencies are locked, and it's packaged into a
+                deployable unit—a Docker image, safe and ready for the world.</li>
+            <li><strong>The Adult (Deployment):</strong> The bee emerges, fully formed! It is released into the hive to
+                perform its duties. The feature is deployed to production, becoming a living, breathing part of the
+                system.</li>
         </ol>
-        <p>"This lifecycle ensures that every bee, no matter its function, is born strong, tested, and ready to contribute to the hive's prosperity," the Beekeeper concluded.</p>
+        <p>"This lifecycle ensures that every bee, no matter its function, is born strong, tested, and ready to
+            contribute to the hive's prosperity," the Beekeeper concluded.</p>
         <p>Here is the lifecycle in a simple diagram:</p>
         <div class="mermaid">
             stateDiagram-v2
-                direction LR
-                [*] --> Egg: Lay Egg
-                Egg: Initial scaffolding
-                Egg --> Larva: Hatch
-                Larva: Develop feature & tests
-                Larva --> Pupa: Spin Cocoon
-                Pupa: Build & Containerize
-                Pupa --> Adult: Emerge
-                Adult: Deploy to production
-                Adult --> [*]
+            direction LR
+            [*] --> Egg: Lay Egg
+            Egg: Initial scaffolding
+            Egg --> Larva: Hatch
+            Larva: Develop feature & tests
+            Larva --> Pupa: Spin Cocoon
+            Pupa: Build & Containerize
+            Pupa --> Adult: Emerge
+            Adult: Deploy to production
+            Adult --> [*]
         </div>
     </div>
 
@@ -409,18 +528,24 @@
 
     <div class="content-wrapper">
         <h2>The Moral of the Story</h2>
-        <p>And so, the builders learned the secrets of the enchanted apiary. They learned that by looking to nature, they could build software that was not a rigid, lifeless machine, but a living, adaptable ecosystem.</p>
-        <p>The Hexagonal Hive teaches us to protect our core logic. The ATCG genetic code gives us a shared language to build with. And the bee's lifecycle gives us a predictable path for growth. By embracing these patterns, we too can build digital kingdoms that are resilient, maintainable, and truly full of life. For in the end, the best code is not merely written; it is grown.</p>
+        <p>And so, the builders learned the secrets of the enchanted apiary. They learned that by looking to nature,
+            they could build software that was not a rigid, lifeless machine, but a living, adaptable ecosystem.</p>
+        <p>The Hexagonal Hive teaches us to protect our core logic. The ATCG genetic code gives us a shared language to
+            build with. And the bee's lifecycle gives us a predictable path for growth. By embracing these patterns, we
+            too can build digital kingdoms that are resilient, maintainable, and truly full of life. For in the end, the
+            best code is not merely written; it is grown.</p>
     </div>
 
     <hr>
 
     <div class="content-wrapper">
         <h2>For Curious Minds: The Beekeeper's Technical Grimoire</h2>
-        <p><em>This section breaks from our fairy tale to provide a more technical look at the patterns we've discussed.</em></p>
+        <p><em>This section breaks from our fairy tale to provide a more technical look at the patterns we've
+                discussed.</em></p>
 
         <h3>ATCG Primitives in Pseudo-code</h3>
-        <p>Here is a conceptual look at how our primitives might be implemented. We'll use a TypeScript-like syntax for clarity.</p>
+        <p>Here is a conceptual look at how our primitives might be implemented. We'll use a TypeScript-like syntax for
+            clarity.</p>
 
         <h4>A: Aggregate</h4>
         <p>An <code>Aggregate</code> encapsulates state and enforces its own rules (invariants).</p>
@@ -493,43 +618,55 @@ class RestConnector {
         </div>
 
         <h3>The "Pollen Protocol": A Note on Inter-Hive Communication</h3>
-        <p>The <strong>Pollen Protocol</strong> is a simple, powerful idea: just as flowers have a predictable structure that bees understand, our <code>Genesis Events</code> should have a predictable structure so other services (Hives) can understand them.</p>
+        <p>The <strong>Pollen Protocol</strong> is a simple, powerful idea: just as flowers have a predictable structure
+            that bees understand, our <code>Genesis Events</code> should have a predictable structure so other services
+            (Hives) can understand them.</p>
         <p>A Pollen Protocol-compliant event should always contain:</p>
         <ul>
             <li><code>eventId</code>: A unique identifier for this specific event instance.</li>
             <li><code>eventType</code>: A clear, past-tense name (e.g., <code>OrderShipped</code>).</li>
-            <li><code>eventVersion</code>: A version number (<code>1.0</code>, <code>2.1</code>) to handle schema evolution.</li>
+            <li><code>eventVersion</code>: A version number (<code>1.0</code>, <code>2.1</code>) to handle schema
+                evolution.</li>
             <li><code>timestamp</code>: When the event occurred.</li>
             <li><code>aggregateId</code>: The ID of the aggregate that produced the event.</li>
             <li><code>payload</code>: The data specific to this event.</li>
         </ul>
-        <p>By enforcing this simple contract, we create a healthy ecosystem where new services can easily consume events from existing ones without creating tight coupling.</p>
-        <p>A final thought on this metaphor: If the Pollen Protocol defines the <em>genes</em> (the structure of an event), then the raw, serialized data that travels over the wire—the JSON string, the Protobuf bytes—is the <em>genetic sequence</em> itself. It is the <code>tataaaaataaaataaaaaa...</code> of our system, the physical expression of the logical gene.</p>
+        <p>By enforcing this simple contract, we create a healthy ecosystem where new services can easily consume events
+            from existing ones without creating tight coupling.</p>
+        <p>A final thought on this metaphor: If the Pollen Protocol defines the <em>genes</em> (the structure of an
+            event), then the raw, serialized data that travels over the wire—the JSON string, the Protobuf bytes—is the
+            <em>genetic sequence</em> itself. It is the <code>tataaaaataaaataaaaaa...</code> of our system, the physical
+            expression of the logical gene.</p>
 
         <h3>Sequence Diagram: From Request to Waggle Dance</h3>
-        <p>This diagram shows the full flow: a user's request comes in through a <code>Connector</code>, is handled by an <code>Aggregate</code>, which produces a <code>Genesis Event</code> that is then published for other parts of the system to consume.</p>
+        <p>This diagram shows the full flow: a user's request comes in through a <code>Connector</code>, is handled by
+            an <code>Aggregate</code>, which produces a <code>Genesis Event</code> that is then published for other
+            parts of the system to consume.</p>
         <div class="mermaid">
             sequenceDiagram
-                participant User as 🧑‍🌾 User
-                participant REST_C as C: REST Connector
-                participant Order_A as A: Order Aggregate
-                participant Events_G as G: Event Bus
+            participant User as 🧑‍🌾 User
+            participant REST_C as C: REST Connector
+            participant Order_A as A: Order Aggregate
+            participant Events_G as G: Event Bus
 
-                User->>+REST_C: POST /orders/123/ship
-                REST_C->>+Order_A: handle_command(shipOrder)
-                Order_A-->>Order_A: Enforce business rules
-                Order_A->>Order_A: apply(OrderShippedEvent)
-                Order_A-->>-REST_C: return OrderShippedEvent
-                REST_C-->>-User: 202 Accepted
+            User->>+REST_C: POST /orders/123/ship
+            REST_C->>+Order_A: handle_command(shipOrder)
+            Order_A-->>Order_A: Enforce business rules
+            Order_A->>Order_A: apply(OrderShippedEvent)
+            Order_A-->>-REST_C: return OrderShippedEvent
+            REST_C-->>-User: 202 Accepted
 
-                REST_C->>+Events_G: publish(OrderShippedEvent)
-                Note over Events_G: Other Hives (e.g., Shipping) listen for this "waggle dance"
-                Events_G-->>-REST_C:
+            REST_C->>+Events_G: publish(OrderShippedEvent)
+            Note over Events_G: Other Hives (e.g., Shipping) listen for this "waggle dance"
+            Events_G-->>-REST_C:
         </div>
 
         <h3>The Beekeeper's Grand Vision: Self-Creating Systems</h3>
-        <p>The final, most profound secret of the hive is this: if the architecture is pure enough, the system can begin to build itself. The "Metamorphosis -> ATCG" mapping is not just a metaphor for a manual process; it is a blueprint for automation.</p>
-        <p>Imagine a developer who wishes to create a new "bee" (feature). Instead of writing boilerplate code, they simply create a declarative definition, perhaps in a YAML file, specifying the ATCG primitives required:</p>
+        <p>The final, most profound secret of the hive is this: if the architecture is pure enough, the system can begin
+            to build itself. The "Metamorphosis -> ATCG" mapping is not just a metaphor for a manual process; it is a
+            blueprint for automation.</p>
+        <p>Imagine a developer who wishes to create a new "bee" (feature). Instead of writing boilerplate code, they
+            simply create a declarative definition, perhaps in a YAML file, specifying the ATCG primitives required:</p>
         <div class="code-block-wrapper">
             <button class="copy-button">Copy</button>
             <pre><code class="language-yaml"># A declarative definition for a new "ShippingNotification" feature
@@ -551,14 +688,69 @@ connectors:
     type: driven # This bee drives an external service
     port: SmtpPort</code></pre>
         </div>
-        <p>An automated <strong>"Queen Bee"</strong> system—a sophisticated CI/CD operator—reads this definition and orchestrates the entire Metamorphosis:</p>
+        <p>An automated <strong>"Queen Bee"</strong> system—a sophisticated CI/CD operator—reads this definition and
+            orchestrates the entire Metamorphosis:</p>
         <ul>
-            <li><strong>Egg:</strong> It receives the YAML and generates the initial project scaffolding, creating all the necessary files from templates.</li>
-            <li><strong>Larva:</strong> It takes the core business logic written by the developer (the one part that requires human creativity) and injects it into the generated code. It then runs a suite of automated tests against the new component.</li>
-            <li><strong>Pupa:</strong> Upon successful testing, it packages the component into a hardened, deployable container.</li>
-            <li><strong>Adult:</strong> It deploys this new container into the production environment, where it comes to life and begins listening for its specified events.</li>
+            <li><strong>Egg:</strong> It receives the YAML and generates the initial project scaffolding, creating all
+                the necessary files from templates.</li>
+            <li><strong>Larva:</strong> It takes the core business logic written by the developer (the one part that
+                requires human creativity) and injects it into the generated code. It then runs a suite of automated
+                tests against the new component.</li>
+            <li><strong>Pupa:</strong> Upon successful testing, it packages the component into a hardened, deployable
+                container.</li>
+            <li><strong>Adult:</strong> It deploys this new container into the production environment, where it comes to
+                life and begins listening for its specified events.</li>
         </ul>
-        <p>This is the ultimate goal: an architecture so well-defined that it becomes a living factory for its own components. This is the convergence of Domain-Driven Design, GitOps, and Model-Driven Development, creating a system that is not just built, but truly <em>grown</em>.</p>
+        <p>This is the ultimate goal: an architecture so well-defined that it becomes a living factory for its own
+            components. This is the convergence of Domain-Driven Design, GitOps, and Model-Driven Development, creating
+            a system that is not just built, but truly <em>grown</em>.</p>
+    </div>
+
+    <hr>
+
+    <div class="content-wrapper">
+        <h2>The Bee's Journey: From Request to Response</h2>
+        <p>This diagram illustrates the complete journey of a request as it travels through the hive.</p>
+        <div class="mermaid">
+            graph TD
+            subgraph "The Bee's Journey: From Request to Response"
+            A[<div style='font-size: 24px;'>🚶</div><br /><b>A Request is Born</b><br />An action from the outside
+            world]
+            A --> B{The Hive Gate<br />Primary Adapter / Connector}
+
+            B -- "1. The request enters the hive" --> C(🐝<br />The data is validated and transformed into a known
+            command)
+
+            C -- "2. The command is sent deeper" --> D[The Antechamber<br />Application Service]
+
+            D -- "3. The core is engaged" --> E((👑<br /><b>The Queen's Chamber</b><br />The Domain Aggregate is
+            commanded))
+
+            subgraph DomainLogic["Domain Logic Execution"]
+            E -- "4. Business rules are enforced" --> E
+            end
+
+            E -- "5. The result is stored" --> F{The Honeycomb<br />Persistence Adapter}
+
+            F --> G[<div style='font-size: 24px;'>🗃️</div><br />The River of Memory<br />Database]
+
+            E -- "6. A 'Waggle Dance' happens" --> H((<div style='font-size: 24px;'>📣</div><br /><b>A Genesis Event is
+                Published</b><br />Notifying the rest of the hive))
+            end
+
+            classDef external fill:#6B8E23,stroke:#333,stroke-width:2px,color:white;
+            classDef adapter fill:#f1c40f,stroke:#333,stroke-width:2px,color:black;
+            classDef service fill:#fff9e6,stroke:#d4a017,stroke-width:2px,color:black;
+            classDef domain fill:#f9c846,stroke:#d4a017,stroke-width:4px,color:black;
+            classDef event fill:#ffeb99,stroke:#d4a017,stroke-width:2px,stroke-dasharray: 5 5,color:black;
+
+            class A,G external;
+            class B,F adapter;
+            class C,D service;
+            class E domain;
+            class H event;
+            style DomainLogic fill:none,stroke:#d4a017,stroke-dasharray: 2 2
+        </div>
     </div>
 
     <hr>
@@ -634,4 +826,5 @@ graph TD
         });
     </script>
 </body>
+
 </html>
