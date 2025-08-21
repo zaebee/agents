@@ -99,6 +99,96 @@ stateDiagram-v2
 
 ---
 
+## Chapter Four: The Hive's Immune System
+
+"A Hive is a living thing," the Beekeeper taught, her voice low and serious. "And like all living things, it is not perfect. It exists in a world of chaos. Sometimes, a bee is born with a faulty wing. Sometimes, a sickness enters the gates. A Hive that cannot heal itself is a Hive that is already dying."
+
+"Therefore," she continued, "the most profound wisdom is not in building a *perfect* Hive, but in building a Hive that *knows how to handle imperfection*. We must bestow upon it an **Immune System**."
+
+### The Concept of Architectural Immunity
+The Hive Immune System is not a single component, but an architectural layer dedicated to resilience and adaptive response. Its purpose is to protect the health of the entire Organism by detecting and neutralizing "mutations"—events that threaten the stability of a Cell.
+
+The system operates on a simple, powerful principle: **Every significant failure within the Hive must be announced as a formal Mutation Event.** These events are not mere logs; they are cries for help, broadcast into the Hive's nervous system. Specialized "immune cells" listen for these cries and orchestrate a response.
+
+### The Immune Cells
+The Immune System is composed of specialized Cells, each with a unique role in protecting the Hive:
+```mermaid
+graph TD
+    subgraph "The Hive's First Responders"
+        G[G: Mutation Event]
+
+        G --> S[Sentinel Cell];
+        G --> P[Phage Cell];
+        G --> M[Macrophage Cell];
+
+        subgraph Sentinel
+            S -- "Observes & Records" --> S_Action["📖 Book of Maladies"];
+        end
+
+        subgraph Phage
+            P -- "Handles 'Common Cold'" --> P_Action_1["🔄 Retry Operation"];
+            P -- "..." --> P_Action_2["🔀 Reroute Traffic"];
+        end
+
+        subgraph Macrophage
+            M -- "Handles 'Serious Illness'" --> M_Action_1["🛑 Quarantine Component"];
+            M -- "..." --> M_Action_2["💥 Trigger Apoptosis (Shutdown)"];
+        end
+    end
+
+    style G fill:#ffeb99,stroke:red,stroke-width:3px,stroke-dasharray: 5 5
+    style S fill:#e8d5b7,stroke:#5e3023,stroke-width:2px
+    style P fill:#d4a017,stroke:#5e3023,stroke-width:2px,color:white
+    style M fill:#5e3023,stroke:black,stroke-width:2px,color:white
+```
+- **Sentinel Cells:** Simple, passive listeners that detect and record mutations for later analysis.
+- **Phage Cells:** First responders designed to handle known, transient errors (the "common cold"), often by retrying or rerouting.
+- **Macrophage Cells:** Heavy-duty cleaners that handle catastrophic mutations, quarantining or even shutting down failing components to protect the organism.
+
+### A Taxonomy of Mutations
+"Not all sickness is the same," the Beekeeper explained. "We must learn to distinguish a simple cold from a true plague. So too must our Immune System learn to distinguish different types of mutations."
+
+```mermaid
+mindmap
+  root((Mutation Event))
+    ConfigurationDefect ("`ConfigurationDefect`<br/>(Genetic Flaw)")
+      )Missing ENV Var(
+      )YAML Syntax Error(
+    TransientInfection ("`TransientInfection`<br/>(Common Cold)")
+      )Network Timeout(
+      )API 503 Error(
+    ChronicFailure ("`ChronicFailure`<br/>(Serious Illness)")
+      )API 401 Error(
+      )Out of Memory(
+    InvariantViolation ("`InvariantViolation`<br/>(Autoimmune Disorder)")
+      )Corrupted State(
+      )Negative Stock(
+```
+
+### The "Immune Response" Codon
+"An Immune System that can only see sickness but cannot act is no system at all," she stated. "The final piece is the 'Immune Response' itself—the spell for healing."
+
+This specialized codon is used by immune cells. It receives a **Mutation Event**, a specialized **Immune Aggregate** makes a policy decision, and a **Corrective Command** is dispatched to the target component.
+```mermaid
+sequenceDiagram
+    participant G_mut as G: Mutation Event
+    participant C as C: Immune Connector
+    participant A_immune as A: Immune Aggregate
+    participant Target as Target Component
+
+    G_mut->>+C: Hears event
+    C->>+A_immune: dispatch_command(RespondToMutation)
+    Note over A_immune: Triage & Policy Decision
+    A_immune-->>-C: return CorrectiveCommand
+    C->>+Target: dispatch_command(CorrectiveCommand)
+    Target-->>Target: Executes corrective action
+    Target-->>-C:
+```
+
+By formalizing our approach to failure, we turn errors from a source of chaos into a source of strength. We create a Hive that doesn't just survive, but learns, adapts, and endures.
+
+---
+
 ## The Grimoire's Artifacts
 
 Our Grimoire is not just a book of philosophy; it contains tangible artifacts that bring these ideas to life.
