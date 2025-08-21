@@ -89,3 +89,9 @@ The ATCG Primitives are the "letters" of our genetic alphabet. The **Codons** ar
     3.  It passes the `Command` to an **A**ggregate within its own Cell.
     4.  This triggers the "Handle Command" codon within the receiving Cell, which may produce its own new **G**enesis Events.
 *   **Conceptual Interface (`IEventHandler`):** `handle(event): Promise<void>`
+
+## 4. The "Immune Response" Codon (`G -> C -> A -> C`)
+
+*   **Purpose:** To create a self-healing system that can react to errors or "mutations" and issue corrective commands.
+*   **Note:** This is an advanced pattern. The full doctrine, including the Taxonomy of Mutations and the different types of Immune Cells, is detailed in the `IMMUNITY.md` document.
+*   **Conceptual Interface (`IImmuneHandler`):** `handle(mutationEvent): Promise<CorrectiveCommand>`

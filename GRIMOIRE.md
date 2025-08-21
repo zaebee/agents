@@ -15,6 +15,8 @@
 *   **The 'Handle Command' Codon (`C -> A -> G`):** The word for 'to change'.
 *   **The 'Query Data' Codon (`C -> T -> C`):** The word for 'to see'.
 *   **The 'React to Event' Codon (`G -> C -> A -> G`):** The word for 'to listen'.
+*   **The 'Immune Response' Codon (`G -> C -> A -> C`):** The word for 'to heal'. The detailed doctrine for this advanced pattern is recorded in the `dna-core/IMMUNITY.md` document.
+
 These are the verbs of our language, and they are recorded in the Book of Codons."
 
 ### Level 4: The ATCG Primitives
