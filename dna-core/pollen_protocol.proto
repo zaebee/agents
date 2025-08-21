@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package hive.dna.pollen.v1;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+// The Pollen Protocol defines the standard envelope for all Genesis Events
+// across the entire Apiary. It ensures that all events are structured
+// consistently, allowing any Cell to consume events from any other Cell.
+message PollenEnvelope {
+  // A unique identifier for this specific event instance (e.g., a UUID).
+  // Complies with the CloudEvents 'id' attribute.
+  string event_id = 1;
+
+  // A clear, past-tense name for the event type.
+  // Example: "OrderShipped", "UserRegistered"
+  string event_type = 2;
+
+  // The version of the event's payload schema.
+  // Example: "1.0", "2.1"
+  string event_version = 3;
+
+  // When the event occurred, in UTC.
+  google.protobuf.Timestamp timestamp = 4;
+
+  // The unique identifier of the Aggregate that produced the event.
+  string aggregate_id = 5;
+
+  // The data specific to this event. Using Struct allows for a flexible,
+  // JSON-like payload that can be different for each event type.
+  google.protobuf.Struct payload = 6;
+}

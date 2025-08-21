@@ -1,0 +1,81 @@
+#!/bin/bash
+
+# The Genesis Engine: a CLI for managing the Hive codebase.
+# This tool acts as the "Connector" (C) between the developer and the codebase.
+
+# --- Configuration ---
+HIVE_ROOT="hive/components"
+
+# --- Helper Functions ---
+function show_usage() {
+    echo "The Genesis Engine - The 'Connector' to the Hive."
+    echo "Usage: $0 hatch larva <component_name> | --manifest <file.yaml>"
+    echo ""
+    echo "Commands:"
+    echo "  hatch larva <component_name>          - Creates a new component by name."
+    echo "  hatch larva --manifest <file.yaml>  - Creates a new component from a manifest file."
+    echo "  ... (spin, emerge coming soon)"
+}
+
+# --- Command Parsing (ATCG Mapping) ---
+COMMAND=$1          # A = Aggregate Action (e.g., hatch)
+SUBCOMMAND=$2       # T = Transformation (e.g., larva)
+ARG3=$3
+ARG4=$4
+
+MANIFEST_FILE=""
+COMPONENT_NAME=""
+
+# --- Command Logic ---
+if [ "$COMMAND" != "hatch" ] || [ "$SUBCOMMAND" != "larva" ]; then
+    echo "Error: Unknown command '$COMMAND $SUBCOMMAND'."
+    show_usage
+    exit 1
+fi
+
+# Check for manifest flag
+if [ "$ARG3" == "--manifest" ]; then
+    if [ -z "$ARG4" ]; then
+        echo "Error: Missing path to manifest file."
+        show_usage
+        exit 1
+    fi
+    MANIFEST_FILE=$ARG4
+    # Simulate reading from YAML. In a real tool, we'd use a proper parser.
+    # This is fragile but demonstrates the principle for our Larva-stage CLI.
+    COMPONENT_NAME=$(grep 'name:' "$MANIFEST_FILE" | awk '{print $2}')
+    if [ -z "$COMPONENT_NAME" ]; then
+        echo "Error: Could not find 'name:' field in manifest $MANIFEST_FILE."
+        exit 1
+    fi
+    echo "Hatching larva from manifest '$MANIFEST_FILE'..."
+else
+    # Legacy mode: get name from command line
+    COMPONENT_NAME=$ARG3
+    if [ -z "$COMPONENT_NAME" ]; then
+        echo "Error: <component_name> or --manifest flag is required."
+        show_usage
+        exit 1
+    fi
+    echo "Hatching larva for component '$COMPONENT_NAME'..."
+fi
+
+
+COMPONENT_PATH="$HIVE_ROOT/$COMPONENT_NAME"
+
+if [ -d "$COMPONENT_PATH" ]; then
+    echo "Error: Component '$COMPONENT_NAME' already exists at $COMPONENT_PATH."
+    exit 1
+fi
+
+# Create the component directory and a placeholder file
+mkdir -p "$COMPONENT_PATH"
+touch "$COMPONENT_PATH/main.py" # Default to python, can be configured later
+
+# If we used a manifest, copy it into the component's directory for record-keeping
+if [ -n "$MANIFEST_FILE" ]; then
+    cp "$MANIFEST_FILE" "$COMPONENT_PATH/manifest.yaml"
+fi
+
+echo "Success! Larva hatched at: $COMPONENT_PATH"
+echo "Next steps: 'spin cocoon' to add tests."
