@@ -269,7 +269,7 @@ A Pollen Protocol-compliant event should always contain:
 
 By enforcing this simple contract, we create a healthy ecosystem where new services can easily consume events from existing ones without creating tight coupling.
 
-A final thought on this metaphor: If the Pollen Protocol defines the _genes_ (the structure of an event), then the raw, serialized data that travels over the wire—the JSON string, the Protobuf bytes—is the _genetic sequence_ itself. It is the `tataaaaataaaataaaaaa...` of our system, the physical expression of the logical gene.
+A final thought on this metaphor: If the Pollen Protocol defines the _genes_ (the structure of an event), then the raw, serialized data that travels over the wire—the JSON string, the Protobuf bytes—is the _genetic sequence_ itself. It is the `tataaaaataaaataaaaaa...` of our system, the physical expression of the logical gene
 
 ### Sequence Diagram: From Request to Waggle Dance
 
@@ -324,6 +324,7 @@ connectors:
 An automated **"Queen Bee"** system—a sophisticated CI/CD operator—reads this definition and orchestrates the entire Metamorphosis:
 
 - **Egg:** It receives the YAML and generates the initial project scaffolding, creating all the necessary files from templates.
+
 - **Larva:** It takes the core business logic written by the developer (the one part that requires human creativity) and injects it into the generated code. It then runs a suite of automated tests against the new component.
 - **Pupa:** Upon successful testing, it packages the component into a hardened, deployable container.
 - **Adult:** It deploys this new container into the production environment, where it comes to life and begins listening for its specified events.
