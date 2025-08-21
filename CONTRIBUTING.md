@@ -6,8 +6,8 @@ Welcome, builder! This guide explains the practical philosophy of how we write c
 
 When you create a new component (a "Cell"), you will start with a declarative manifest (`manifest.yaml`). This file is more than just configuration; it is an **ontological declaration**.
 
-*   It asserts the **existence and essence** of your new component.
-*   It defines your component's **identity** (`name`), its **purpose** (`description`), and its **relationships** with the rest of the Organism (`listens_to`, `produces`, `connectors`).
+- It asserts the **existence and essence** of your new component.
+- It defines your component's **identity** (`name`), its **purpose** (`description`), and its **relationships** with the rest of the Organism (`listens_to`, `produces`, `connectors`).
 
 This manifest is the source of truth for your component's role in the greater system. Treat it as the primary blueprint for your Cell.
 
@@ -26,9 +26,9 @@ A `Codeon` is a **design principle**, not a specific class. When writing code, s
 
 Change is how our system evolves. We think of changes to the codebase as "mutations."
 
-*   **Beneficial Mutations (Refactoring):** These are encouraged. Leave the code better than you found it. Improve the fitness of your Cell.
-*   **Neutral Mutations (Styling):** Permitted, but should be handled by automated formatters where possible.
-*   **Harmful Mutations (Bugs):** These are failures in our quality control process.
+- **Beneficial Mutations (Refactoring):** These are encouraged. Leave the code better than you found it. Improve the fitness of your Cell.
+- **Neutral Mutations (Styling):** Permitted, but should be handled by automated formatters where possible.
+- **Harmful Mutations (Bugs):** These are failures in our quality control process.
 
 ## The Pipeline as Quality Control (Epigenetics and Environment)
 

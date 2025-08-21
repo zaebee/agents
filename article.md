@@ -42,7 +42,7 @@ The Beekeeper smiled. "Aha, that is the deepest secret of all. Every living thin
 
 "A **Genesis Event** is the famous 'waggle dance' of the honeybee. It's a message, a broadcast to the entire hive that something important has happened—'I've found a field of delicious flowers!' or 'An order has been placed!'. It's an immutable fact, a piece of history that other bees can react to, allowing the hive to work together without being tightly coupled."
 
-> *[Note: The HTML version of this article includes a special animation here, visualizing the genesis of a component from the four ATCG primitives.]*
+> _[Note: The HTML version of this article includes a special animation here, visualizing the genesis of a component from the four ATCG primitives.]_
 
 ## The Royal Jelly Framework
 
@@ -83,7 +83,7 @@ graph TD
 
         subgraph DomainCore ["👑 The Queen's Chamber (Domain Core)"]
             direction TB
-            
+
             subgraph Aggregates [A: The Organs]
                 OrderAggregate["Order Bee"]
                 InventoryAggregate["Inventory Bee"]
@@ -94,7 +94,7 @@ graph TD
             end
 
             GenesisEvent["G: The Waggle Dance <br/>(Genesis Events)"]
-            
+
             OrderAggregate -- produces --> GenesisEvent
             InventoryAggregate -- produces --> GenesisEvent
             PricingTransformation -- used by --> OrderAggregate
@@ -104,13 +104,13 @@ graph TD
     %% Connections
     User --> RestConnector
     CLI --> CliConnector
-    
+
     RestConnector --> OrderAggregate
     CliConnector --> InventoryAggregate
 
     OrderAggregate -- "persists state via" --> DbConnector
     InventoryAggregate -- "gets stock levels via" --> ApiClientConnector
-    
+
     DbConnector --> Database
     ApiClientConnector --> ExternalAPI
 
@@ -178,7 +178,7 @@ The Hexagonal Hive teaches us to protect our core logic. The ATCG genetic code g
 
 ## For Curious Minds: The Beekeeper's Technical Grimoire
 
-*This section breaks from our fairy tale to provide a more technical look at the patterns we've discussed.*
+_This section breaks from our fairy tale to provide a more technical look at the patterns we've discussed._
 
 ### ATCG Primitives in Pseudo-code
 
@@ -210,12 +210,12 @@ class OrderAggregate {
     }
 
     // State is changed by applying an event
-    const event = new OrderShippedEvent({ 
-      orderId: this.state.id, 
+    const event = new OrderShippedEvent({
+      orderId: this.state.id,
       shippingId: command.shippingId,
-      timestamp: new Date() 
+      timestamp: new Date(),
     });
-    
+
     this.apply(event);
 
     return event;
@@ -271,7 +271,7 @@ A Pollen Protocol-compliant event should always contain:
 
 By enforcing this simple contract, we create a healthy ecosystem where new services can easily consume events from existing ones without creating tight coupling.
 
-A final thought on this metaphor: If the Pollen Protocol defines the *genes* (the structure of an event), then the raw, serialized data that travels over the wire—the JSON string, the Protobuf bytes—is the *genetic sequence* itself. It is the `tataaaaataaaataaaaaa...` of our system, the physical expression of the logical gene.
+A final thought on this metaphor: If the Pollen Protocol defines the _genes_ (the structure of an event), then the raw, serialized data that travels over the wire—the JSON string, the Protobuf bytes—is the _genetic sequence_ itself. It is the `tataaaaataaaataaaaaa...` of our system, the physical expression of the logical gene.
 
 ### Sequence Diagram: From Request to Waggle Dance
 
@@ -293,7 +293,7 @@ sequenceDiagram
 
     REST_C->>+Events_G: publish(OrderShippedEvent)
     Note over Events_G: Other Hives (e.g., Shipping) listen for this "waggle dance"
-    Events_G-->>-REST_C: 
+    Events_G-->>-REST_C:
 ```
 
 ### The Beekeeper's Grand Vision: Self-Creating Systems
@@ -330,7 +330,7 @@ An automated **"Queen Bee"** system—a sophisticated CI/CD operator—reads thi
 - **Pupa:** Upon successful testing, it packages the component into a hardened, deployable container.
 - **Adult:** It deploys this new container into the production environment, where it comes to life and begins listening for its specified events.
 
-This is the ultimate goal: an architecture so well-defined that it becomes a living factory for its own components. This is the convergence of Domain-Driven Design, GitOps, and Model-Driven Development, creating a system that is not just built, but truly *grown*.
+This is the ultimate goal: an architecture so well-defined that it becomes a living factory for its own components. This is the convergence of Domain-Driven Design, GitOps, and Model-Driven Development, creating a system that is not just built, but truly _grown_.
 
 ### Advanced Beekeeping: Foraging, Seasons, and Defense
 
