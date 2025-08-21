@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATCG Genesis Animation</title>
+    <style>
+        :root {
+            --honey-yellow: #f9c846;
+            --dark-honey: #d4a017;
+            --comb-brown: #5e3023;
+            --highlight: #ff8c00;
+            /* ATCG Colors */
+            --a-color: #fff3cd;
+            --t-color: #fff9e6;
+            --c-color: #f1c40f;
+            --g-color: #ffeb99;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #f5f1e8 0%, #e8d5b7 100%);
+        }
+
+        .genesis-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Patrick Hand', cursive;
+            color: var(--comb-brown);
+            font-size: 1.5em;
+        }
+
+        .genesis-svg-wrapper {
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.7);
+            border-radius: 8px;
+            border: 1px solid var(--dark-honey);
+        }
+
+        .primitive {
+            stroke: var(--comb-brown);
+            stroke-width: 1;
+            animation-duration: 4s;
+            animation-timing-function: ease-in-out;
+            animation-iteration-count: infinite;
+        }
+
+        .a-primitive { fill: var(--a-color); animation-name: converge-a; }
+        .t-primitive { fill: var(--t-color); animation-name: converge-t; }
+        .c-primitive { fill: var(--c-color); animation-name: converge-c; }
+        .g-primitive { fill: var(--g-color); animation-name: converge-g; }
+
+        .core-hexagon {
+            fill: var(--honey-yellow);
+            stroke: var(--dark-honey);
+            stroke-width: 2;
+            transform-origin: center;
+            animation: glow 4s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        /* Keyframes for primitives converging */
+        @keyframes converge-a { 0%,100% { transform: translate(0,0); opacity:1; } 40% { transform: translate(70px, 70px); opacity:1; } 60% { transform: translate(70px, 70px); opacity:0; } }
+        @keyframes converge-t { 0%,100% { transform: translate(0,0); opacity:1; } 40% { transform: translate(-70px, 70px); opacity:1; } 60% { transform: translate(-70px, 70px); opacity:0; } }
+        @keyframes converge-c { 0%,100% { transform: translate(0,0); opacity:1; } 40% { transform: translate(70px, -70px); opacity:1; } 60% { transform: translate(70px, -70px); opacity:0; } }
+        @keyframes converge-g { 0%,100% { transform: translate(0,0); opacity:1; } 40% { transform: translate(-70px, -70px); opacity:1; } 60% { transform: translate(-70px, -70px); opacity:0; } }
+
+        /* Keyframe for the core appearing and glowing */
+        @keyframes glow {
+            0%, 50%, 100% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            70% {
+                opacity: 1;
+                transform: scale(1);
+                filter: drop-shadow(0 0 6px var(--highlight));
+            }
+            90% {
+                opacity: 1;
+                transform: scale(1);
+                filter: drop-shadow(0 0 6px var(--highlight));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="genesis-container">
+        <p>The Genesis of a Component</p>
+        <div class="genesis-svg-wrapper">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <!-- The four primitives -->
+                <circle cx="30" cy="30" r="15" class="primitive a-primitive"/>
+                <circle cx="170" cy="30" r="15" class="primitive t-primitive"/>
+                <circle cx="30" cy="170" r="15" class="primitive c-primitive"/>
+                <circle cx="170" cy="170" r="15" class="primitive g-primitive"/>
+
+                <!-- The central core that appears -->
+                <path d="M 100,25 L 175,62.5 L 175,137.5 L 100,175 L 25,137.5 L 25,62.5 Z" class="core-hexagon"/>
+            </svg>
+        </div>
+    </div>
+</body>
+</html>

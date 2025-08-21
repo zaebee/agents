@@ -83,6 +83,8 @@ The Beekeeper smiled. "Aha, that is the deepest secret of all. Every living thin
 ### G is for Genesis Event
 "A **Genesis Event** is the famous 'waggle dance' of the honeybee. It's a message, a broadcast to the entire hive that something important has happened—'I've found a field of delicious flowers!' or 'An order has been placed!'. It's an immutable fact, a piece of history that other bees can react to, allowing the hive to work together without being tightly coupled."
 
+> *[Note: The HTML version of this article includes a special animation here, visualizing the genesis of a component from the four ATCG primitives.]*
+
 ## The Royal Jelly Framework
 
 "Finally," said the Beekeeper, "every Queen Bee, the mother of a whole domain, is born from the same magical substance: **Royal Jelly**."
@@ -202,6 +204,64 @@ stateDiagram-v2
     Pupa --> Adult: Emerge
     Adult: Deploy to production
     Adult --> [*]
+```
+
+---
+
+## The Beekeeper's Book of Codons
+
+"The four ATCG primitives are the letters of our alphabet," the Beekeeper continued, opening a heavy, leather-bound book. "But letters alone are not enough. They form 'codons'—words with specific, powerful meanings. These are the fundamental spells of our craft."
+
+"Let us study the three most essential codons."
+
+### 1. The "Handle Command" Codon
+"This is the most common spell, the word for 'to do' or 'to change'," she said. "It describes how the outside world can ask our hive to perform an action."
+
+The pattern is simple: An external request arrives at a **Connector (C)**. The Connector translates it into a command and calls an **Aggregate (A)**. The Aggregate enforces its rules, changes its state, and emits a **Genesis Event (G)** to announce what has happened.
+
+```mermaid
+graph LR
+    subgraph "Codon: Handle Command"
+        C[C: Connector] --> A[A: Aggregate];
+        A --> G[G: Genesis Event];
+    end
+    style C fill:#f1c40f,stroke:#333,stroke-width:2px
+    style A fill:#fff3cd,stroke:#d4a017,stroke-width:2px
+    style G fill:#ffeb99,stroke:#d4a017,stroke-width:2px,stroke-dasharray: 5 5
+```
+
+### 2. The "Query Data" Codon
+"Sometimes, the world doesn't want to change our hive, but merely to ask a question," the Beekeeper explained. "For this, we use the 'Query Data' codon, the word for 'to see' or 'to know'."
+
+This pattern is for reading data. A request enters through a **Connector (C)**. It is passed to a stateless **Transformation (T)**, which gathers the necessary information (perhaps from one or more read-optimized stores) and transforms it into a data transfer object (DTO) to be sent back to the outside world. No state is changed; no Genesis Events are created.
+
+```mermaid
+graph LR
+    subgraph "Codon: Query Data"
+        C_In[C: Connector In] --> T[T: Transformation];
+        T --> C_Out[C: Connector Out];
+    end
+    style C_In fill:#f1c40f,stroke:#333,stroke-width:2px
+    style T fill:#fff9e6,stroke:#d4a017,stroke-width:2px
+    style C_Out fill:#f1c40f,stroke:#333,stroke-width:2px
+```
+
+### 3. The "React to Event" Codon
+"The final spell is the most magical," she whispered. "It is how different parts of the hive, or even different hives in the apiary, talk to each other. It is the word for 'to listen' and 'to react'."
+
+This pattern begins with a listening **Connector (C)**, like a bee's ear tuned to the frequency of a specific "waggle dance" (a Genesis Event from another domain). When it hears the event, it translates it into a command and, just like the "Handle Command" codon, calls an **Aggregate (A)** in its own domain. This might cause a chain reaction, where the second aggregate produces its own **Genesis Event (G)**.
+
+```mermaid
+graph LR
+    subgraph "Codon: React to Event"
+        G_In[G: Genesis Event In] --> C[C: Listening Connector];
+        C --> A[A: Aggregate];
+        A --> G_Out[G: Genesis Event Out];
+    end
+    style G_In fill:#ffeb99,stroke:#d4a017,stroke-width:2px,stroke-dasharray: 5 5
+    style C fill:#f1c40f,stroke:#333,stroke-width:2px
+    style A fill:#fff3cd,stroke:#d4a017,stroke-width:2px
+    style G_Out fill:#ffeb99,stroke:#d4a017,stroke-width:2px,stroke-dasharray: 5 5
 ```
 
 ---
@@ -366,6 +426,17 @@ An automated **"Queen Bee"** system—a sophisticated CI/CD operator—reads thi
 *   **Adult:** It deploys this new container into the production environment, where it comes to life and begins listening for its specified events.
 
 This is the ultimate goal: an architecture so well-defined that it becomes a living factory for its own components. This is the convergence of Domain-Driven Design, GitOps, and Model-Driven Development, creating a system that is not just built, but truly *grown*.
+
+### Proof of Concept: The Codon Generator
+
+To demonstrate the power of the "self-creating systems" idea, a proof-of-concept script, `codon_generator.py`, has been created. This Python script reads a simple `feature.yml` file, which declaratively defines a feature using our codon patterns.
+
+**How it works:**
+1.  **Define a Feature:** You describe a new feature in `feature.yml`, specifying which codons it uses.
+2.  **Run the Generator:** You execute the command: `python codon_generator.py feature.yml`.
+3.  **Get Boilerplate Code:** The script prints out the Python class definitions for the necessary Aggregates and Connectors, creating a ready-made skeleton for the developer to fill in with specific business logic.
+
+This script is a simple illustration of a profound concept: when an architecture is well-defined and its patterns are understood, we can automate the creation of a significant portion of our code, freeing up developers to focus on what truly matters.
 
 ### Advanced Beekeeping: Foraging, Seasons, and Defense
 
