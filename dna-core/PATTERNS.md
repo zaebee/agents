@@ -1,10 +1,12 @@
-# The DNA Core: ATCG Primitives
+# The DNA Patterns
+
+## The DNA Core: ATCG Primitives
 
 This document defines the four fundamental, language-agnostic patterns that form the "genetic code" of all components in our Hive. Every service, regardless of its implementation language, will be composed of these primitives.
 
 ---
 
-## A = Aggregate
+### A = Aggregate
 
 - **Concept:** An Aggregate is a cluster of associated objects that we treat as a single unit for the purpose of data changes. It is the fundamental building block of our domain logic.
 - **Purpose:** To enforce consistency. All business rules and invariants for a given concept are enforced within its Aggregate. Changes to any object within the Aggregate boundary are coordinated through a single entry point, the "Aggregate Root".
@@ -17,7 +19,7 @@ This document defines the four fundamental, language-agnostic patterns that form
 
 ---
 
-## T = Transformation
+### T = Transformation
 
 - **Concept:** A pure, stateless function or domain service that encapsulates business logic that doesn't naturally fit within a single Aggregate.
 - **Purpose:** To perform calculations, transformations, or coordinate between multiple Aggregates without holding any state of its own.
@@ -27,7 +29,7 @@ This document defines the four fundamental, language-agnostic patterns that form
 
 ---
 
-## C = Connector
+### C = Connector
 
 - **Concept:** A Connector is an adapter that handles communication between a Cell and the outside world. It is an implementation of a "Port" in Hexagonal Architecture.
 - **Purpose:** To translate external protocols and data formats into the language of our domain (Commands and Events), and vice-versa. This isolates our core logic from the details of infrastructure.
@@ -38,7 +40,7 @@ This document defines the four fundamental, language-agnostic patterns that form
 
 ---
 
-## G = Genesis Event
+### G = Genesis Event
 
 - **Concept:** A Domain Event. It is an immutable record of something significant that has happened within the domain.
 - **Purpose:** To capture all state changes in the system as a sequence of events. Aggregates generate events, and these events are the source of truth for state changes. They are also used for communication between Cells.
