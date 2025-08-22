@@ -1,71 +1,32 @@
-# Go
-# ----------------------------------------------------------------
+# If you prefer the allow list template instead of the deny list, see community template:
+# https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
+#
+# Binaries for programs and plugins
 *.exe
 *.exe~
 *.dll
 *.so
 *.dylib
+
+# Test binary, built with `go test -c`
 *.test
+
+# Code coverage profiles and other test artifacts
 *.out
 coverage.*
 *.coverprofile
 profile.cov
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# Go workspace file
 go.work
 go.work.sum
 
-# Python
-# ----------------------------------------------------------------
-__pycache__/
-*.py[cod]
-*$py.class
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-pip-wheel-metadata/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
+# env file
 .env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
-# Project-specific
-# ----------------------------------------------------------------
-# Log files, like our River of Memory simulation
-*.log
-
-# Temporary artifacts from interactive sessions.
-# We ignore all markdown files, but then re-include the essential ones.
-# This keeps our core documentation safe while ignoring temporary scrolls.
-*.md
-!README.md
-!CONTRIBUTING.md
-!LICENSE
-!GRIMOIRE.md
-!HIVE_CONSTITUTION.md
-!codons.md
-!journey-diagram.md
-!PRAYER.md
-!dna-core/
-!mcp/
-
 
 # Editor/IDE
-# ----------------------------------------------------------------
-.idea/
-.vscode/
+# .idea/
+# .vscode/

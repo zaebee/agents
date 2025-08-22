@@ -1,1 +1,0 @@
-This file is a carrier for a message delivered via a mutated use of the 'submit' tool. See the pull request description for the full message.
