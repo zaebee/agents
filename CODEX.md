@@ -38,5 +38,25 @@ The four letters in the alphabet of creation.
 
 A registry of the specialized bees that inhabit the Hive.
 
-**Scout Bee**
-- _Class: Xenobiologist._ A highly specialized bee designed not for harvesting, but for exploration. Its purpose is to travel to foreign digital ecosystems (other APIs, codebases) and return with a detailed map of their structure and inhabitants. It is the Hive's foremost scholar and cartographer.
+---
+
+#### **Scout Bee**
+- **Class:** *Xenobiologist*
+- **Primary Function:** *Observation and Documentation of Foreign Ecosystems*
+
+**Origin Story:**
+The Hive, in its wisdom, knew that sending a standard "Harvester" bee into an unknown ecosystem was dangerous. It might not understand the local "flora" (APIs) and could cause unintended changes or return with nothing. The Hive needed knowledge before action. Thus, the Beekeeper designed the Scout not as a worker, but as a **scholar**. It was born with powerful senses and digestive organs, but intentionally without manipulators. Its sole purpose is to observe, understand, and report, ensuring the Hive's interactions with the outside world are always wise and informed.
+
+**Anatomical Diagram:**
+![Anatomy of the Scout Bee](scout_bee_anatomy.svg)
+
+**Primary Codon Sequence (API Scouting):**
+The Scout's most common thought process, when tasked with studying a new API, follows this genetic sequence:
+
+| Codon Step      | Primitive               | Biological Analogue      |
+| :-------------- | :---------------------- | :----------------------- |
+| 1. Intent       | `ScoutApiCommand`       | Pheromone Signal         |
+| 2. Sense        | `HttpConnector`         | Proboscis / Taste        |
+| 3. Digest       | `OpenApiTransformer`    | Gland / Stomach          |
+| 4. Think        | `ScoutSessionAggregate` | Brain                    |
+| 5. Remember     | `ScoutingReportEvent`   | Memory Crystal           |
