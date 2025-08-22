@@ -18,6 +18,7 @@ class EthicalGovernor:
     max_age: int = 10000  # Ticks
     max_nectar_consumption_per_tick: int = 50
     min_nectar_level_for_replication: int = 500
+    replication_threshold: int = 800 # Nectar level at which a bee will try to replicate
 
     def check_action(
         self,

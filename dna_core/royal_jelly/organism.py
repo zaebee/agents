@@ -1,3 +1,4 @@
+import copy
 import uuid
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
@@ -40,11 +41,18 @@ class HealthStatus(Enum):
 class Metabolism:
     """Governs the bee's energy, health, and emotional state."""
     nectar_level: int = 100
+    max_nectar: int = 1000
+    nectar_production_rate: int = 1  # Passive nectar generation per tick
     health_status: HealthStatus = HealthStatus.HEALTHY
     age: int = 0
     affective_state: Dict[str, int] = field(
         default_factory=lambda: {"pain": 0, "joy": 0, "fear": 0}
     )
+
+
+class StarvationError(Exception):
+    """Raised when an organism cannot perform an action due to lack of nectar."""
+    pass
 
 
 class LifecycleState(Enum):
@@ -65,10 +73,11 @@ class DigitalOrganism(Primitive, ABC):
     It inherits from Primitive to be a first-class citizen in the Hive's type system.
     """
 
-    def __init__(self, genome: Genome):
+    def __init__(self, genome: Genome, generation: int = 1):
         # The Unchanging Soul
         self.genome: Genome = genome
         self.id: str = f"{genome.primitive_type.name}-{uuid.uuid4()}"
+        self.generation: int = generation
 
         # The Learned Memory
         self.epigenome: Epigenome = Epigenome()
@@ -96,9 +105,49 @@ class DigitalOrganism(Primitive, ABC):
         This drives aging, metabolism, and lifecycle changes.
         """
         self.metabolism.age += 1
-        self.metabolism.nectar_level -= 1  # Base metabolic cost
+
+        # Passive nectar production and consumption
+        base_metabolic_cost = 1
+        produced = self.metabolism.nectar_production_rate
+        consumed = base_metabolic_cost
+
+        new_nectar_level = self.metabolism.nectar_level + produced - consumed
+        self.metabolism.nectar_level = min(new_nectar_level, self.metabolism.max_nectar)
+
+        if self.metabolism.nectar_level <= 0:
+            self.metabolism.health_status = HealthStatus.STARVING
+
         self._update_lifecycle_state()
         self._update_affective_state()
+
+    def consume_nectar(self, amount: int):
+        """
+        Consumes a given amount of nectar for an action.
+        Raises StarvationError if the organism cannot afford it.
+        """
+        if self.metabolism.nectar_level < amount:
+            self.metabolism.health_status = HealthStatus.STARVING
+            raise StarvationError(
+                f"{self.id} has {self.metabolism.nectar_level} nectar, but needs {amount}."
+            )
+        self.metabolism.nectar_level -= amount
+
+    def learn_engram(self, key: str, value: Any):
+        """Learns and stores a new piece of wisdom in its epigenome."""
+        print(f"  -> {self.id} learned a new engram: {key}={value}")
+        self.epigenome.engrams[key] = value
+
+    def replicate(self) -> "DigitalOrganism":
+        """
+        Creates a child organism that inherits its genome and epigenome.
+        This is the basis of generational learning.
+        """
+        print(f"  -> {self.id} is replicating...")
+        child = self.__class__(genome=self.genome, generation=self.generation + 1)
+        child.epigenome = copy.deepcopy(self.epigenome)
+        child.epigenome.lineage = {"parent_id": self.id, "parent_generation": self.generation}
+        print(f"     ...Child {child.id} (Gen {child.generation}) born with inherited wisdom.")
+        return child
 
     @abstractmethod
     def main_function(self, *args, **kwargs):
@@ -131,7 +180,7 @@ class DigitalOrganism(Primitive, ABC):
     def __repr__(self):
         return (
             f"<{self.__class__.__name__} id={self.id} "
-            f"symbol={self.symbol.name} "
+            f"gen={self.generation} "
             f"state={self.lifecycle_state.name} "
             f"nectar={self.metabolism.nectar_level} "
             f"age={self.metabolism.age}>"
