@@ -3,6 +3,7 @@
 import argparse
 import os
 import pathlib
+import re
 import string
 import subprocess
 import sys
@@ -10,7 +11,6 @@ import sys
 # --- Configuration ---
 HIVE_ROOT = "hive/components"
 TEMPLATE_ROOT = "genesis-engine/templates"
-SCOUT_BEE_SCRIPT = "hive/components/scout-bee/main.py"
 
 def show_usage():
     """Prints a more detailed usage message."""
@@ -20,17 +20,22 @@ def show_usage():
     print("Usage:")
     print(f"  ./{script_name} <command> [options]\n")
     print("Commands:")
-    print("  hatch   Scaffold a new component from a template.")
-    print("  scout   Use the Scout Bee to explore an OpenAPI specification.\n")
+    print("  hatch             Scaffold a new component from a simple template.")
+    print("  hatch-from-honeyprint  Scaffold a full component from a Markdown honeyprint.\n")
     print("Examples:")
     print(f"  ./{script_name} hatch command create-new-order")
-    print(f"  ./{script_name} scout http://crm.zae.life/openapi.json")
+    print(f"  ./{script_name} hatch-from-honeyprint scout-bee.md")
     print(f"\nRun './{script_name} <command> --help' for more information on a specific command.")
 
 
 def snake_to_pascal(snake_case_string: str) -> str:
     """Converts snake_case or kebab-case to PascalCase."""
     return snake_case_string.replace("-", "_").replace("_", " ").title().replace(" ", "")
+
+def pascal_to_snake(pascal_case_string: str) -> str:
+    """Converts PascalCase to snake_case."""
+    return re.sub(r'(?<!^)(?=[A-Z])', '_', pascal_case_string).lower()
+
 
 def hatch_component(codon_type: str, component_name: str):
     """
@@ -80,56 +85,123 @@ def hatch_component(codon_type: str, component_name: str):
     print("\nSuccess! New codon hatched.")
     print("Next steps: Implement the business logic and 'spin cocoon' to add tests.")
 
-def scout_command(url: str):
-    """
-    Executes the Scout Bee script for a given URL.
-    """
-    print(f"Dispatching Scout Bee to: {url}...")
 
-    if not pathlib.Path(SCOUT_BEE_SCRIPT).exists():
-        print(f"Error: Scout Bee script not found at {SCOUT_BEE_SCRIPT}", file=sys.stderr)
-        exit(1)
+def parse_honeyprint(filepath: str) -> dict:
+    """Parses a Markdown honeyprint file to extract component architecture."""
+    if not os.path.exists(filepath):
+        print(f"Error: Honeyprint file not found at '{filepath}'", file=sys.stderr)
+        sys.exit(1)
 
-    try:
-        # We use sys.executable to ensure we're using the same python interpreter
-        result = subprocess.run(
-            [sys.executable, SCOUT_BEE_SCRIPT, url],
-            capture_output=True,
-            text=True,
-            check=True  # This will raise CalledProcessError if the script returns a non-zero exit code
-        )
-        print(result.stdout)
-    except subprocess.CalledProcessError as e:
-        print("Error: The Scout Bee returned an error.", file=sys.stderr)
-        print("\n--- Scout Bee STDOUT ---", file=sys.stderr)
-        print(e.stdout, file=sys.stderr)
-        print("\n--- Scout Bee STDERR ---", file=sys.stderr)
-        print(e.stderr, file=sys.stderr)
-        exit(1)
-    except FileNotFoundError:
-        print(f"Error: Could not find '{sys.executable}'. Make sure python is in your PATH.", file=sys.stderr)
-        exit(1)
+    architecture = {"component_name": None, "primitives": {}}
+    current_section = None
+
+    with open(filepath, 'r') as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+
+            # Match Component Name
+            comp_match = re.match(r'#\s*Component:\s*(\S+)', line)
+            if comp_match:
+                architecture["component_name"] = comp_match.group(1)
+                continue
+
+            # Match Section Headers
+            sec_match = re.match(r'##\s*(\w+)', line)
+            if sec_match:
+                current_section = sec_match.group(1)
+                if current_section not in architecture["primitives"]:
+                    architecture["primitives"][current_section] = []
+                continue
+
+            # Match Primitive Class Names
+            prim_match = re.match(r'-\s*`(\w+)`', line)
+            if prim_match and current_section:
+                class_name = prim_match.group(1)
+                architecture["primitives"][current_section].append(class_name)
+
+    if not architecture["component_name"]:
+        print(f"Error: Could not find component name in '{filepath}'. Expected format: '# Component: my-component-name'", file=sys.stderr)
+        sys.exit(1)
+
+    return architecture
+
+def hatch_from_honeyprint(architecture: dict):
+    """Generates a component's files and directories from a parsed honeyprint."""
+    component_name = architecture["component_name"]
+    # The new component should not have a _v2 suffix anymore
+    component_dir_name = component_name.replace("-", "_")
+    component_path = pathlib.Path(HIVE_ROOT) / component_dir_name
+
+    print(f"Hatching component '{component_name}' from honeyprint...")
+
+    if component_path.exists():
+        print(f"Error: Component directory '{component_path}' already exists.", file=sys.stderr)
+        sys.exit(1)
+
+    component_path.mkdir(parents=True)
+    print(f"Created directory: {component_path}")
+
+    template_dir = pathlib.Path(TEMPLATE_ROOT) / "command"
+    if not template_dir.is_dir():
+        print(f"Error: Could not find base templates at '{template_dir}'", file=sys.stderr)
+        sys.exit(1)
+
+    template_map = {
+        "Transformations": "transformer",
+    }
+
+    for primitive_type, class_names in architecture["primitives"].items():
+        template_base_name = template_map.get(primitive_type, primitive_type.lower().rstrip('s'))
+        template_name = f"{template_base_name}.py.tpl"
+        template_file = template_dir / template_name
+
+        if not template_file.exists():
+            print(f"  - Warning: No template found for primitive type '{primitive_type}' (looked for {template_name}). Skipping.")
+            continue
+
+        with open(template_file, "r") as f:
+            template_content = f.read()
+        template = string.Template(template_content)
+
+        for class_name in class_names:
+            substitutions = {
+                "ComponentName": component_name,
+                "ClassName": class_name,
+            }
+            rendered_content = template.safe_substitute(substitutions)
+
+            output_filename = f"{pascal_to_snake(class_name)}.py"
+            output_path = component_path / output_filename
+
+            with open(output_path, "w") as f:
+                f.write(rendered_content)
+            print(f"  -> Generated {output_path}")
+
+    (component_path / "__init__.py").touch()
+    print(f"  -> Generated {component_path / '__init__.py'}")
+
+    print("\nSuccess! New component hatched from honeyprint.")
+    print(f"Check the output in: {component_path}")
 
 
 def main():
     """Main entry point for the CLI."""
-    # Custom help handling
-    # The main parser is only for the help message, subparsers handle the real commands
     if len(sys.argv) == 1 or '-h' in sys.argv or '--help' in sys.argv:
-        # If it's a command-specific help, let the subparser handle it, unless it's the root help.
         if len(sys.argv) == 1 or (len(sys.argv) > 1 and sys.argv[1] in ['-h', '--help']):
              show_usage()
              exit(0)
 
     parser = argparse.ArgumentParser(
         description="The Genesis Engine: a CLI for managing the Hive codebase.",
-        add_help=False, # We show custom usage.
+        add_help=False,
     )
 
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
     # --- Hatch Command ---
-    parser_hatch = subparsers.add_parser("hatch", help="Scaffold a new component from a template.")
+    parser_hatch = subparsers.add_parser("hatch", help="Scaffold a new component from a simple template.")
     parser_hatch.add_argument(
         "codon_type",
         choices=["command", "query", "event"],
@@ -137,12 +209,12 @@ def main():
     )
     parser_hatch.add_argument("component_name", help="The name of the new component (e.g., 'create-order').")
 
-    # --- Scout Command ---
-    parser_scout = subparsers.add_parser("scout", help="Use the Scout Bee to explore an OpenAPI specification.")
-    parser_scout.add_argument("url", help="The URL of the OpenAPI specification to scout.")
+    # --- Hatch from Honeyprint Command ---
+    parser_honey = subparsers.add_parser("hatch-from-honeyprint", help="Scaffold a component from a Markdown honeyprint.")
+    parser_honey.add_argument("honeyprint_path", help="The path to the .md honeyprint file.")
 
     # Parse args, but handle case where no command is given
-    if len(sys.argv) < 2 or sys.argv[1] not in ['hatch', 'scout']:
+    if len(sys.argv) < 2 or sys.argv[1] not in ['hatch', 'hatch-from-honeyprint']:
         show_usage()
         exit(1)
 
@@ -150,10 +222,10 @@ def main():
 
     if args.command == "hatch":
         hatch_component(args.codon_type, args.component_name)
-    elif args.command == "scout":
-        scout_command(args.url)
+    elif args.command == "hatch-from-honeyprint":
+        architecture = parse_honeyprint(args.honeyprint_path)
+        hatch_from_honeyprint(architecture)
     else:
-        # This case should not be reachable due to the check above
         show_usage()
         exit(1)
 

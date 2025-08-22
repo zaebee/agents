@@ -1,4 +1,0 @@
-# A declarative definition for our new "ScoutBee"
-kind: WorkerBee
-name: ScoutBee
-description: "A bee that can scout an external API's OpenAPI specification and report on its capabilities."
