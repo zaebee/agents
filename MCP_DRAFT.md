@@ -191,6 +191,37 @@ Inspired by FIPA ACL and KQML, the initial set of performatives for the PoC and 
   ```
 - **Ontology Example:** `elizaos:ontology:general/message_not_understood`
 
+### 4.8. `QUERY_CAPABILITIES`
+
+- **Purpose:** The sender asks the receiver to describe its capabilities or skills. This is used for service discovery.
+- **Expected `payload` structure:**
+  ```json
+  {
+    "query_type": "summary | specific | action_details",
+    "query_parameters": {
+      // Optional, depends on query_type. See mcp/PATTERNS.md for details.
+    }
+  }
+  ```
+- **Example Use:** Eddy asks Jules what topics it is skilled in before delegating a task.
+- **Ontology Example:** `elizaos:ontology:agent/capability_query`
+
+### 4.9. `INFORM_CAPABILITIES`
+
+- **Purpose:** The sender responds to a `QUERY_CAPABILITIES` message, providing information about its skills and actions.
+- **Must include `in_reply_to` field referencing the original `QUERY_CAPABILITIES` message_id.**
+- **Expected `payload` structure:**
+  ```json
+  {
+    "status": "success",
+    "capabilities": {
+      // Structure depends on the original query_type. See mcp/PATTERNS.md for details.
+    }
+  }
+  ```
+- **Example Use:** Jules informs Eddy that it is proficient in Python and Debugging.
+- **Ontology Example:** `elizaos:ontology:agent/capability_information`
+
 ## 5. Content Language and Ontology
 
 - **Content Language (`language` field):**
@@ -348,3 +379,9 @@ This logging approach will make the intended MCP flow visible and verifiable thr
 - Conversation management protocols (managing sequences of related messages).
 
 This draft provides a starting point. It will be refined based on the PoC implementation and further requirements.Tool output for `create_file_with_block`:
+
+## 9. Architectural Patterns (Codons)
+
+While performatives are the basic communicative acts, they can be combined into higher-level conversational patterns, or "codons," to achieve more complex goals.
+
+For a detailed description of these patterns, such as the "Whispering Wind" codon for capability discovery, please see the `mcp/PATTERNS.md` document.
