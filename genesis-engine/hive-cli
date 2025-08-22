@@ -1,73 +1,81 @@
-#!/bin/bash
+#!/usr/bin/env python3
 
-# The Genesis Engine: a CLI for managing the Hive codebase.
-# This tool acts as the "Connector" (C) between the developer and the codebase.
+import argparse
+import sys
+import os
 
-# --- Configuration ---
-HIVE_ROOT="hive/components"
+# Add project root to path before other imports
+# This ensures that dna_core and other modules can be found
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-# --- Helper Functions ---
-function show_usage() {
-    echo "The Genesis Engine - The 'Connector' to the Hive."
-    echo "Usage: $0 hatch <codon_type> <component_name>"
-    echo ""
-    echo "Codon Types:"
-    echo "  command   - Scaffolds a 'Handle Command' pattern (C -> A -> G)."
-    echo "  query     - Scaffolds a 'Query Data' pattern (C -> T -> C)."
-    echo "  event     - Scaffolds a 'React to Event' pattern (G -> C -> A -> G)."
-}
+from dna_core.royal_jelly import PeriodicTable
 
-# --- Command Parsing ---
-COMMAND=$1
-CODON_TYPE=$2
-COMPONENT_NAME=$3
+# --- Command Handlers ---
 
-if [ "$COMMAND" != "hatch" ] || [ -z "$CODON_TYPE" ] || [ -z "$COMPONENT_NAME" ]; then
-    show_usage
-    exit 1
-fi
+def handle_table_command(args):
+    """Display the Hive's Periodic Table."""
+    print("Summoning the Periodic Table of Primitives...")
+    PeriodicTable.print_table()
 
-COMPONENT_PATH="$HIVE_ROOT/$COMPONENT_NAME"
-echo "Hatching new '$CODON_TYPE' codon named '$COMPONENT_NAME'..."
+def handle_compat_command(args):
+    """Check if two primitives can bond."""
+    print(f"🔬 Compatibility Check: {args.element1} + {args.element2}")
 
-if [ -d "$COMPONENT_PATH" ]; then
-    echo "Error: Component '$COMPONENT_NAME' already exists at $COMPONENT_PATH."
-    exit 1
-fi
+    # This is a simplified check based on the new SDK
+    # A real implementation might be more complex
+    is_compatible = PeriodicTable.predict_compatibility(args.element1, args.element2)
+    toxicity1 = PeriodicTable.check_toxicity(args.element1)
+    toxicity2 = PeriodicTable.check_toxicity(args.element2)
 
-# --- Scaffolding Logic ---
-mkdir -p "$COMPONENT_PATH"
-echo "Created directory: $COMPONENT_PATH"
+    print(f"   ✅ Compatible: {'Yes' if is_compatible else 'No'}")
+    print(f"   ⚠️ Toxicity: {args.element1} ({toxicity1}), {args.element2} ({toxicity2})")
 
-case $CODON_TYPE in
-    command)
-        echo "Scaffolding 'Handle Command' pattern (C -> A -> G)..."
-        touch "$COMPONENT_PATH/connector.py"
-        touch "$COMPONENT_PATH/command.py"
-        touch "$COMPONENT_PATH/aggregate.py"
-        touch "$COMPONENT_PATH/event.py"
-        ;;
-    query)
-        echo "Scaffolding 'Query Data' pattern (C -> T -> C)..."
-        touch "$COMPONENT_PATH/connector.py"
-        touch "$COMPONENT_PATH/query.py"
-        touch "$COMPONENT_PATH/transformer.py"
-        touch "$COMPONENT_PATH/dto.py"
-        ;;
-    event)
-        echo "Scaffolding 'React to Event' pattern (G -> C -> A -> G)..."
-        touch "$COMPONENT_PATH/listening_connector.py"
-        touch "$COMPONENT_PATH/command.py"
-        touch "$COMPONENT_PATH/aggregate.py"
-        touch "$COMPONENT_PATH/new_event.py"
-        ;;
-    *)
-        echo "Error: Unknown codon type '$CODON_TYPE'."
-        rm -rf "$COMPONENT_PATH" # Clean up created directory
-        show_usage
-        exit 1
-        ;;
-esac
+    if "high" in [toxicity1, toxicity2]:
+        print("   💀 Warning: High toxicity detected! This bond is unstable and not recommended.")
 
-echo "Success! New '$CODON_TYPE' codon hatched at: $COMPONENT_PATH"
-echo "Next steps: 'spin cocoon' to add tests."
+def handle_unimplemented(args):
+    """Handler for commands that are defined in the Grimoire but not yet implemented."""
+    print(f"Command '{args.command}' is defined in the Grimoire but not yet implemented.")
+    print("The Hive's magic is still growing. Check back later!")
+
+# --- Main CLI Setup ---
+
+def main():
+    """Main entry point for the Alchemist's CLI."""
+    parser = argparse.ArgumentParser(
+        description="📜 The Beekeeper’s Grimoire: A CLI for tending to the Hive.",
+        formatter_class=argparse.RawTextHelpFormatter
+    )
+    subparsers = parser.add_subparsers(dest="command", required=True, help="Available spells")
+
+    # --- `table` command ---
+    table_parser = subparsers.add_parser("table", help="Display the Hive's Periodic Table of Primitives.")
+    table_parser.set_defaults(func=handle_table_command)
+
+    # --- `compat` command ---
+    compat_parser = subparsers.add_parser("compat", help="Check the chemical compatibility of two primitives.")
+    compat_parser.add_argument("element1", help="The name of the first primitive (e.g., OrderAggregate)")
+    compat_parser.add_argument("element2", help="The name of the second primitive (e.g., OrderPlacedEvent)")
+    compat_parser.set_defaults(func=handle_compat_command)
+
+    # --- Placeholder commands from the Grimoire ---
+    # This makes the CLI aware of future commands and provides a helpful message.
+    placeholder_commands = [
+        "synthesize", "inspect", "cull", "observe", "advise", "feed",
+        "plant", "harvest", "archive", "cure", "refine", "analyze",
+        "list", "health", "history", "plan"
+    ]
+    for command in placeholder_commands:
+        placeholder_parser = subparsers.add_parser(command, help=f"(Not yet implemented) See Grimoire for details on '{command}'.")
+        placeholder_parser.set_defaults(func=handle_unimplemented)
+
+    args = parser.parse_args()
+
+    # Execute the function associated with the chosen sub-command
+    if hasattr(args, 'func'):
+        args.func(args)
+    else:
+        parser.print_help()
+
+if __name__ == "__main__":
+    main()
