@@ -18,6 +18,7 @@ class Genome:
     bonds_template: Tuple[str, ...]
     valency: Tuple[int, int]
     purpose: str
+    nectar_production_rate: int = 1
 
 
 @dataclass
@@ -84,6 +85,8 @@ class DigitalOrganism(Primitive, ABC):
 
         # The Spark of Life
         self.metabolism: Metabolism = Metabolism()
+        self.metabolism.nectar_production_rate = genome.nectar_production_rate
+        self.fitness_score: float = 0.0
 
         # The Dance of Existence
         self.lifecycle_state: LifecycleState = LifecycleState.NASCENT
@@ -140,13 +143,20 @@ class DigitalOrganism(Primitive, ABC):
     def replicate(self) -> "DigitalOrganism":
         """
         Creates a child organism that inherits its genome and epigenome.
-        This is the basis of generational learning.
+        The parent endows the child with a portion of its nectar as a
+        starting inheritance.
         """
         print(f"  -> {self.id} is replicating...")
         child = self.__class__(genome=self.genome, generation=self.generation + 1)
         child.epigenome = copy.deepcopy(self.epigenome)
         child.epigenome.lineage = {"parent_id": self.id, "parent_generation": self.generation}
-        print(f"     ...Child {child.id} (Gen {child.generation}) born with inherited wisdom.")
+
+        # Inheritance Grant: Parent gives 40% of its nectar to the child
+        inheritance_amount = int(self.metabolism.nectar_level * 0.4)
+        self.consume_nectar(inheritance_amount)
+        child.metabolism.nectar_level = inheritance_amount
+
+        print(f"     ...Child {child.id} (Gen {child.generation}) born with {inheritance_amount} nectar inheritance.")
         return child
 
     @abstractmethod
@@ -183,5 +193,6 @@ class DigitalOrganism(Primitive, ABC):
             f"gen={self.generation} "
             f"state={self.lifecycle_state.name} "
             f"nectar={self.metabolism.nectar_level} "
-            f"age={self.metabolism.age}>"
+            f"age={self.metabolism.age} "
+            f"fitness={self.fitness_score:.2f}>"
         )
