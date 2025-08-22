@@ -3,7 +3,7 @@ from dataclasses import dataclass
 @dataclass
 class ApiSpecFetchedEvent:
     """
-    An event for the scout-bee component.
+    An event indicating an API spec has been successfully fetched.
+    (Currently a marker event, not carrying data).
     """
-    # Define event attributes here
     pass

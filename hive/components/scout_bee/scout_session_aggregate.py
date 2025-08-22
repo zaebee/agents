@@ -1,28 +1,30 @@
 import uuid
 import shutil
-from datetime import datetime, timezone
-from google.protobuf.struct_pb2 import Struct
-from google.protobuf.timestamp_pb2 import Timestamp
-from dna_core.pollen_protocol_pb2 import PollenEnvelope
+from typing import Union
 from dna_core.royal_jelly import Aggregate
 
 # Import this component's primitives
 from .scout_repository_command import ScoutRepositoryCommand
 from .scout_api_command import ScoutApiCommand
+from .scouting_report_generated_event import ScoutingReportGeneratedEvent
 from .http_connector import HttpConnector
 from .git_hub_connector import GitHubConnector
 from .open_api_transformer import OpenApiTransformer
 from .repository_transformer import RepositoryTransformer
 from .source_file_transformer import SourceFileTransformer
 
-class ScoutSessionAggregate(Aggregate):
+# Define a Union type for the commands this aggregate can handle
+TCommand = Union[ScoutRepositoryCommand, ScoutApiCommand]
+
+class ScoutSessionAggregate(Aggregate[TCommand, ScoutingReportGeneratedEvent]):
     """
     The aggregate for the scout-bee component.
     It orchestrates the scouting of external resources.
+    Element: A (Aggregate)
     """
 
     def __init__(self, aggregate_id: str):
-        super().__init__(aggregate_id)
+        self.id = aggregate_id
         # Initialize connectors and transformers
         self.http_connector = HttpConnector()
         self.github_connector = GitHubConnector()
@@ -33,38 +35,48 @@ class ScoutSessionAggregate(Aggregate):
         self.report = None
         self.status = "INITIALIZED"
 
-    def handle_command(self, command):
-        """Handles the incoming command."""
+    def handle(self, command: TCommand) -> ScoutingReportGeneratedEvent:
+        """Handles the incoming command and returns the resulting event."""
         if isinstance(command, ScoutRepositoryCommand):
-            self._handle_scout_repository(command)
+            report_data = self._handle_scout_repository(command)
         elif isinstance(command, ScoutApiCommand):
-            self._handle_scout_api(command)
+            report_data = self._handle_scout_api(command)
         else:
-            print(f"Warning: Unhandled command type {type(command)}")
+            raise TypeError(f"Unhandled command type: {type(command)}")
 
-    def _handle_scout_api(self, command: ScoutApiCommand):
+        event = ScoutingReportGeneratedEvent(
+            aggregate_id=self.id,
+            report=report_data
+        )
+        self._apply(event) # Apply the event to self
+        return event
+
+    def _handle_scout_api(self, command: ScoutApiCommand) -> dict:
         """Orchestrates the scouting of an OpenAPI specification."""
         print(f"--- Scout Bee received command to scout API: {command.url} ---")
         try:
-            raw_content = self.http_connector.fetch(command.url)
-            report_data = self.openapi_transformer.transform(raw_content)
+            raw_content = self.http_connector.process(command.url)
+            report_data = self.openapi_transformer.execute(raw_content)
             self._print_api_report(report_data)
-            self._record_report_event(report_data)
+            return report_data
         except Exception as e:
             print(f"An error occurred during API scouting: {e}")
             self.status = "FAILED"
+            return {"error": str(e)}
 
-    def _handle_scout_repository(self, command: ScoutRepositoryCommand):
+    def _handle_scout_repository(self, command: ScoutRepositoryCommand) -> dict:
         """Orchestrates the scouting of a GitHub repository."""
         print(f"--- Scout Bee received command to scout repo: {command.url} ---")
         temp_dir = None
         try:
-            temp_dir = self.github_connector.clone(command.url, command.github_token)
+            repo_input = {"url": command.url, "github_token": command.github_token}
+            temp_dir = self.github_connector.process(repo_input)
 
             discovered_components = {"aggregates": [], "transformations": [], "connectors": []}
 
-            for filepath in self.repo_transformer.transform(temp_dir):
-                file_components = self.source_file_transformer.transform(filepath)
+            source_files = self.repo_transformer.execute(temp_dir)
+            for filepath in source_files:
+                file_components = self.source_file_transformer.execute(filepath)
                 for key in discovered_components:
                     discovered_components[key].extend(file_components[key])
 
@@ -73,11 +85,12 @@ class ScoutSessionAggregate(Aggregate):
                 "components": discovered_components
             }
             self._print_repo_report(report_data)
-            self._record_report_event(report_data)
+            return report_data
 
         except Exception as e:
             print(f"An error occurred during repository scouting: {e}")
             self.status = "FAILED"
+            return {"error": str(e)}
         finally:
             if temp_dir:
                 print("\nScouting mission complete. Cleaning up temporary files.")
@@ -87,58 +100,42 @@ class ScoutSessionAggregate(Aggregate):
         """Prints a formatted report for an API scan."""
         print("\n--- OpenAPI Scout Bee Report ---")
         print("="*20)
-        print(f"API Title: {report['title']}")
-        print(f"Version: {report['version']}")
-        print(f"Description: {report['description']}")
+        print(f"API Title: {report.get('title', 'N/A')}")
+        print(f"Version: {report.get('version', 'N/A')}")
+        print(f"Description: {report.get('description', 'N/A')}")
         print("="*20)
         print("\nEndpoints Discovered:")
-        if not report['endpoints']:
+        if not report.get('endpoints'):
             print("No paths found in the specification.")
             return
-        for endpoint in report['endpoints']:
-            print(f"\n--- Path: {endpoint['path']} ---")
-            print(f"  - Method: {endpoint['method']}")
-            print(f"    Summary: {endpoint['summary']}")
-            if endpoint['parameters']:
+        for endpoint in report.get('endpoints', []):
+            print(f"\n--- Path: {endpoint.get('path')} ---")
+            print(f"  - Method: {endpoint.get('method')}")
+            print(f"    Summary: {endpoint.get('summary', 'No summary provided.')}")
+            if endpoint.get('parameters'):
                 print("    Parameters:")
-                for param in endpoint['parameters']:
-                     print(f"      - [{param['in']}] {param['name']}: {param['description']}")
-            if endpoint['request_body']:
+                for param in endpoint.get('parameters', []):
+                     print(f"      - [{param.get('in', 'N/A')}] {param.get('name', 'N/A')}: {param.get('description', 'No description.')}")
+            if endpoint.get('request_body'):
                 print("    Request Body: Yes")
 
     def _print_repo_report(self, report: dict):
         """Prints a formatted report for a repository scan."""
         print("\n--- GitHub Scout Bee Report ---")
-        print(f"Repository: {report['repository']}")
+        print(f"Repository: {report.get('repository')}")
         print("\nDiscovered Potential ATCG Components:")
-        for comp_type, comp_list in report['components'].items():
+        components = report.get('components', {})
+        for comp_type, comp_list in components.items():
             if comp_list:
                 print(f"\n  {comp_type.replace('_', ' ').title()}:")
                 for item in sorted(list(set(comp_list))):
                     print(f"    - {item}")
 
-    def _record_report_event(self, report_data: dict):
-        """Creates and records a ScoutingReportGeneratedEvent."""
-        payload_struct = Struct()
-        payload_struct.update(report_data)
-        timestamp = Timestamp()
-        timestamp.FromDatetime(datetime.now(timezone.utc))
-
-        event = PollenEnvelope(
-            event_id=str(uuid.uuid4()),
-            event_type="ScoutingReportGeneratedEvent",
-            event_version="1.0",
-            aggregate_id=self.id,
-            timestamp=timestamp,
-            payload=payload_struct,
-        )
-        self._record_event(event)
-
-    def _apply_event(self, event: PollenEnvelope) -> None:
+    def _apply(self, event: ScoutingReportGeneratedEvent) -> None:
         """Applies an event to the aggregate's state."""
-        if event.event_type == "ScoutingReportGeneratedEvent":
-            self.report = dict(event.payload)
+        self.report = event.report
+        if "error" not in self.report:
             self.status = "COMPLETED"
-            print(f"\nApplied {event.event_type} to aggregate {self.id}. Status is now {self.status}.")
         else:
-            print(f"Warning: Unhandled event type {event.event_type}")
+            self.status = "FAILED"
+        print(f"\nApplied ScoutingReportGeneratedEvent to aggregate {self.id}. Status is now {self.status}.")

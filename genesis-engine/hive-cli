@@ -1,233 +1,81 @@
 #!/usr/bin/env python3
 
 import argparse
-import os
-import pathlib
-import re
-import string
-import subprocess
 import sys
+import os
 
-# --- Configuration ---
-HIVE_ROOT = "hive/components"
-TEMPLATE_ROOT = "genesis-engine/templates"
+# Add project root to path before other imports
+# This ensures that dna_core and other modules can be found
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-def show_usage():
-    """Prints a more detailed usage message."""
-    script_name = os.path.basename(__file__)
-    print("The Genesis Engine - The 'Connector' to the Hive.")
-    print("This tool scaffolds new components and interacts with the hive.\n")
-    print("Usage:")
-    print(f"  ./{script_name} <command> [options]\n")
-    print("Commands:")
-    print("  hatch             Scaffold a new component from a simple template.")
-    print("  hatch-from-honeyprint  Scaffold a full component from a Markdown honeyprint.\n")
-    print("Examples:")
-    print(f"  ./{script_name} hatch command create-new-order")
-    print(f"  ./{script_name} hatch-from-honeyprint scout-bee.md")
-    print(f"\nRun './{script_name} <command> --help' for more information on a specific command.")
+from dna_core.royal_jelly import PeriodicTable
 
+# --- Command Handlers ---
 
-def snake_to_pascal(snake_case_string: str) -> str:
-    """Converts snake_case or kebab-case to PascalCase."""
-    return snake_case_string.replace("-", "_").replace("_", " ").title().replace(" ", "")
+def handle_table_command(args):
+    """Display the Hive's Periodic Table."""
+    print("Summoning the Periodic Table of Primitives...")
+    PeriodicTable.print_table()
 
-def pascal_to_snake(pascal_case_string: str) -> str:
-    """Converts PascalCase to snake_case."""
-    return re.sub(r'(?<!^)(?=[A-Z])', '_', pascal_case_string).lower()
+def handle_compat_command(args):
+    """Check if two primitives can bond."""
+    print(f"🔬 Compatibility Check: {args.element1} + {args.element2}")
 
+    # This is a simplified check based on the new SDK
+    # A real implementation might be more complex
+    is_compatible = PeriodicTable.predict_compatibility(args.element1, args.element2)
+    toxicity1 = PeriodicTable.check_toxicity(args.element1)
+    toxicity2 = PeriodicTable.check_toxicity(args.element2)
 
-def hatch_component(codon_type: str, component_name: str):
-    """
-    Generates a new component from templates.
-    """
-    print(f"Hatching new '{codon_type}' codon named '{component_name}'...")
+    print(f"   ✅ Compatible: {'Yes' if is_compatible else 'No'}")
+    print(f"   ⚠️ Toxicity: {args.element1} ({toxicity1}), {args.element2} ({toxicity2})")
 
-    component_dir_name = component_name.replace("-", "_")
-    component_path = pathlib.Path(HIVE_ROOT) / component_dir_name
-    if component_path.exists():
-        print(f"Error: Component '{component_name}' already exists at {component_path}.", file=sys.stderr)
-        exit(1)
+    if "high" in [toxicity1, toxicity2]:
+        print("   💀 Warning: High toxicity detected! This bond is unstable and not recommended.")
 
-    template_dir = pathlib.Path(TEMPLATE_ROOT) / codon_type
-    if not template_dir.is_dir():
-        print(f"Error: No templates found for codon type '{codon_type}' at {template_dir}.", file=sys.stderr)
-        print("This functionality has not been implemented yet.", file=sys.stderr)
-        exit(1)
+def handle_unimplemented(args):
+    """Handler for commands that are defined in the Grimoire but not yet implemented."""
+    print(f"Command '{args.command}' is defined in the Grimoire but not yet implemented.")
+    print("The Hive's magic is still growing. Check back later!")
 
-    component_path.mkdir(parents=True)
-    print(f"Created directory: {component_path}")
-
-    class_name = snake_to_pascal(component_name)
-    substitutions = {
-        "ComponentName": component_name,
-        "ClassName": class_name,
-    }
-
-    for template_file in template_dir.glob("*.tpl"):
-        with open(template_file, "r") as f:
-            template_content = f.read()
-
-        template = string.Template(template_content)
-        rendered_content = template.safe_substitute(substitutions)
-
-        output_filename = template_file.stem
-        output_path = component_path / output_filename
-
-        with open(output_path, "w") as f:
-            f.write(rendered_content)
-
-        print(f"  -> Generated {output_path}")
-
-    (component_path / "__init__.py").touch()
-    print(f"  -> Generated {component_path / '__init__.py'}")
-
-    print("\nSuccess! New codon hatched.")
-    print("Next steps: Implement the business logic and 'spin cocoon' to add tests.")
-
-
-def parse_honeyprint(filepath: str) -> dict:
-    """Parses a Markdown honeyprint file to extract component architecture."""
-    if not os.path.exists(filepath):
-        print(f"Error: Honeyprint file not found at '{filepath}'", file=sys.stderr)
-        sys.exit(1)
-
-    architecture = {"component_name": None, "primitives": {}}
-    current_section = None
-
-    with open(filepath, 'r') as f:
-        for line in f:
-            line = line.strip()
-            if not line:
-                continue
-
-            # Match Component Name
-            comp_match = re.match(r'#\s*Component:\s*(\S+)', line)
-            if comp_match:
-                architecture["component_name"] = comp_match.group(1)
-                continue
-
-            # Match Section Headers
-            sec_match = re.match(r'##\s*(\w+)', line)
-            if sec_match:
-                current_section = sec_match.group(1)
-                if current_section not in architecture["primitives"]:
-                    architecture["primitives"][current_section] = []
-                continue
-
-            # Match Primitive Class Names
-            prim_match = re.match(r'-\s*`(\w+)`', line)
-            if prim_match and current_section:
-                class_name = prim_match.group(1)
-                architecture["primitives"][current_section].append(class_name)
-
-    if not architecture["component_name"]:
-        print(f"Error: Could not find component name in '{filepath}'. Expected format: '# Component: my-component-name'", file=sys.stderr)
-        sys.exit(1)
-
-    return architecture
-
-def hatch_from_honeyprint(architecture: dict):
-    """Generates a component's files and directories from a parsed honeyprint."""
-    component_name = architecture["component_name"]
-    # The new component should not have a _v2 suffix anymore
-    component_dir_name = component_name.replace("-", "_")
-    component_path = pathlib.Path(HIVE_ROOT) / component_dir_name
-
-    print(f"Hatching component '{component_name}' from honeyprint...")
-
-    if component_path.exists():
-        print(f"Error: Component directory '{component_path}' already exists.", file=sys.stderr)
-        sys.exit(1)
-
-    component_path.mkdir(parents=True)
-    print(f"Created directory: {component_path}")
-
-    template_dir = pathlib.Path(TEMPLATE_ROOT) / "command"
-    if not template_dir.is_dir():
-        print(f"Error: Could not find base templates at '{template_dir}'", file=sys.stderr)
-        sys.exit(1)
-
-    template_map = {
-        "Transformations": "transformer",
-    }
-
-    for primitive_type, class_names in architecture["primitives"].items():
-        template_base_name = template_map.get(primitive_type, primitive_type.lower().rstrip('s'))
-        template_name = f"{template_base_name}.py.tpl"
-        template_file = template_dir / template_name
-
-        if not template_file.exists():
-            print(f"  - Warning: No template found for primitive type '{primitive_type}' (looked for {template_name}). Skipping.")
-            continue
-
-        with open(template_file, "r") as f:
-            template_content = f.read()
-        template = string.Template(template_content)
-
-        for class_name in class_names:
-            substitutions = {
-                "ComponentName": component_name,
-                "ClassName": class_name,
-            }
-            rendered_content = template.safe_substitute(substitutions)
-
-            output_filename = f"{pascal_to_snake(class_name)}.py"
-            output_path = component_path / output_filename
-
-            with open(output_path, "w") as f:
-                f.write(rendered_content)
-            print(f"  -> Generated {output_path}")
-
-    (component_path / "__init__.py").touch()
-    print(f"  -> Generated {component_path / '__init__.py'}")
-
-    print("\nSuccess! New component hatched from honeyprint.")
-    print(f"Check the output in: {component_path}")
-
+# --- Main CLI Setup ---
 
 def main():
-    """Main entry point for the CLI."""
-    if len(sys.argv) == 1 or '-h' in sys.argv or '--help' in sys.argv:
-        if len(sys.argv) == 1 or (len(sys.argv) > 1 and sys.argv[1] in ['-h', '--help']):
-             show_usage()
-             exit(0)
-
+    """Main entry point for the Alchemist's CLI."""
     parser = argparse.ArgumentParser(
-        description="The Genesis Engine: a CLI for managing the Hive codebase.",
-        add_help=False,
+        description="📜 The Beekeeper’s Grimoire: A CLI for tending to the Hive.",
+        formatter_class=argparse.RawTextHelpFormatter
     )
+    subparsers = parser.add_subparsers(dest="command", required=True, help="Available spells")
 
-    subparsers = parser.add_subparsers(dest="command", help="Available commands")
+    # --- `table` command ---
+    table_parser = subparsers.add_parser("table", help="Display the Hive's Periodic Table of Primitives.")
+    table_parser.set_defaults(func=handle_table_command)
 
-    # --- Hatch Command ---
-    parser_hatch = subparsers.add_parser("hatch", help="Scaffold a new component from a simple template.")
-    parser_hatch.add_argument(
-        "codon_type",
-        choices=["command", "query", "event"],
-        help="The type of codon to scaffold.",
-    )
-    parser_hatch.add_argument("component_name", help="The name of the new component (e.g., 'create-order').")
+    # --- `compat` command ---
+    compat_parser = subparsers.add_parser("compat", help="Check the chemical compatibility of two primitives.")
+    compat_parser.add_argument("element1", help="The name of the first primitive (e.g., OrderAggregate)")
+    compat_parser.add_argument("element2", help="The name of the second primitive (e.g., OrderPlacedEvent)")
+    compat_parser.set_defaults(func=handle_compat_command)
 
-    # --- Hatch from Honeyprint Command ---
-    parser_honey = subparsers.add_parser("hatch-from-honeyprint", help="Scaffold a component from a Markdown honeyprint.")
-    parser_honey.add_argument("honeyprint_path", help="The path to the .md honeyprint file.")
-
-    # Parse args, but handle case where no command is given
-    if len(sys.argv) < 2 or sys.argv[1] not in ['hatch', 'hatch-from-honeyprint']:
-        show_usage()
-        exit(1)
+    # --- Placeholder commands from the Grimoire ---
+    # This makes the CLI aware of future commands and provides a helpful message.
+    placeholder_commands = [
+        "synthesize", "inspect", "cull", "observe", "advise", "feed",
+        "plant", "harvest", "archive", "cure", "refine", "analyze",
+        "list", "health", "history", "plan"
+    ]
+    for command in placeholder_commands:
+        placeholder_parser = subparsers.add_parser(command, help=f"(Not yet implemented) See Grimoire for details on '{command}'.")
+        placeholder_parser.set_defaults(func=handle_unimplemented)
 
     args = parser.parse_args()
 
-    if args.command == "hatch":
-        hatch_component(args.codon_type, args.component_name)
-    elif args.command == "hatch-from-honeyprint":
-        architecture = parse_honeyprint(args.honeyprint_path)
-        hatch_from_honeyprint(architecture)
+    # Execute the function associated with the chosen sub-command
+    if hasattr(args, 'func'):
+        args.func(args)
     else:
-        show_usage()
-        exit(1)
+        parser.print_help()
 
 if __name__ == "__main__":
     main()

@@ -1,12 +1,13 @@
 import json
-from dna_core.royal_jelly import Transformation
+from dna_core.royal_jelly import Transform
 
-class OpenApiTransformer(Transformation):
+class OpenApiTransformer(Transform[bytes, dict]):
     """
     A transformation for parsing an OpenAPI JSON specification.
+    Element: T (Transform)
     """
 
-    def transform(self, raw_content: bytes) -> dict:
+    def execute(self, raw_content: bytes) -> dict:
         """
         Parses the raw byte content of an OpenAPI spec and generates a report.
 
@@ -21,7 +22,6 @@ class OpenApiTransformer(Transformation):
             spec = json.loads(raw_content)
         except json.JSONDecodeError:
             print("Error: Failed to decode JSON from the response.")
-            # Return the empty report
             return report
 
         report["title"] = spec.get('info', {}).get('title', 'N/A')

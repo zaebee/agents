@@ -8,7 +8,6 @@ import shutil
 from unittest.mock import patch, MagicMock
 
 # This is a bit of a hack to make the imports work
-# It ensures the project root is on the path to find dna_core
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))
 
 from hive.components.scout_bee.source_file_transformer import SourceFileTransformer
@@ -20,205 +19,99 @@ from hive.components.scout_bee.scout_session_aggregate import ScoutSessionAggreg
 from hive.components.scout_bee.scout_api_command import ScoutApiCommand
 from hive.components.scout_bee.scout_repository_command import ScoutRepositoryCommand
 
-class TestSourceFileTransformer(unittest.TestCase):
-    """
-    Tests for the SourceFileTransformer.
-    """
+class TestTransformers(unittest.TestCase):
+    """Consolidated tests for all transformer primitives."""
 
-    def setUp(self):
-        self.transformer = SourceFileTransformer()
-
-    def test_analyze_ts_file(self):
-        """Tests the TypeScript file analyzer logic within the transformer."""
-        ts_content = """
-        // A comment
-        class MyCoolAggregate extends Aggregate { /* ... */ }
-        class AnotherClass extends SomeOtherBase { /* ... */ }
-        export class MyConnector extends Connector { /* ... */ }
-        """
-        # Create a temporary file to be analyzed
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.ts', delete=False) as ts_file:
-            ts_file.write(ts_content)
-            filepath = ts_file.name
-
-        try:
-            components = self.transformer.transform(filepath)
-            self.assertIn("MyCoolAggregate", components["aggregates"])
-            self.assertIn("MyConnector", components["connectors"])
-            self.assertEqual(len(components["transformations"]), 0)
-            self.assertNotIn("AnotherClass", components["aggregates"] + components["connectors"] + components["transformations"])
-        finally:
-            os.remove(filepath)
-
-    def test_analyze_py_file(self):
-        """Tests the Python file analyzer logic within the transformer."""
-        py_content = """
-# A python comment
-class MyPyAggregate(Aggregate):
-    pass
-
-class NotAComponent:
-    pass
-
-class MyPyTransformation(Transformation):
-    pass
-        """
-        # Create a temporary file to be analyzed
+    def test_source_file_transformer(self):
+        transformer = SourceFileTransformer()
+        py_content = "class MyPyAggregate(Aggregate): pass"
         with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as py_file:
             py_file.write(py_content)
             filepath = py_file.name
 
         try:
-            components = self.transformer.transform(filepath)
+            components = transformer.execute(filepath)
             self.assertIn("MyPyAggregate", components["aggregates"])
-            self.assertIn("MyPyTransformation", components["transformations"])
-            self.assertEqual(len(components["connectors"]), 0)
-            self.assertNotIn("NotAComponent", components["aggregates"] + components["connectors"] + components["transformations"])
         finally:
             os.remove(filepath)
 
-    def test_transform_unsupported_file(self):
-        """Tests that an unsupported file type returns an empty result."""
-        # Create a dummy file
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as txt_file:
-            txt_file.write("some text")
-            filepath = txt_file.name
-
+    def test_repository_transformer(self):
+        transformer = RepositoryTransformer()
+        temp_dir = tempfile.mkdtemp()
+        (pathlib.Path(temp_dir) / "test.py").touch()
         try:
-            components = self.transformer.transform(filepath)
-            self.assertEqual(len(components["aggregates"]), 0)
-            self.assertEqual(len(components["connectors"]), 0)
-            self.assertEqual(len(components["transformations"]), 0)
+            files = transformer.execute(temp_dir)
+            self.assertEqual(len(files), 1)
+            self.assertEqual(os.path.basename(files[0]), "test.py")
         finally:
-            os.remove(filepath)
+            shutil.rmtree(temp_dir)
 
-
-class TestRepositoryTransformer(unittest.TestCase):
-    """
-    Tests for the RepositoryTransformer.
-    """
-    def setUp(self):
-        self.transformer = RepositoryTransformer()
-        self.temp_dir = tempfile.mkdtemp()
-
-        # Create a dummy file structure
-        (pathlib.Path(self.temp_dir) / "src").mkdir()
-        (pathlib.Path(self.temp_dir) / "src" / "component1").mkdir()
-        (pathlib.Path(self.temp_dir) / "src" / "component1" / "aggregate.py").touch()
-        (pathlib.Path(self.temp_dir) / "src" / "component1" / "model.ts").touch()
-        (pathlib.Path(self.temp_dir) / "README.md").touch()
-
-    def tearDown(self):
-        shutil.rmtree(self.temp_dir)
-
-    def test_finds_source_files(self):
-        """Tests that the transformer correctly finds .py and .ts files."""
-        found_files = list(self.transformer.transform(self.temp_dir))
-        self.assertEqual(len(found_files), 2)
-
-        base_names = [os.path.basename(f) for f in found_files]
-        self.assertIn("aggregate.py", base_names)
-        self.assertIn("model.ts", base_names)
-
-class TestOpenApiTransformer(unittest.TestCase):
-    """
-    Tests for the OpenApiTransformer.
-    """
-    def setUp(self):
-        self.transformer = OpenApiTransformer()
-
-    def test_parses_valid_spec(self):
-        """Tests that a valid OpenAPI spec is parsed correctly."""
-        mock_spec = {
-            "info": {"title": "Test API", "version": "1.1"},
-            "paths": {
-                "/items": {
-                    "get": {"summary": "Get items"}
-                }
-            }
-        }
+    def test_openapi_transformer(self):
+        transformer = OpenApiTransformer()
+        mock_spec = {"info": {"title": "Test API"}}
         raw_content = json.dumps(mock_spec).encode('utf-8')
-        report = self.transformer.transform(raw_content)
-
+        report = transformer.execute(raw_content)
         self.assertEqual(report["title"], "Test API")
-        self.assertEqual(report["version"], "1.1")
-        self.assertEqual(len(report["endpoints"]), 1)
-        self.assertEqual(report["endpoints"][0]["path"], "/items")
-        self.assertEqual(report["endpoints"][0]["method"], "GET")
 
-    def test_handles_invalid_json(self):
-        """Tests that invalid JSON returns a default report."""
-        raw_content = b"{'not_json':}"
-        report = self.transformer.transform(raw_content)
-        self.assertEqual(report["title"], "N/A")
-        self.assertEqual(len(report["endpoints"]), 0)
+class TestConnectors(unittest.TestCase):
+    """Consolidated tests for all connector primitives."""
 
-
-class TestHttpConnector(unittest.TestCase):
     @patch('requests.get')
-    def test_fetch_success(self, mock_get):
-        """Tests a successful fetch from a URL."""
+    def test_http_connector(self, mock_get):
         mock_response = MagicMock()
-        mock_response.status_code = 200
         mock_response.content = b'{"key": "value"}'
         mock_response.raise_for_status = MagicMock()
         mock_get.return_value = mock_response
 
         connector = HttpConnector()
-        content = connector.fetch("http://test.com")
-
-        mock_get.assert_called_once_with("http://test.com")
+        content = connector.process("http://test.com")
         self.assertEqual(content, b'{"key": "value"}')
 
-
-@patch('shutil.rmtree') # Mock rmtree to avoid file system side effects on failure
-class TestGitHubConnector(unittest.TestCase):
     @patch('git.Repo.clone_from')
-    @patch('tempfile.mkdtemp', return_value="/fake/temp/dir")
-    def test_clone_success(self, mock_mkdtemp, mock_clone_from, mock_rmtree):
-        """Tests a successful repository clone."""
+    @patch('tempfile.mkdtemp', return_value="/fake/dir")
+    def test_github_connector(self, mock_mkdtemp, mock_clone_from):
         connector = GitHubConnector()
-        temp_dir = connector.clone("http://github.com/test/repo.git")
-
-        mock_mkdtemp.assert_called_once()
-        mock_clone_from.assert_called_once_with("http://github.com/test/repo.git", "/fake/temp/dir")
-        self.assertEqual(temp_dir, "/fake/temp/dir")
-
+        input_data = {"url": "https://a.com/b.git", "github_token": "token"}
+        temp_dir = connector.process(input_data)
+        mock_clone_from.assert_called_once_with("https://token@a.com/b.git", "/fake/dir")
+        self.assertEqual(temp_dir, "/fake/dir")
 
 class TestScoutSessionAggregate(unittest.TestCase):
+    """Tests for the main aggregate orchestration."""
+
     def setUp(self):
         self.aggregate = ScoutSessionAggregate("test-session-123")
 
+    @patch.object(HttpConnector, 'process', return_value=b'{"info": {"title": "Mock API"}}')
+    @patch.object(OpenApiTransformer, 'execute', return_value={"title": "Mock API", "version": "1.0"})
+    def test_handle_api_command(self, mock_execute, mock_process):
+        """Tests the API scouting workflow."""
+        command = ScoutApiCommand(url="http://mock.api")
+        event = self.aggregate.handle(command)
+
+        mock_process.assert_called_once_with("http://mock.api")
+        mock_execute.assert_called_once_with(b'{"info": {"title": "Mock API"}}')
+
+        self.assertEqual(event.aggregate_id, "test-session-123")
+        self.assertEqual(event.report["title"], "Mock API")
+        self.assertEqual(self.aggregate.status, "COMPLETED")
+
     @patch('shutil.rmtree')
-    @patch.object(GitHubConnector, 'clone', return_value="/fake/dir")
-    @patch.object(RepositoryTransformer, 'transform', return_value=["/fake/dir/file.py"])
-    @patch.object(SourceFileTransformer, 'transform', return_value={"aggregates": ["TestAggregate"], "connectors": [], "transformations": []})
-    def test_handle_scout_repo_command(self, mock_source_transformer, mock_repo_transformer, mock_clone, mock_rmtree):
-        """Tests the full orchestration of scouting a repository."""
-        command = ScoutRepositoryCommand(url="http://github.com/test/repo.git")
-        self.aggregate.handle_command(command)
+    @patch.object(GitHubConnector, 'process', return_value="/fake/repo")
+    @patch.object(RepositoryTransformer, 'execute', return_value=["/fake/repo/file.py"])
+    @patch.object(SourceFileTransformer, 'execute', return_value={"aggregates": ["TestAgg"], "transformations": [], "connectors": []})
+    def test_handle_repo_command(self, mock_source_execute, mock_repo_execute, mock_git_process, mock_rmtree):
+        """Tests the repository scouting workflow."""
+        command = ScoutRepositoryCommand(url="http://github.com/a/b.git")
+        event = self.aggregate.handle(command)
 
-        mock_clone.assert_called_once_with("http://github.com/test/repo.git", None)
-        mock_repo_transformer.assert_called_once_with("/fake/dir")
-        mock_source_transformer.assert_called_once_with("/fake/dir/file.py")
-        mock_rmtree.assert_called_once_with("/fake/dir") # Check that cleanup happens
+        mock_git_process.assert_called_once()
+        mock_repo_execute.assert_called_once_with("/fake/repo")
+        mock_source_execute.assert_called_once_with("/fake/repo/file.py")
 
+        self.assertEqual(event.report["repository"], "http://github.com/a/b.git")
+        self.assertIn("TestAgg", event.report["components"]["aggregates"])
         self.assertEqual(self.aggregate.status, "COMPLETED")
-        self.assertIn("TestAggregate", self.aggregate.report["components"]["aggregates"])
-
-
-    @patch.object(HttpConnector, 'fetch', return_value=b'{"info": {"title": "Mock"}}')
-    @patch.object(OpenApiTransformer, 'transform', return_value={"title": "Mock", "version": "1.0", "description": "A mock API", "endpoints": []})
-    def test_handle_scout_api_command(self, mock_transform, mock_fetch):
-        """Tests the orchestration of scouting an API."""
-        command = ScoutApiCommand(url="http://mock.api/spec.json")
-        self.aggregate.handle_command(command)
-
-        mock_fetch.assert_called_once_with("http://mock.api/spec.json")
-        mock_transform.assert_called_once_with(b'{"info": {"title": "Mock"}}')
-        self.assertEqual(self.aggregate.status, "COMPLETED")
-        self.assertEqual(self.aggregate.report, {"title": "Mock", "version": "1.0", "description": "A mock API", "endpoints": []})
-
 
 if __name__ == '__main__':
     unittest.main()

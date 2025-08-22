@@ -1,9 +1,10 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Dict, Any
 
 @dataclass
 class ScoutingReportGeneratedEvent:
     """
-    An event for the scout-bee component.
+    An event produced when a scouting session is complete.
     """
-    # Define event attributes here
-    pass
+    aggregate_id: str
+    report: Dict[str, Any] = field(default_factory=dict)

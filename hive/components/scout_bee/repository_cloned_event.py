@@ -3,7 +3,7 @@ from dataclasses import dataclass
 @dataclass
 class RepositoryClonedEvent:
     """
-    An event for the scout-bee component.
+    An event indicating a repository has been successfully cloned.
+    (Currently a marker event, not carrying data).
     """
-    # Define event attributes here
     pass

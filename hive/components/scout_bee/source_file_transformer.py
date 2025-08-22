@@ -1,13 +1,14 @@
 import re
-from dna_core.royal_jelly import Transformation
+from dna_core.royal_jelly import Transform
 
-class SourceFileTransformer(Transformation):
+class SourceFileTransformer(Transform[str, dict]):
     """
     A transformation for parsing individual source files (.py, .ts)
     to find class definitions that inherit from Royal Jelly / ATCG primitives.
+    Element: T (Transform)
     """
 
-    def transform(self, filepath: str) -> dict:
+    def execute(self, filepath: str) -> dict:
         """
         Analyzes a single source file and returns discovered components.
 
@@ -15,8 +16,7 @@ class SourceFileTransformer(Transformation):
             filepath: The path to the source file.
 
         Returns:
-            A dictionary of discovered components, e.g.,
-            {"aggregates": ["MyAggregate"], "connectors": [], "transformations": []}
+            A dictionary of discovered components.
         """
         if filepath.endswith('.py'):
             return self._analyze_py_file(filepath)
@@ -43,7 +43,7 @@ class SourceFileTransformer(Transformation):
                 elif base_class == 'Transformation':
                     components["transformations"].append(class_name)
         except Exception:
-            pass  # Ignore files that can't be read
+            pass
         return components
 
     def _analyze_py_file(self, filepath: str) -> dict:
@@ -64,5 +64,5 @@ class SourceFileTransformer(Transformation):
                 elif base_class == 'Transformation':
                     components["transformations"].append(class_name)
         except Exception:
-            pass  # Ignore files that can't be read
+            pass
         return components
