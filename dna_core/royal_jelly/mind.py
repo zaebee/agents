@@ -1,4 +1,4 @@
-from typing import Dict, List, TYPE_CHECKING
+from typing import Dict, List, TYPE_CHECKING, Any
 import numpy as np
 
 if TYPE_CHECKING:
@@ -25,13 +25,30 @@ class HiveMind:
             "nectar_level": 0.8, # Overwhelmingly reward nectar storage
             "age": 0.0,
             "engrams": 0.0,
+        },
+        "IMPROVE_LATENCY": {
+            "production_rate": 0.6, # Favor strong bees that can be optimized
+            "nectar_level": 0.1,
+            "age": 0.0,
+            "engrams": 0.3, # Reward bees that have learned optimizations
         }
     }
 
     def __init__(self):
         self.global_metrics: Dict[str, float] = {}
+        self.production_state: Dict[str, Any] = {}
         self.goal: str = "DEFAULT"
         print("🧠 HiveMind has awakened.")
+
+    def ingest_production_metrics(self, metrics: Dict[str, Any]):
+        """Consumes and stores metrics from the production environment."""
+        self.production_state = metrics
+        # The mind can now react to real-world conditions
+        for component in self.production_state.get("components", []):
+            if component.get("metrics", {}).get("latency_ms_p95", 0) > 200.0:
+                print(f"  🧠 MIND ALERT: High latency detected for {component['name']}. Setting goal to IMPROVE_LATENCY.")
+                self.set_goal("IMPROVE_LATENCY")
+
 
     def observe(self, organisms: List["DigitalOrganism"]):
         """
