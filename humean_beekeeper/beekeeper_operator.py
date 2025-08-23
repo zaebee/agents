@@ -4,9 +4,11 @@ from typing import Dict, Any, List
 from .metric_collector import MetricCollector
 from dna_core.royal_jelly.mind import HiveMind
 from dna_core.pollen_protocol_pb2 import WaggleDanceEvent, GenomeMessage
-from dna_core.royal_jelly.organism import DigitalOrganism
+from dna_core.royal_jelly.organism import DigitalOrganism, Genome
 from dna_core.royal_jelly.fitness import FitnessJudge
 from dna_core.royal_jelly.nectar_quality import NectarQuality
+from dna_core.royal_jelly.periodic_table import ElementSymbol
+from hive_simulator import TestBee
 
 class BeekeeperOperator:
     """
@@ -21,7 +23,10 @@ class BeekeeperOperator:
         print("🤖 Humean Beekeeper Operator is online.")
 
     def run_simulation_cycle(self, simulator):
-        """Runs a single tick of the simulation and checks for discoveries."""
+        """Runs a single tick of the simulation, listens for news, and manages the hive."""
+        # A beekeeper first observes the world, then its own hive, then acts.
+        self.listen_for_foreign_dances(simulator)
+
         simulator.run_tick()
 
         # Run breeding contest if it's time
@@ -29,6 +34,50 @@ class BeekeeperOperator:
             newly_born = self.run_breeding_contest(simulator)
             if newly_born:
                 self.check_for_discoveries(newly_born, simulator)
+
+    def listen_for_foreign_dances(self, simulator):
+        """
+        Processes the event bus for dances from other hives and incorporates superior genomes.
+        """
+        # Ensure the mind has the latest metrics from its own hive first
+        self.mind.observe(list(simulator.organisms.values()))
+        avg_local_fitness = self.mind.global_metrics.get("average_fitness", 0)
+
+        for event in simulator.event_bus:
+            # Ensure we are looking at a WaggleDanceEvent from another hive
+            if isinstance(event, WaggleDanceEvent) and event.source_hive_id != simulator.name:
+                print(f"  [{simulator.name}] Heard a waggle dance from '{event.source_hive_id}'!")
+
+                # Decision logic: is the foreign gene "better"?
+                if event.fitness_score > avg_local_fitness:
+                    print(f"    - Foreign genome is superior (Fitness: {event.fitness_score:.2f} > Local Avg: {avg_local_fitness:.2f}).")
+                    self.adopt_foreign_genome(event, simulator)
+
+    def adopt_foreign_genome(self, event: WaggleDanceEvent, simulator):
+        """Creates a new organism from a foreign genome and adds it to the hive."""
+        print(f"    - Action: Adopting foreign genome from {event.source_hive_id}.")
+
+        foreign_genome_msg = event.genome
+        try:
+            primitive_type_enum = ElementSymbol[foreign_genome_msg.primitive_type]
+        except KeyError:
+            print(f"    - ⚠️ ERROR: Unknown primitive type '{foreign_genome_msg.primitive_type}' in event. Cannot adopt.")
+            return
+
+        reconstructed_genome = Genome(
+            primitive_type=primitive_type_enum,
+            purpose=foreign_genome_msg.purpose,
+            nectar_production_rate=foreign_genome_msg.nectar_production_rate,
+            bonds_template=("TestEvent",),
+            valency=(1, 1),
+            traits=("immigrant", "adopted")
+        )
+
+        immigrant_bee = TestBee(genome=reconstructed_genome)
+        # Give the immigrant a unique ID based on its origin
+        immigrant_bee.id = f"Immigrant-{event.source_component_id[:8]}"
+
+        simulator.add_organism(immigrant_bee)
 
     def run_breeding_contest(self, simulator) -> List[DigitalOrganism]:
         """Selects the fittest organisms and allows them to replicate."""
@@ -91,7 +140,7 @@ class BeekeeperOperator:
         )
 
         event = WaggleDanceEvent(
-            source_hive_id="beekeeper-01",
+            source_hive_id=simulator.name, # Use the simulator's name for proper identification
             source_component_id=organism.id,
             fitness_score=self.fitness_judge.calculate_genome_fitness(organism.genome),
             fitness_delta=(self.fitness_judge.calculate_genome_fitness(organism.genome) - avg_fitness),

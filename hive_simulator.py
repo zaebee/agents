@@ -36,9 +36,10 @@ class TestBee(DigitalOrganism):
 
 class HiveSimulator:
     """A controlled environment to simulate the life and evolution of DigitalOrganisms."""
-    def __init__(self, max_ticks: int = 100, organisms: List[DigitalOrganism] = None):
+    def __init__(self, max_ticks: int = 100, organisms: List[DigitalOrganism] = None, event_bus: List = None, name: str = "Hive"):
         if organisms is None:
             organisms = []
+        self.name = name
         self.max_ticks: int = max_ticks
         self.organisms: Dict[str, DigitalOrganism] = {org.id: org for org in organisms}
         self.current_tick: int = 0
@@ -48,7 +49,7 @@ class HiveSimulator:
         self.mind: HiveMind = HiveMind()
         self.royal_jelly_bank: float = 0.0
         self.tax_rate = 0.1
-        self.event_bus: List[Dict] = []
+        self.event_bus: List[Dict] = event_bus if event_bus is not None else []
         self.born_in_tick: Dict[int, List[DigitalOrganism]] = {}
 
     def run_tick(self) -> None:
