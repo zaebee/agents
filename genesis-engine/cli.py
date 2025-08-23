@@ -38,6 +38,72 @@ def handle_unimplemented(args):
     print(f"Command '{args.command}' is defined in the Grimoire but not yet implemented.")
     print("The Hive's magic is still growing. Check back later!")
 
+import pathlib
+import shutil
+import re
+from .parser import parse_genome, GenomeValidationError
+from .generator import CodeGenerator
+
+def to_snake_case(name: str) -> str:
+    """Converts a name to snake_case."""
+    name = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
+    name = re.sub('__([A-Z])', r'_\1', name)
+    name = re.sub('([a-z0-9])([A-Z])', r'\1_\2', name)
+    return name.lower().replace(" ", "_").replace("-", "_")
+
+def handle_synthesize_command(args):
+    """Handler for the new genome-based synthesis command."""
+    try:
+        print(f"🧬 Synthesizing new organism from genome: {args.genome}")
+
+        # 1. Parse and validate the genome
+        genome_data = parse_genome(args.genome)
+
+        # 2. Prepare paths and directories
+        component_name = genome_data['name']
+        component_dir_name = to_snake_case(component_name)
+        base_path = pathlib.Path("hive/components") / component_dir_name
+
+        if base_path.exists():
+            print(f"❌ Error: Component '{component_name}' already exists at {base_path}.")
+            return
+
+        base_path.mkdir(parents=True)
+        (base_path / "tests").mkdir()
+        print(f"  -> Created directory structure at {base_path}")
+
+        # 3. Generate code
+        generator = CodeGenerator()
+        organism_code = generator.generate_organism_file(genome_data)
+        contracts_code = generator.generate_contracts_file(genome_data)
+        test_code = generator.generate_test_file(genome_data)
+
+        # 4. Write generated files
+        with open(base_path / "organism.py", "w") as f:
+            f.write(organism_code)
+        print(f"  -> Wrote organism.py")
+
+        with open(base_path / "contracts.py", "w") as f:
+            f.write(contracts_code)
+        print(f"  -> Wrote contracts.py")
+
+        with open(base_path / "tests/__init__.py", "w") as f:
+            f.write("") # Make tests a package
+
+        with open(base_path / "tests/test_organism.py", "w") as f:
+            f.write(test_code)
+        print(f"  -> Wrote tests/test_organism.py")
+
+        # 5. Copy the genome file
+        genome_file = pathlib.Path(args.genome)
+        shutil.copy(genome_file, base_path / genome_file.name)
+        print(f"  -> Copied genome.yaml to component directory.")
+
+        print("\n✅ Synthesis complete! A new bee is ready to be taught its purpose.")
+
+    except (FileNotFoundError, GenomeValidationError) as e:
+        print(f"❌ Error: {e}")
+
 # --- Main CLI Setup ---
 
 def main():
@@ -58,10 +124,15 @@ def main():
     compat_parser.add_argument("element2", help="The name of the second primitive (e.g., OrderPlacedEvent)")
     compat_parser.set_defaults(func=handle_compat_command)
 
+    # --- `synthesize` command ---
+    synthesize_parser = subparsers.add_parser("synthesize", help="Create a new organism from a genome.yaml file.")
+    synthesize_parser.add_argument("--genome", required=True, help="Path to the genome.yaml file.")
+    synthesize_parser.set_defaults(func=handle_synthesize_command)
+
     # --- Placeholder commands from the Grimoire ---
     # This makes the CLI aware of future commands and provides a helpful message.
     placeholder_commands = [
-        "synthesize", "inspect", "cull", "observe", "advise", "feed",
+        "inspect", "cull", "observe", "advise", "feed",
         "plant", "harvest", "archive", "cure", "refine", "analyze",
         "list", "health", "history", "plan"
     ]
