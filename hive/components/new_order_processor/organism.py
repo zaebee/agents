@@ -1,3 +1,4 @@
+import uuid
 from dna_core.royal_jelly.organism import DigitalOrganism, Genome
 from dna_core.royal_jelly.periodic_table import ElementSymbol
 from .contracts import (
@@ -27,15 +28,26 @@ class Neworderprocessor(DigitalOrganism):
 
     def handle_creation_command(self, command: CreateneworderCommand):
         """Handler for the CreateneworderCommand."""
-        print(f"  ->  handling CreateneworderCommand...")
-        # TODO: Implement business logic for this command.
-        # This handler should consume nectar and produce one of the
-        # events defined in the 'produces' section of the genome.
+        print(f"  -> {self.id} handling CreateneworderCommand for customer {command.customer_id}...")
 
-        # Example:
-        # self.consume_nectar(10)
-        # return OrdercreatedEvent(...)
-        pass
+        self.consume_nectar(20) # Cost of processing an order
+
+        if not command.items:
+            print(f"  -> Order rejected for customer {command.customer_id}: No items provided.")
+            return OrderrejectedEvent(
+                customer_id=command.customer_id,
+                reason="Order must contain at least one item.",
+                correlation_id=command.correlation_id
+            )
+
+        order_id = f"order-{uuid.uuid4()}"
+        print(f"  -> Order created for customer {command.customer_id} with new ID {order_id}.")
+        return OrdercreatedEvent(
+            order_id=order_id,
+            customer_id=command.customer_id,
+            items=command.items,
+            correlation_id=command.correlation_id
+        )
 
 
     # Override the abstract main_function to route commands

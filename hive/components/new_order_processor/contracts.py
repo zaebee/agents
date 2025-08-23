@@ -9,11 +9,9 @@ from typing import List, Any
 @dataclass
 class CreateneworderCommand:
     """Command to trigger the 'handle_creation_command' action."""
-    # TODO: Define the fields required for this command.
-    # Example:
-    # order_id: str
-    # items: List[str]
-    pass
+    customer_id: str
+    items: List[str]
+    correlation_id: str
 
 
 # --- Events (Outputs) ---
@@ -21,17 +19,14 @@ class CreateneworderCommand:
 @dataclass
 class OrdercreatedEvent:
     """Event indicating that 'OrderCreated' has occurred."""
-    # TODO: Define the payload for this event.
-    # Example:
-    # order_id: str
-    # status: str
-    pass
+    order_id: str
+    customer_id: str
+    items: List[str]
+    correlation_id: str
 
 @dataclass
 class OrderrejectedEvent:
     """Event indicating that 'OrderRejected' has occurred."""
-    # TODO: Define the payload for this event.
-    # Example:
-    # order_id: str
-    # status: str
-    pass
+    customer_id: str
+    reason: str
+    correlation_id: str
