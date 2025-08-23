@@ -1,0 +1,6 @@
+rich
+protobuf
+requests
+GitPython
+PyYAML
+Jinja2

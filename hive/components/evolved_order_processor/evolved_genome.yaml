@@ -1,0 +1,15 @@
+algorithm_complexity: O(1)
+bonds:
+  consumes:
+  - command: CreateNewOrder
+    handler: handle_creation_command
+  produces:
+  - event: OrderCreated
+error_handling_level: robust
+name: EvolvedOrderProcessor
+nectar_production_rate: 40
+primitive_type: T
+purpose: A highly efficient, caching, robust, O(1) transform.
+traits:
+- evolved
+- caching

@@ -1,0 +1,48 @@
+from dna_core.royal_jelly.organism import DigitalOrganism, Genome
+from dna_core.royal_jelly.periodic_table import ElementSymbol
+from .contracts import (
+    # Import contracts generated from the genome
+    {% for item in genome.bonds.consumes %}{{ item.command | pascal_case }}Command,{% endfor %}
+    {% for item in genome.bonds.produces %}{{ item.event | pascal_case }}Event,{% endfor %}
+)
+
+class {{ genome.name | pascal_case }}(DigitalOrganism):
+    """
+    {{ genome.purpose }}
+
+    This organism was synthesized by the Genesis Engine.
+    """
+
+    def __init__(self, generation: int = 1):
+        genome = Genome(
+            primitive_type=ElementSymbol.{{ genome.primitive_type }},
+            bonds_template=({% for item in genome.bonds.consumes %}"{{ item.command }}",{% endfor %}{% for item in genome.bonds.produces %}"{{ item.event }}",{% endfor %}),
+            valency=({{ genome.bonds.consumes | length }}, {{ genome.bonds.produces | length }}),
+            purpose="{{ genome.purpose }}",
+            nectar_production_rate={{ genome.genetic_traits.nectar_production_rate | default(1) }}
+        )
+        super().__init__(genome=genome, generation=generation)
+
+    # --- Command Handlers ---
+    {% for item in genome.bonds.consumes %}
+    def {{ item.handler }}(self, command: {{ item.command | pascal_case }}Command):
+        """Handler for the {{ item.command | pascal_case }}Command."""
+        print(f"  -> {{ self.id }} handling {{ item.command | pascal_case }}Command...")
+        # TODO: Implement business logic for this command.
+        # This handler should consume nectar and produce one of the
+        # events defined in the 'produces' section of the genome.
+
+        # Example:
+        # self.consume_nectar(10)
+        # return {{ genome.bonds.produces[0].event | pascal_case }}Event(...)
+        pass
+    {% endfor %}
+
+    # Override the abstract main_function to route commands
+    def main_function(self, command):
+        """Routes incoming commands to the appropriate handler."""
+        {% for item in genome.bonds.consumes %}
+        if isinstance(command, {{ item.command | pascal_case }}Command):
+            return self.{{ item.handler }}(command)
+        {% endfor %}
+        raise TypeError(f"Unknown command type received: {type(command)}")
