@@ -1,6 +1,7 @@
 import os
 from jinja2 import Environment, FileSystemLoader
 from typing import Dict, Any
+from .parser import GenerationContext
 
 import re
 
@@ -27,17 +28,32 @@ class CodeGenerator:
         self.env.filters['pascal_case'] = snake_to_pascal
         self.env.filters['snake_case'] = to_snake_case
 
-    def generate_organism_file(self, genome_data: Dict[str, Any]) -> str:
+    def _create_template_data(self, context: GenerationContext) -> Dict[str, Any]:
+        """Creates the dictionary expected by the Jinja2 templates."""
+        return {
+            "name": context.name,
+            "purpose": context.genome.purpose,
+            "primitive_type": context.genome.primitive_type.name,
+            "bonds": context.bonds_map,
+            "genetic_traits": {
+                "nectar_production_rate": context.genome.nectar_production_rate
+            }
+        }
+
+    def generate_organism_file(self, context: GenerationContext) -> str:
         """Generates the content for the main organism.py file."""
         template = self.env.get_template("organism.py.j2")
-        return template.render(genome=genome_data)
+        template_data = self._create_template_data(context)
+        return template.render(genome=template_data)
 
-    def generate_contracts_file(self, genome_data: Dict[str, Any]) -> str:
+    def generate_contracts_file(self, context: GenerationContext) -> str:
         """Generates the content for the events.py/commands.py file."""
         template = self.env.get_template("contracts.py.j2")
-        return template.render(genome=genome_data)
+        template_data = self._create_template_data(context)
+        return template.render(genome=template_data)
 
-    def generate_test_file(self, genome_data: Dict[str, Any]) -> str:
+    def generate_test_file(self, context: GenerationContext) -> str:
         """Generates the content for the test scaffold."""
         template = self.env.get_template("test_organism.py.j2")
-        return template.render(genome=genome_data)
+        template_data = self._create_template_data(context)
+        return template.render(genome=template_data)

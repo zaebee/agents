@@ -3,23 +3,23 @@ from dna_core.royal_jelly.periodic_table import ElementSymbol
 from .contracts import (
     # Import contracts generated from the genome
     CreateneworderCommand,
-    OrdercreatedEvent,OrderrejectedEvent,
+    OrdercreatedEvent,
 )
 
-class Neworderprocessor(DigitalOrganism):
+class Evolvedorderprocessor(DigitalOrganism):
     """
-    Handles the initial creation and validation of a customer order.
+    A highly efficient, caching, robust, O(1) transform.
 
     This organism was synthesized by the Genesis Engine.
     """
 
     def __init__(self, generation: int = 1):
         genome = Genome(
-            primitive_type=ElementSymbol.A,
-            bonds_template=("CreateNewOrder","OrderCreated","OrderRejected",),
-            valency=(1, 2),
-            purpose="Handles the initial creation and validation of a customer order.",
-            nectar_production_rate=1
+            primitive_type=ElementSymbol.T,
+            bonds_template=("CreateNewOrder","OrderCreated",),
+            valency=(1, 1),
+            purpose="A highly efficient, caching, robust, O(1) transform.",
+            nectar_production_rate=40
         )
         super().__init__(genome=genome, generation=generation)
 

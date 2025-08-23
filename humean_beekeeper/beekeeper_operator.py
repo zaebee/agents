@@ -16,11 +16,33 @@ class BeekeeperOperator:
     It orchestrates the observe-decide-act loop for self-healing and optimization.
     """
 
-    def __init__(self):
+    def __init__(self, health_threshold: float = 70.0):
         self.collector = MetricCollector()
+        self.health_threshold = health_threshold
         self.mind = HiveMind()
         self.fitness_judge = FitnessJudge() # The beekeeper uses the judge
         print("🤖 Humean Beekeeper Operator is online.")
+
+    def run_aiops_cycle(self) -> bool:
+        """
+        Runs one cycle of the AIOps monitoring loop.
+
+        Returns:
+            True if an intervention is required, False otherwise.
+        """
+        print("\n--- AIOps Cycle---")
+        metrics = self.collector.collect()
+        health = metrics.get("health_percent", 100.0)
+        print(f"  -> Monitoring live service. Current health: {health:.2f}%")
+
+        if health < self.health_threshold:
+            print(f"  🚨 HEALTH ALERT: Service health ({health:.2f}%) is below threshold ({self.health_threshold:.2f}%).")
+            print("  -> Action: Evolutionary intervention required.")
+            return True # Intervention needed
+
+        # If health is fine, simulate natural degradation over time
+        self.collector.degrade_service()
+        return False # No intervention needed yet
 
     def run_simulation_cycle(self, simulator):
         """Runs a single tick of the simulation, listens for news, and manages the hive."""

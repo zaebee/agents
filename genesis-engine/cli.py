@@ -57,10 +57,10 @@ def handle_synthesize_command(args):
         print(f"🧬 Synthesizing new organism from genome: {args.genome}")
 
         # 1. Parse and validate the genome
-        genome_data = parse_genome(args.genome)
+        context = parse_genome(args.genome)
 
         # 2. Prepare paths and directories
-        component_name = genome_data['name']
+        component_name = context.name
         component_dir_name = to_snake_case(component_name)
         base_path = pathlib.Path("hive/components") / component_dir_name
 
@@ -74,9 +74,9 @@ def handle_synthesize_command(args):
 
         # 3. Generate code
         generator = CodeGenerator()
-        organism_code = generator.generate_organism_file(genome_data)
-        contracts_code = generator.generate_contracts_file(genome_data)
-        test_code = generator.generate_test_file(genome_data)
+        organism_code = generator.generate_organism_file(context)
+        contracts_code = generator.generate_contracts_file(context)
+        test_code = generator.generate_test_file(context)
 
         # 4. Write generated files
         with open(base_path / "organism.py", "w") as f:

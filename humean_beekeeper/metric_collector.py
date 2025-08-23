@@ -1,36 +1,27 @@
-import json
-from typing import Dict, Any, List
+import random
+from typing import Dict, Any
 
 class MetricCollector:
     """
-    Simulates a monitoring agent that collects metrics from a production environment.
-    In a real system, this would connect to Prometheus, Datadog, or another
-    observability platform.
+    Simulates a monitoring agent that collects health metrics from a production service.
+    In a real system, this would connect to an observability platform.
     """
 
-    def __init__(self, source_file: str = "humean_beekeeper/production_metrics.json"):
-        self.source_file = source_file
-        print(f"📈 Metric Collector initialized. Monitoring source: {self.source_file}")
+    def __init__(self, initial_health: float = 100.0):
+        self.service_health = initial_health
+        print(f"📈 Metric Collector initialized. Initial service health: {self.service_health:.2f}%")
 
     def collect(self) -> Dict[str, Any]:
-        """
-        Collects metrics from the source file.
+        """Returns the current health metrics of the service."""
+        return {
+            "service_name": "NewOrderProcessor",
+            "health_percent": self.service_health,
+            "error_rate": (100.0 - self.service_health) / 100.0,
+            "latency_ms": 50 + (100 - self.service_health) * 5
+        }
 
-        Returns:
-            A dictionary representing the current state of production metrics.
-
-        Raises:
-            FileNotFoundError: If the source file cannot be found.
-        """
-        print(f"  -> Collecting production metrics from {self.source_file}...")
-        try:
-            with open(self.source_file, 'r') as f:
-                metrics = json.load(f)
-            print("  -> Metrics collected successfully.")
-            return metrics
-        except FileNotFoundError:
-            print(f"❌ Error: Metric source file not found at {self.source_file}")
-            raise
-        except json.JSONDecodeError:
-            print(f"❌ Error: Could not decode JSON from {self.source_file}")
-            raise
+    def degrade_service(self, amount: float = 5.0):
+        """Degrades the service health by a random amount up to the specified value."""
+        degradation = random.uniform(0, amount)
+        self.service_health = max(0.0, self.service_health - degradation)
+        print(f"  📉 Service health degraded. Current health: {self.service_health:.2f}%")
