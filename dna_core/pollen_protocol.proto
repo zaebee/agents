@@ -31,3 +31,22 @@ message PollenEnvelope {
   // JSON-like payload that can be different for each event type.
   google.protobuf.Struct payload = 6;
 }
+
+// --- Digital Organism Genetics ---
+
+message GenomeMessage {
+  string primitive_type = 1;
+  string purpose = 2;
+  int32 nectar_production_rate = 3;
+  // We can add more fields here as the Genome evolves.
+}
+
+// --- Cross-Hive Communication Events ---
+
+message WaggleDanceEvent {
+  string source_hive_id = 1;
+  string source_component_id = 2;
+  double fitness_score = 3;
+  double fitness_delta = 4;
+  GenomeMessage genome = 5;
+}

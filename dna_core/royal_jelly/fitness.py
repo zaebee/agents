@@ -1,47 +1,39 @@
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .organism import DigitalOrganism
-
-import math
-
-# Define weights for the fitness function. This allows for easy tuning.
-FITNESS_WEIGHTS = {
-    "production_rate": 0.8, # Genetic potential is still most important
-    "nectar_level": 0.2,    # Current success is a good indicator
-    "engrams": 0.1,         # Reward learning
-}
+    from .organism import Genome, DigitalOrganism
 
 class FitnessJudge:
     """
-    Calculates the "fitness" of a digital organism, quantifying its success
-    and suitability for replication. This is the core of natural selection.
+    Calculates the "fitness" of a digital organism based purely on its
+    inherent genetic traits (its Genome), not its current runtime state.
     """
 
-    def calculate_fitness(self, organism: "DigitalOrganism", weights: Dict[str, float] = None) -> float:
+    @staticmethod
+    def calculate_genome_fitness(genome: "Genome") -> float:
         """
-        Calculates a fitness score (0-100) based on a weighted average of
-        the organism's current state and genetic potential, modified by age.
+        Calculates a fitness score (0-100) based on the static Genome.
+        This represents the bee's genetic potential.
         """
-        if weights is None:
-            weights = FITNESS_WEIGHTS
+        score = 0.0
 
-        # Normalize metrics to a common scale (e.g., 0-1) before applying weights.
-        norm_prod_rate = min(organism.metabolism.nectar_production_rate / 50.0, 1.0)
-        norm_nectar = min(organism.metabolism.nectar_level / 1000.0, 1.0)
-        norm_engrams = min(len(organism.epigenome.engrams) / 10.0, 1.0)
+        # Reward efficient algorithms
+        if genome.algorithm_complexity == "O(1)":
+            score += 40
+        elif genome.algorithm_complexity == "O(log n)":
+            score += 25
 
-        # Calculate a base score on production and current state
-        base_score = (
-            norm_prod_rate * weights.get("production_rate", 0) +
-            norm_nectar * weights.get("nectar_level", 0) +
-            norm_engrams * weights.get("engrams", 0)
-        )
+        # Reward robust error handling
+        if genome.error_handling_level == "robust":
+            score += 30
 
-        # Apply an age factor. Wisdom of the elders.
-        age_factor = 1 + (math.log(max(1, organism.metabolism.age)) * weights.get("age", 0))
+        # Reward beneficial traits
+        if "caching" in genome.traits:
+            score += 20
+        if "parallelism" in genome.traits:
+            score += 15
 
-        # Final score is base score modified by age
-        final_score = max(0, min(100, base_score * 100 * (1 + age_factor)))
+        # Reward high production potential, but cap it to prevent it from dominating
+        score += min(genome.nectar_production_rate, 50) / 2.0 # Max 25 points from production
 
-        return final_score
+        return max(0.0, min(100.0, score))

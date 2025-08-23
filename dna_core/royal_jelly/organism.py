@@ -19,6 +19,10 @@ class Genome:
     valency: Tuple[int, int]
     purpose: str
     nectar_production_rate: int = 1
+    # New fields for Genome-First Fitness
+    algorithm_complexity: str = "O(n)" # e.g., O(1), O(n)
+    error_handling_level: str = "basic" # e.g., basic, robust
+    traits: Tuple[str, ...] = () # e.g., ("caching", "parallelism")
 
 
 @dataclass
