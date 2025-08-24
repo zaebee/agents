@@ -4,45 +4,52 @@
 Shows molecular synthesis and beautiful visualization.
 """
 
-import sys
 import math
-from pathlib import Path
 from datetime import datetime
-import json
+
 
 def print_banner(text, emoji="🧪"):
     """Print a beautiful banner"""
     print(f"\n{emoji} {text}")
     print("=" * (len(text) + 4))
 
+
 def print_result(label, value, unit=""):
     """Print a formatted result"""
     print(f"   {label}: {value}{unit}")
 
+
 def generate_advanced_honeyprint():
     """Generate an advanced honeyprint with molecular accuracy"""
-    
+
     # Component specifications
     component_name = "UserServiceCore"
-    adapters = ["REST_API", "GraphQL", "Database", "EventBus", "Auth_Service", "Cache_Layer"]
+    adapters = [
+        "REST_API",
+        "GraphQL",
+        "Database",
+        "EventBus",
+        "Auth_Service",
+        "Cache_Layer",
+    ]
     external_connections = {
         "REST_API": "Mobile_App",
-        "GraphQL": "Web_Frontend", 
+        "GraphQL": "Web_Frontend",
         "Database": "PostgreSQL",
         "EventBus": "Message_Queue",
         "Auth_Service": "OAuth2_Provider",
-        "Cache_Layer": "Redis_Cluster"
+        "Cache_Layer": "Redis_Cluster",
     }
-    
+
     # Calculate molecular properties
     molecular_formula = f"A1C{len(adapters)}"  # Aggregate + Connectors
     bond_energy = 85.0 * len(adapters) + 120.0  # Base energy calculation
     stability_score = 92.5  # High aromatic stability
-    
+
     # SVG generation with enhanced molecular styling
     width, height = 800, 600
     center_x, center_y = width // 2, height // 2
-    
+
     svg_content = f"""<?xml version="1.0" encoding="UTF-8"?>
 <svg width="{width}" height="{height}" xmlns="http://www.w3.org/2000/svg" font-family="'Fira Code', monospace" font-size="12">
     <defs>
@@ -141,7 +148,7 @@ def generate_advanced_honeyprint():
     <text x="{center_x}" y="65" class="formula">{molecular_formula}</text>
     
     <!-- Molecular structure -->"""
-    
+
     # Draw aromatic hexagon bonds (like benzene)
     hex_radius = 120
     bond_points = []
@@ -150,61 +157,67 @@ def generate_advanced_honeyprint():
         x = center_x + hex_radius * math.cos(angle)
         y = center_y + hex_radius * math.sin(angle)
         bond_points.append((x, y))
-    
+
     # Draw hexagon bonds
     for i in range(6):
         x1, y1 = bond_points[i]
         x2, y2 = bond_points[(i + 1) % 6]
         svg_content += f'\n    <line x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" class="aromatic-bond"/>'
-    
+
     # Central core
-    svg_content += f'\n    <circle cx="{center_x}" cy="{center_y}" r="50" class="core"/>'
+    svg_content += (
+        f'\n    <circle cx="{center_x}" cy="{center_y}" r="50" class="core"/>'
+    )
     svg_content += f'\n    <text x="{center_x}" y="{center_y - 5}" class="core-label">Domain</text>'
-    svg_content += f'\n    <text x="{center_x}" y="{center_y + 10}" class="core-label">Core</text>'
-    
+    svg_content += (
+        f'\n    <text x="{center_x}" y="{center_y + 10}" class="core-label">Core</text>'
+    )
+
     # Adapter atoms
     for i, adapter in enumerate(adapters):
         angle = (i * 60 - 90) * math.pi / 180
         x = center_x + hex_radius * math.cos(angle)
         y = center_y + hex_radius * math.sin(angle)
-        
+
         # Bond from core to adapter
         svg_content += f'\n    <line x1="{center_x}" y1="{center_y}" x2="{x:.1f}" y2="{y:.1f}" class="bond"/>'
-        
+
         # Adapter circle
-        svg_content += f'\n    <circle cx="{x:.1f}" cy="{y:.1f}" r="35" class="adapter"/>'
-        
+        svg_content += (
+            f'\n    <circle cx="{x:.1f}" cy="{y:.1f}" r="35" class="adapter"/>'
+        )
+
         # Adapter labels (split long names)
         if len(adapter) > 8:
-            parts = adapter.split('_')
+            parts = adapter.split("_")
             svg_content += f'\n    <text x="{x:.1f}" y="{y - 5:.1f}" class="label">{parts[0]}</text>'
             if len(parts) > 1:
                 svg_content += f'\n    <text x="{x:.1f}" y="{y + 8:.1f}" class="label">{parts[1]}</text>'
         else:
             svg_content += f'\n    <text x="{x:.1f}" y="{y + 3:.1f}" class="label">{adapter}</text>'
-        
+
         # External connections
         if adapter in external_connections:
             external = external_connections[adapter]
             ext_angle = angle
             ext_x = center_x + (hex_radius + 100) * math.cos(ext_angle)
             ext_y = center_y + (hex_radius + 100) * math.sin(ext_angle)
-            
+
             # Bond to external
             svg_content += f'\n    <line x1="{x:.1f}" y1="{y:.1f}" x2="{ext_x:.1f}" y2="{ext_y:.1f}" class="bond"/>'
-            
+
             # External system
             svg_content += f'\n    <circle cx="{ext_x:.1f}" cy="{ext_y:.1f}" r="28" class="external"/>'
-            
+
             # External labels
             if len(external) > 8:
-                parts = external.split('_')
+                parts = external.split("_")
                 svg_content += f'\n    <text x="{ext_x:.1f}" y="{ext_y - 5:.1f}" class="label">{parts[0]}</text>'
                 if len(parts) > 1:
                     svg_content += f'\n    <text x="{ext_x:.1f}" y="{ext_y + 8:.1f}" class="label">{parts[1]}</text>'
             else:
                 svg_content += f'\n    <text x="{ext_x:.1f}" y="{ext_y + 3:.1f}" class="label">{external}</text>'
-    
+
     # Add molecular statistics
     stats_y = height - 120
     svg_content += f'''
@@ -216,7 +229,7 @@ def generate_advanced_honeyprint():
     <text x="30" y="{stats_y + 65}" class="stats">Bond Energy: {bond_energy:.1f} kJ/mol</text>
     <text x="30" y="{stats_y + 80}" class="stats">Atoms: {len(adapters) + 1} | Bonds: {len(adapters) * 2}</text>
     '''
-    
+
     # Add synthesis info
     synthesis_y = height - 120
     svg_content += f'''
@@ -225,9 +238,9 @@ def generate_advanced_honeyprint():
     <text x="{width - 210}" y="{synthesis_y + 35}" class="stats">Catalyst: Royal Jelly</text>
     <text x="{width - 210}" y="{synthesis_y + 50}" class="stats">Temperature: 310K</text>
     <text x="{width - 210}" y="{synthesis_y + 65}" class="stats">Pattern: Hexagonal Core</text>
-    <text x="{width - 210}" y="{synthesis_y + 80}" class="stats">Generated: {datetime.now().strftime('%H:%M:%S')}</text>
+    <text x="{width - 210}" y="{synthesis_y + 80}" class="stats">Generated: {datetime.now().strftime("%H:%M:%S")}</text>
     '''
-    
+
     # Add legend
     legend_x = 20
     legend_y = 100
@@ -242,109 +255,113 @@ def generate_advanced_honeyprint():
     <circle cx="{legend_x + 20}" cy="{legend_y + 62}" r="8" class="external"/>
     <text x="{legend_x + 35}" y="{legend_y + 67}" class="stats">External Systems</text>
     '''
-    
-    svg_content += '\n</svg>'
-    
+
+    svg_content += "\n</svg>"
+
     return svg_content, {
-        'component_name': component_name,
-        'molecular_formula': molecular_formula,
-        'stability_score': stability_score,
-        'bond_energy': bond_energy,
-        'atom_count': len(adapters) + 1,
-        'bond_count': len(adapters) * 2,
-        'adapters': adapters,
-        'external_connections': external_connections
+        "component_name": component_name,
+        "molecular_formula": molecular_formula,
+        "stability_score": stability_score,
+        "bond_energy": bond_energy,
+        "atom_count": len(adapters) + 1,
+        "bond_count": len(adapters) * 2,
+        "adapters": adapters,
+        "external_connections": external_connections,
     }
+
 
 def generate_simple_reaction_demo():
     """Demonstrate a simple chemical reaction"""
-    
+
     reactions = {
         "hexagonal_formation": {
             "reactants": ["A", "C", "C", "C", "C", "C", "C"],
             "products": ["HexCore(A1C6)"],
             "catalyst": "royal_jelly",
             "energy_released": 120.5,
-            "description": "Forms stable aromatic hexagonal architecture"
+            "description": "Forms stable aromatic hexagonal architecture",
         },
         "microservice_synthesis": {
             "reactants": ["A", "T", "T", "C", "C"],
             "products": ["Microservice(A1T2C2)"],
             "catalyst": "genesis_template",
             "energy_released": 85.0,
-            "description": "Creates lightweight service component"
-        }
+            "description": "Creates lightweight service component",
+        },
     }
-    
+
     return reactions
+
 
 def main():
     """Main demonstration function"""
-    
+
     print_banner("MOLECULAR ARCHITECTURE DEMONSTRATION", "🧬")
     print("Growing beautiful software molecules using chemistry principles!")
-    
+
     # Step 1: System Overview
     print_banner("Phase 1: Molecular System Overview", "🔬")
-    
+
     print("🧪 Molecular Chemistry Components:")
     print("   • Honeyprint Generator - Beautiful SVG molecular visualizations")
-    print("   • Reaction Engine - Chemical synthesis of components") 
+    print("   • Reaction Engine - Chemical synthesis of components")
     print("   • Stability Analyzer - Valence bond analysis")
     print("   • Chemical Registry - Component database")
     print("   • Queen Bee Orchestrator - Master coordinator")
-    
+
     # Step 2: Generate Advanced Honeyprint
     print_banner("Phase 2: Molecular Synthesis & Visualization", "🐝")
-    
+
     print("🎨 Synthesizing advanced molecular architecture...")
     svg_content, molecule_data = generate_advanced_honeyprint()
-    
+
     # Save the beautiful visualization
     output_file = "beautiful_molecule.svg"
-    with open(output_file, 'w') as f:
+    with open(output_file, "w") as f:
         f.write(svg_content)
-    
+
     print("✅ Molecular synthesis complete!")
-    print_result("Component Name", molecule_data['component_name'])
-    print_result("Molecular Formula", molecule_data['molecular_formula'])
-    print_result("Stability Score", f"{molecule_data['stability_score']}", "/100 (Aromatic)")
+    print_result("Component Name", molecule_data["component_name"])
+    print_result("Molecular Formula", molecule_data["molecular_formula"])
+    print_result(
+        "Stability Score", f"{molecule_data['stability_score']}", "/100 (Aromatic)"
+    )
     print_result("Bond Energy", f"{molecule_data['bond_energy']:.1f}", " kJ/mol")
-    print_result("Atom Count", molecule_data['atom_count'])
-    print_result("Bond Count", molecule_data['bond_count'])
+    print_result("Atom Count", molecule_data["atom_count"])
+    print_result("Bond Count", molecule_data["bond_count"])
     print_result("Visualization", output_file)
-    
+
     # Step 3: Chemical Reactions
     print_banner("Phase 3: Chemical Reaction Analysis", "⚗️")
-    
+
     reactions = generate_simple_reaction_demo()
-    
+
     print("🧪 Available Chemical Reactions:")
     for name, reaction in reactions.items():
         print(f"\n🔹 {name.replace('_', ' ').title()}:")
-        reactants_str = " + ".join(reaction['reactants'])
-        products_str = " + ".join(reaction['products'])
+        reactants_str = " + ".join(reaction["reactants"])
+        products_str = " + ".join(reaction["products"])
         print(f"   {reactants_str} --{reaction['catalyst']}--> {products_str}")
         print(f"   Energy Released: {reaction['energy_released']} kJ/mol")
         print(f"   Description: {reaction['description']}")
-    
+
     # Step 4: Create molecular documentation
     print_banner("Phase 4: Molecular Documentation", "📚")
-    
-    doc_content = f"""# {molecule_data['component_name']} - Molecular Architecture Report
+
+    doc_content = f"""# {molecule_data["component_name"]} - Molecular Architecture Report
 
 ## 🧬 Molecular Structure Analysis
 
 ### Chemical Properties
-- **Molecular Formula**: `{molecule_data['molecular_formula']}`
+- **Molecular Formula**: `{molecule_data["molecular_formula"]}`
 - **Structure Type**: Aromatic Hexagonal (Benzene-inspired)
 - **Stability Classification**: Aromatic (Extra Stable)
-- **Synthesis Date**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}
+- **Synthesis Date**: {datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")}
 
 ### Quantitative Analysis
-- **Stability Score**: {molecule_data['stability_score']}/100
-- **Bond Energy**: {molecule_data['bond_energy']:.1f} kJ/mol
-- **Atomic Composition**: {molecule_data['atom_count']} atoms, {molecule_data['bond_count']} bonds
+- **Stability Score**: {molecule_data["stability_score"]}/100
+- **Bond Energy**: {molecule_data["bond_energy"]:.1f} kJ/mol
+- **Atomic Composition**: {molecule_data["atom_count"]} atoms, {molecule_data["bond_count"]} bonds
 - **Decomposition Risk**: <5% (Aromatic stability)
 
 ## 🎨 Molecular Visualization
@@ -359,10 +376,10 @@ def main():
 The central domain logic, analogous to the carbon ring in benzene.
 
 ### Connector Adapters (C)
-{chr(10).join(f'- **{adapter}**: Primary interface adapter' for adapter in molecule_data['adapters'])}
+{chr(10).join(f"- **{adapter}**: Primary interface adapter" for adapter in molecule_data["adapters"])}
 
 ### External Systems
-{chr(10).join(f'- **{ext}**: Connected via {adapter}' for adapter, ext in molecule_data['external_connections'].items())}
+{chr(10).join(f"- **{ext}**: Connected via {adapter}" for adapter, ext in molecule_data["external_connections"].items())}
 
 ## ⚗️ Synthesis Process
 
@@ -399,7 +416,7 @@ Based on molecular analysis:
 
 This molecular architecture is **production-ready** with:
 
-- High stability score ({molecule_data['stability_score']}/100)
+- High stability score ({molecule_data["stability_score"]}/100)
 - Low decomposition risk
 - Proven aromatic pattern
 - Comprehensive external connectivity
@@ -409,38 +426,41 @@ This molecular architecture is **production-ready** with:
 *Generated by Molecular Architecture System* 🧪🐝
 *Based on benzene chemistry principles applied to software architecture*
 """
-    
+
     # Save documentation
-    with open("molecular_analysis.md", 'w') as f:
+    with open("molecular_analysis.md", "w") as f:
         f.write(doc_content)
-    
+
     print("✅ Documentation generated successfully!")
     print("   📄 molecular_analysis.md - Complete molecular analysis")
-    
+
     # Step 5: Final Summary
     print_banner("🎉 MOLECULAR SYNTHESIS COMPLETE!", "✨")
-    
+
     print("🧪 Successfully demonstrated molecular architecture system!")
     print("\n📁 Generated Files:")
     print("   🎨 beautiful_molecule.svg - Stunning molecular visualization")
     print("   📚 molecular_analysis.md - Complete scientific analysis")
-    
+
     print("\n🔬 Molecular Properties:")
     print(f"   Formula: {molecule_data['molecular_formula']}")
     print(f"   Stability: {molecule_data['stability_score']}/100 (Aromatic)")
     print(f"   Bond Energy: {molecule_data['bond_energy']:.1f} kJ/mol")
-    print(f"   Architecture: Hexagonal Core with {len(molecule_data['adapters'])} adapters")
-    
+    print(
+        f"   Architecture: Hexagonal Core with {len(molecule_data['adapters'])} adapters"
+    )
+
     print("\n🚀 Next Steps:")
     print("   • Open beautiful_molecule.svg in your browser to see the molecule")
     print("   • Read molecular_analysis.md for complete scientific analysis")
     print("   • Experiment with different molecular formulas and structures")
-    
+
     print("\n🧬 Key Innovation:")
     print("   This is the world's first software architecture visualization")
     print("   based on actual molecular chemistry principles!")
-    
+
     print("\n✨ The future of architecture is truly molecular! 🧪🐝")
+
 
 if __name__ == "__main__":
     main()

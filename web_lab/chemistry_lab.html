@@ -20,7 +20,7 @@
         
         .lab-container {
             display: grid;
-            grid-template-columns: 1fr 2fr 1fr;
+            grid-template-columns: 1fr 2fr 1fr 1fr;
             grid-template-rows: auto 1fr auto;
             height: 100vh;
             gap: 20px;
@@ -293,6 +293,227 @@
             color: #bdc3c7;
             font-size: 0.9em;
         }
+        
+        .molecule-registry {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            max-height: 100%;
+            overflow: hidden;
+        }
+        
+        .molecule-registry h3 {
+            color: #e67e22;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .registry-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .registry-search {
+            flex: 1;
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid #34495e;
+            border-radius: 5px;
+            color: white;
+            font-family: inherit;
+        }
+        
+        .registry-filter {
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid #34495e;
+            border-radius: 5px;
+            color: white;
+            font-family: inherit;
+        }
+        
+        .molecules-container {
+            flex: 1;
+            overflow-y: auto;
+            max-height: calc(100% - 120px);
+        }
+        
+        .molecule-card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid #3498db;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .molecule-card:hover {
+            background: rgba(0, 0, 0, 0.4);
+            transform: translateX(5px);
+        }
+        
+        .molecule-visual {
+            flex-shrink: 0;
+            width: 80px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .molecule-visual svg {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+        }
+        
+        .molecule-visual-placeholder {
+            color: #7f8c8d;
+            font-size: 0.7em;
+            text-align: center;
+            line-height: 1.2;
+        }
+        
+        .molecule-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .molecule-preview-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .molecule-preview-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 80vw;
+            max-height: 80vh;
+            overflow: auto;
+            position: relative;
+        }
+        
+        .molecule-preview-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .molecule-preview-close:hover {
+            color: #e74c3c;
+        }
+        
+        .molecule-actions {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+        
+        .molecule-actions:hover {
+            background: rgba(52, 152, 219, 0.6);
+            transform: scale(1.1);
+        }
+        
+        .molecule-card.aromatic {
+            border-left-color: #f1c40f;
+        }
+        
+        .molecule-card.stable {
+            border-left-color: #2ecc71;
+        }
+        
+        .molecule-card.experimental {
+            border-left-color: #e67e22;
+        }
+        
+        .molecule-card.deprecated {
+            border-left-color: #95a5a6;
+        }
+        
+        .molecule-card.radioactive {
+            border-left-color: #e74c3c;
+        }
+        
+        .molecule-name {
+            font-weight: bold;
+            color: #ecf0f1;
+            margin-bottom: 4px;
+        }
+        
+        .molecule-formula {
+            color: #f1c40f;
+            font-size: 0.9em;
+            margin-bottom: 4px;
+        }
+        
+        .molecule-stability {
+            font-size: 0.8em;
+            color: #bdc3c7;
+            text-transform: capitalize;
+        }
+        
+        .molecule-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.7em;
+            color: #7f8c8d;
+            margin-top: 8px;
+        }
+        
+        .loading-indicator {
+            text-align: center;
+            color: #3498db;
+            padding: 20px;
+        }
+        
+        .registry-stats {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            padding: 8px;
+            margin-top: 10px;
+            font-size: 0.8em;
+            color: #bdc3c7;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -369,6 +590,32 @@
             </div>
         </div>
         
+        <div class="molecule-registry">
+            <h3>🧬 Molecule Registry</h3>
+            
+            <div class="registry-controls">
+                <input type="text" class="registry-search" id="moleculeSearch" placeholder="Search molecules..." onkeyup="filterMolecules()">
+                <select class="registry-filter" id="stabilityFilter" onchange="filterMolecules()">
+                    <option value="">All Stability</option>
+                    <option value="aromatic">Aromatic</option>
+                    <option value="stable">Stable</option>
+                    <option value="experimental">Experimental</option>
+                    <option value="deprecated">Deprecated</option>
+                    <option value="radioactive">Radioactive</option>
+                </select>
+            </div>
+            
+            <div class="molecules-container" id="moleculesContainer">
+                <div class="loading-indicator" id="loadingIndicator">
+                    🔄 Loading registered molecules...
+                </div>
+            </div>
+            
+            <div class="registry-stats" id="registryStats">
+                Total molecules: <span id="totalCount">0</span>
+            </div>
+        </div>
+        
         <div class="results-panel">
             <h3>📊 Analysis Results</h3>
             
@@ -404,11 +651,23 @@
         </footer>
     </div>
 
+    <!-- Molecule Preview Modal -->
+    <div class="molecule-preview-modal" id="moleculePreviewModal">
+        <div class="molecule-preview-content">
+            <button class="molecule-preview-close" onclick="closeMoleculePreview()">&times;</button>
+            <div id="moleculePreviewContent">
+                <!-- SVG content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
     <script>
         let selectedElements = [];
         let molecules = [];
         let bonds = [];
         let reactionEnergy = 0;
+        let registeredMolecules = [];
+        let filteredMolecules = [];
         
         const reactions = {
             hexagonal: {
@@ -729,8 +988,227 @@
             }
         }
         
+        // Molecule Registry Functions
+        async function loadRegisteredMolecules() {
+            try {
+                const response = await fetch('/api/molecules?limit=50');
+                const data = await response.json();
+                
+                registeredMolecules = data.molecules;
+                filteredMolecules = [...registeredMolecules];
+                
+                displayMolecules();
+                updateRegistryStats(data.total_count);
+                
+                console.log('📊 Loaded', registeredMolecules.length, 'registered molecules');
+            } catch (error) {
+                console.error('❌ Failed to load molecules:', error);
+                document.getElementById('loadingIndicator').innerHTML = '❌ Failed to load molecules';
+            }
+        }
+        
+        function displayMolecules() {
+            const container = document.getElementById('moleculesContainer');
+            const loading = document.getElementById('loadingIndicator');
+            
+            if (loading) {
+                loading.style.display = 'none';
+            }
+            
+            if (filteredMolecules.length === 0) {
+                container.innerHTML = '<div class="loading-indicator">🔍 No molecules found</div>';
+                return;
+            }
+            
+            const moleculesHTML = filteredMolecules.map(molecule => `
+                <div class="molecule-card ${molecule.stability}" onclick="loadMoleculeIntoWorkspace('${molecule.name}', '${molecule.molecular_formula}')">
+                    <div class="molecule-visual" id="visual-${molecule.name}">
+                        <div class="molecule-visual-placeholder">Loading...</div>
+                    </div>
+                    <div class="molecule-info">
+                        <div class="molecule-name">${molecule.name}</div>
+                        <div class="molecule-formula">${molecule.molecular_formula}</div>
+                        <div class="molecule-stability">${molecule.stability}</div>
+                        <div class="molecule-meta">
+                            <span>${molecule.bond_energy.toFixed(1)} kJ/mol</span>
+                            <span>Used ${molecule.usage_count} times</span>
+                        </div>
+                    </div>
+                    <div class="molecule-actions" onclick="event.stopPropagation(); showMoleculePreview('${molecule.name}')" title="View full SVG">
+                        🔍
+                    </div>
+                </div>
+            `).join('');
+            
+            container.innerHTML = moleculesHTML;
+            
+            // Load SVG thumbnails for each molecule
+            filteredMolecules.forEach(molecule => {
+                loadMoleculeSvgThumbnail(molecule.name);
+            });
+        }
+        
+        function filterMolecules() {
+            const searchTerm = document.getElementById('moleculeSearch').value.toLowerCase();
+            const stabilityFilter = document.getElementById('stabilityFilter').value;
+            
+            filteredMolecules = registeredMolecules.filter(molecule => {
+                const matchesSearch = molecule.name.toLowerCase().includes(searchTerm) ||
+                                    molecule.molecular_formula.toLowerCase().includes(searchTerm);
+                
+                const matchesStability = !stabilityFilter || molecule.stability === stabilityFilter;
+                
+                return matchesSearch && matchesStability;
+            });
+            
+            displayMolecules();
+        }
+        
+        function loadMoleculeIntoWorkspace(name, formula) {
+            // Clear current workspace
+            clearWorkspace();
+            
+            // Parse formula and add elements
+            const elements = parseFormula(formula);
+            elements.forEach(element => {
+                if (['A', 'T', 'C', 'G'].includes(element)) {
+                    selectElement(element);
+                }
+            });
+            
+            addResult(`🧬 Loaded molecule: ${name} (${formula})`, 'success');
+            
+            // Update reaction equation
+            const equation = document.getElementById('reactionEquation');
+            equation.innerHTML = `Loaded: <strong>${name}</strong> → <span style="color: #2ecc71;">${formula}</span>`;
+        }
+        
+        function parseFormula(formula) {
+            // Simple formula parser for ATCG elements
+            const elements = [];
+            const regex = /([ATCG])(\d*)/g;
+            let match;
+            
+            while ((match = regex.exec(formula)) !== null) {
+                const element = match[1];
+                const count = parseInt(match[2]) || 1;
+                
+                for (let i = 0; i < count; i++) {
+                    elements.push(element);
+                }
+            }
+            
+            return elements;
+        }
+        
+        function updateRegistryStats(totalCount) {
+            document.getElementById('totalCount').textContent = totalCount;
+        }
+        
+        // SVG Loading Functions
+        async function loadMoleculeSvgThumbnail(moleculeName) {
+            try {
+                const visualContainer = document.getElementById(`visual-${moleculeName}`);
+                if (!visualContainer) return;
+                
+                const response = await fetch(`/api/molecules/${moleculeName}/svg`);
+                
+                if (response.ok) {
+                    const svgContent = await response.text();
+                    // Create scaled-down version for thumbnail
+                    const scaledSvg = scaleSvgForThumbnail(svgContent);
+                    visualContainer.innerHTML = scaledSvg;
+                } else {
+                    visualContainer.innerHTML = '<div class="molecule-visual-placeholder">🧬<br>No Visual</div>';
+                }
+            } catch (error) {
+                console.error(`Error loading SVG for ${moleculeName}:`, error);
+                const visualContainer = document.getElementById(`visual-${moleculeName}`);
+                if (visualContainer) {
+                    visualContainer.innerHTML = '<div class="molecule-visual-placeholder">❌<br>Error</div>';
+                }
+            }
+        }
+        
+        function scaleSvgForThumbnail(svgContent) {
+            // Extract viewBox or set default size
+            const parser = new DOMParser();
+            const svgDoc = parser.parseFromString(svgContent, 'image/svg+xml');
+            const svgElement = svgDoc.querySelector('svg');
+            
+            if (svgElement) {
+                // Remove fixed width/height and ensure it scales properly
+                svgElement.removeAttribute('width');
+                svgElement.removeAttribute('height');
+                svgElement.setAttribute('viewBox', svgElement.getAttribute('viewBox') || '0 0 600 500');
+                svgElement.style.width = '100%';
+                svgElement.style.height = '100%';
+                
+                return svgElement.outerHTML;
+            }
+            
+            return svgContent;
+        }
+        
+        async function showMoleculePreview(moleculeName) {
+            try {
+                const modal = document.getElementById('moleculePreviewModal');
+                const content = document.getElementById('moleculePreviewContent');
+                
+                // Show loading state
+                content.innerHTML = '<div style="text-align: center; padding: 40px; color: #666;">Loading molecular structure...</div>';
+                modal.style.display = 'flex';
+                
+                const response = await fetch(`/api/molecules/${moleculeName}/svg`);
+                
+                if (response.ok) {
+                    const svgContent = await response.text();
+                    content.innerHTML = `
+                        <button class="molecule-preview-close" onclick="closeMoleculePreview()">&times;</button>
+                        <h3 style="text-align: center; margin-bottom: 20px; color: #333;">${moleculeName} - Molecular Structure</h3>
+                        <div style="text-align: center;">
+                            ${svgContent}
+                        </div>
+                    `;
+                } else {
+                    content.innerHTML = `
+                        <button class="molecule-preview-close" onclick="closeMoleculePreview()">&times;</button>
+                        <div style="text-align: center; padding: 40px; color: #666;">
+                            <h3>${moleculeName}</h3>
+                            <p>No molecular visualization available</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error(`Error loading SVG preview for ${moleculeName}:`, error);
+                const content = document.getElementById('moleculePreviewContent');
+                content.innerHTML = `
+                    <button class="molecule-preview-close" onclick="closeMoleculePreview()">&times;</button>
+                    <div style="text-align: center; padding: 40px; color: #e74c3c;">
+                        <h3>Error Loading ${moleculeName}</h3>
+                        <p>Failed to load molecular visualization</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function closeMoleculePreview() {
+            const modal = document.getElementById('moleculePreviewModal');
+            modal.style.display = 'none';
+        }
+        
+        // Close modal when clicking outside
+        document.getElementById('moleculePreviewModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeMoleculePreview();
+            }
+        });
+        
         // Initialize
         addResult('🧪 Chemistry Lab initialized. Ready for molecular experiments!', 'success');
+        
+        // Load registered molecules on startup
+        loadRegisteredMolecules();
     </script>
 </body>
 </html>

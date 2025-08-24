@@ -4,13 +4,18 @@ import os
 from typing import List
 
 # This would be a real, importable class
-from ..transformations.code_generator import CodeGenerated
+try:
+    from ..transformations.code_generator import CodeGenerated
+except ImportError:
+    from transformations.code_generator import CodeGenerated
+
 
 class FileWriterConnector:
     """
     This connector's job is to take generated code (from a CodeGenerated event)
     and perform the infrastructure task of writing it to the file system.
     """
+
     def __init__(self):
         print("  - FileWriterConnector initialized.")
 
@@ -34,7 +39,7 @@ class FileWriterConnector:
         for event in events:
             file_path = os.path.join(event.component_path, event.file_name)
             print(f"    - Writing file: {file_path}")
-            with open(file_path, 'w') as f:
+            with open(file_path, "w") as f:
                 f.write(event.file_content)
 
         print(f"\nSuccess! New codon hatched at: {component_path}")

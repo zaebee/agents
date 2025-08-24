@@ -3,17 +3,21 @@
 from dataclasses import dataclass, field
 from typing import Dict, List, Any
 
+
 # This would be a real, importable class from our dna-core library in a mature system
 @dataclass
 class HatchCommand:
     """A command to hatch a new component."""
+
     codon_type: str
     component_name: str
+
 
 # This would also be a real, importable event class
 @dataclass
 class ComponentHatchingInitiated:
     """An event produced when a hatch command is successfully validated."""
+
     component_name: str
     component_path: str
     codon_type: str
@@ -29,10 +33,10 @@ class CompilerAggregate:
 
     # The "Genetic Map" defining which templates belong to which codon.
     CODON_BLUEPRINTS: Dict[str, List[str]] = {
-        'command': ['C.py.tpl', 'A.py.tpl', 'G.py.tpl', 'command.py.tpl'],
-        'query':   ['C.py.tpl', 'T.py.tpl', 'query.py.tpl', 'dto.py.tpl'],
-        'event':   ['G.py.tpl', 'C.py.tpl', 'A.py.tpl', 'command.py.tpl'],
-        'immune':  ['C.py.tpl', 'immune.py.tpl', 'command.py.tpl']
+        "command": ["C.py.tpl", "A.py.tpl", "G.py.tpl", "command.py.tpl"],
+        "query": ["C.py.tpl", "T.py.tpl", "query.py.tpl", "dto.py.tpl"],
+        "event": ["G.py.tpl", "C.py.tpl", "A.py.tpl", "command.py.tpl"],
+        "immune": ["C.py.tpl", "immune.py.tpl", "command.py.tpl"],
     }
 
     def __init__(self):
@@ -60,7 +64,7 @@ class CompilerAggregate:
             component_name=command.component_name,
             component_path=f"{hive_root}/{command.component_name}",
             codon_type=command.codon_type,
-            templates=templates_to_use
+            templates=templates_to_use,
         )
 
         # 3. Add to pending events

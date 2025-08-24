@@ -1,17 +1,20 @@
 # The "Input Sense" of our Genesis Engine - The CLI Connector
 
-import click
 from typing import Callable
-from dataclasses import dataclass
 
 # This would be a real, importable class
-from ..aggregates.compiler_aggregate import HatchCommand
+try:
+    from ..aggregates.compiler_aggregate import HatchCommand
+except ImportError:
+    from aggregates.compiler_aggregate import HatchCommand
+
 
 class CliConnector:
     """
     This connector's job is to translate user input from the command line
     into domain Commands for the aggregate to handle.
     """
+
     def __init__(self, command_handler: Callable):
         self._command_handler = command_handler
         print("  - CliConnector initialized.")
@@ -21,10 +24,7 @@ class CliConnector:
         print(f"\n> CLI Connector received 'hatch {codon_type}' for '{component_name}'")
 
         # 1. Translate to command
-        command = HatchCommand(
-            codon_type=codon_type,
-            component_name=component_name
-        )
+        command = HatchCommand(codon_type=codon_type, component_name=component_name)
 
         # 2. Pass to handler (in our case, the aggregate)
         self._command_handler(command)
