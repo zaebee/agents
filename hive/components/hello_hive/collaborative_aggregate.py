@@ -8,12 +8,10 @@ It shows how human intuition (Jules enthusiasm), critical thinking (Humean skept
 and empirical measurement can work together to validate architectural decisions.
 """
 
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 from datetime import datetime, timezone
 from dna_core.pollen_protocol_pb2 import PollenEnvelope
 from dna_core.royal_jelly import (
-    SacredAggregate,
-    SacredCommand,
     SacredCodonType,
     create_sacred_command,
     CollaborativeValidator,
@@ -21,7 +19,6 @@ from dna_core.royal_jelly import (
     create_validation_context,
     ValidationSeverity,
 )
-from .command import HelloHiveCommand
 from .sacred_aggregate import HelloHiveSacredAggregate
 
 
@@ -343,7 +340,7 @@ class HelloHiveCollaborativeAggregate(HelloHiveSacredAggregate):
         print(f"   Confidence Score: {validation_result.confidence_score:.2f}")
         print(f"   Consensus Level: {validation_result.consensus_level:.2f}")
 
-        print(f"\n   Individual Validator Feedback:")
+        print("\n   Individual Validator Feedback:")
         for feedback in validation_result.feedback_list:
             emoji = {"jules": "🎉", "humean_skeptic": "🤔", "empirical_analyzer": "📊"}
             validator_emoji = emoji.get(feedback.validator_source, "🔍")
@@ -364,7 +361,7 @@ class HelloHiveCollaborativeAggregate(HelloHiveSacredAggregate):
                 print(f"       Tone: {feedback.emotional_tone}")
 
         if validation_result.recommendations:
-            print(f"\n   📝 Collaborative Recommendations:")
+            print("\n   📝 Collaborative Recommendations:")
             for rec in validation_result.recommendations[:3]:  # Show top 3
                 print(f"     • {rec}")
 
@@ -544,7 +541,7 @@ def demonstrate_collaborative_protocols():
         print(f"   ❌ Validation failed: {e}")
 
     # 2. Demonstrate empirical query validation
-    print(f"\n2. 📊 Empirical Query Validation")
+    print("\n2. 📊 Empirical Query Validation")
     query_result = collab_aggregate.query_with_empirical_validation(
         {
             "query_type": "greeting_analytics",
@@ -557,7 +554,7 @@ def demonstrate_collaborative_protocols():
     )
 
     # 3. Demonstrate consensus-building event reaction
-    print(f"\n3. ⚖️ Consensus Building for Event Reactions")
+    print("\n3. ⚖️ Consensus Building for Event Reactions")
     # Create mock external event
     mock_event = collab_aggregate._create_event(
         "ExternalCollaborationRequest",
@@ -571,7 +568,7 @@ def demonstrate_collaborative_protocols():
     print(f"   Generated {len(reaction_events)} consensus-based reaction events")
 
     # 4. Show collaboration health report
-    print(f"\n4. 📈 Collaboration Health Report")
+    print("\n4. 📈 Collaboration Health Report")
     health_report = collab_aggregate.get_collaboration_health_report()
     print(
         f"   Bio/Sci AI/Humean Alignment: {health_report['bio_sci_ai_humean_alignment']:.2f}"
@@ -587,12 +584,12 @@ def demonstrate_collaborative_protocols():
     )
 
     # 5. Show recommendations
-    print(f"\n5. 💡 Collaborative Recommendations:")
+    print("\n5. 💡 Collaborative Recommendations:")
     recommendations = health_report["recommendations"]
     for i, rec in enumerate(recommendations[:3], 1):
         print(f"   {i}. {rec}")
 
-    print(f"\n🎉 Collaborative Protocol Demonstration Complete!")
+    print("\n🎉 Collaborative Protocol Demonstration Complete!")
     print(f"   Sacred Compliance: {collab_aggregate._calculate_compliance_score():.2f}")
     print(f"   Total Validations: {len(collab_aggregate.validation_history)}")
 

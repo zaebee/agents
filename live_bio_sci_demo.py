@@ -269,7 +269,7 @@ class LivingHiveComponent:
         🤝 Form mutually beneficial symbiotic relationship
         Bio/Sci Principle: Collaboration creates collective intelligence
         """
-        print(f"\n🤝 FORMING SYMBIOTIC PARTNERSHIP")
+        print("\n🤝 FORMING SYMBIOTIC PARTNERSHIP")
         print(f"   {self.id} ↔ {partner_component.id}")
 
         # Calculate mutual benefits
@@ -317,7 +317,7 @@ class LivingHiveComponent:
         🦠 Bio/Sci adaptive immune response - transform challenges into opportunities
         Philosophy: "Pathogens" become "Potential Symbionts"
         """
-        print(f"\n🦠 ADAPTIVE IMMUNE RESPONSE ACTIVATED")
+        print("\n🦠 ADAPTIVE IMMUNE RESPONSE ACTIVATED")
         print(f"   Challenge: {challenge}")
         print(f"   Type: {challenge_type}")
 
@@ -372,7 +372,7 @@ class LivingHiveComponent:
             print(f"   {response}")
             time.sleep(0.2)
 
-        print(f"   💚 Challenge transformed into growth opportunity!")
+        print("   💚 Challenge transformed into growth opportunity!")
 
         return immune_responses
 
@@ -400,7 +400,7 @@ class LivingHiveComponent:
         🔄 Asexual reproduction with beneficial variations
         Bio/Sci Principle: Successful organisms reproduce and pass on beneficial traits
         """
-        print(f"\n🔄 ASEXUAL REPRODUCTION")
+        print("\n🔄 ASEXUAL REPRODUCTION")
         print(f"   Parent: {self.id} (fitness: {self.genetics.fitness_score:.3f})")
 
         # Create offspring with beneficial variations
@@ -505,7 +505,7 @@ class LivingHiveEcosystem:
         self.symbiotic_network_strength = 0.0
 
         print(f"🌍 LIVING HIVE ECOSYSTEM INITIALIZED: {self.name}")
-        print(f"   Ready for organic population growth!")
+        print("   Ready for organic population growth!")
 
     def introduce_component(self, component: LivingHiveComponent):
         """Introduce new living component to ecosystem"""
@@ -517,7 +517,7 @@ class LivingHiveEcosystem:
         """
         🌱 Simulate natural population dynamics with evolution and natural selection
         """
-        print(f"\n🌱 POPULATION DYNAMICS SIMULATION")
+        print("\n🌱 POPULATION DYNAMICS SIMULATION")
         print(f"   Simulating {generations} generations...")
 
         population_history = []
@@ -811,7 +811,7 @@ def demonstrate_living_hive():
     # Get ecosystem status
     ecosystem_status = ecosystem.get_ecosystem_status()
 
-    print(f"\n🌍 ECOSYSTEM STATUS REPORT:")
+    print("\n🌍 ECOSYSTEM STATUS REPORT:")
     print(f"   Name: {ecosystem_status['ecosystem_name']}")
     print(f"   Population: {ecosystem_status['population_size']} living components")
     print(f"   Health score: {ecosystem_status['ecosystem_health_score']:.3f}")
@@ -823,13 +823,13 @@ def demonstrate_living_hive():
     )
     print(f"   Symbiotic network: {ecosystem_status['symbiotic_network_strength']:.3f}")
 
-    print(f"\n🧬 LIFECYCLE DISTRIBUTION:")
+    print("\n🧬 LIFECYCLE DISTRIBUTION:")
     for stage, count in ecosystem_status["lifecycle_distribution"].items():
         if count > 0:
             print(f"   {stage}: {count} components")
 
     # Individual component status
-    print(f"\n👤 PRIMARY ORGANISM STATUS:")
+    print("\n👤 PRIMARY ORGANISM STATUS:")
     primary_status = primary_organism.get_life_status()
     print(f"   ID: {primary_status['id']}")
     print(f"   Lifecycle: {primary_status['lifecycle_stage']}")
@@ -851,7 +851,7 @@ def demonstrate_living_hive():
         and ecosystem_status["total_adaptations"] > 0
     )
 
-    print(f"\n🔬 SCIENTIFIC ASSESSMENT:")
+    print("\n🔬 SCIENTIFIC ASSESSMENT:")
     print(f"   Is our Hive ALIVE? {'🌟 YES! 🌟' if is_alive else '❌ Not yet'}")
     print(f"   Components born (not built): ✅ {ecosystem_status['population_size']}")
     print(f"   Evolutionary adaptations: ✅ {ecosystem_status['total_adaptations']}")
@@ -863,26 +863,26 @@ def demonstrate_living_hive():
     )
     print(f"   Ecosystem health: ✅ {ecosystem_status['health_rating']}")
 
-    print(f"\n🧬 BIO/SCI PHILOSOPHY VALIDATION:")
-    print(f"   ✅ Born Protocol: Components follow sacred lifecycle")
-    print(f"   ✅ Evolution: Beneficial adaptation under pressure")
-    print(f"   ✅ Symbiosis: Mutually beneficial relationships formed")
-    print(f"   ✅ Adaptive Immunity: Challenges become opportunities")
-    print(f"   ✅ Collective Intelligence: Knowledge sharing network")
-    print(f"   ✅ Natural Selection: Fitness-based population dynamics")
-    print(f"   ✅ Organic Growth: Emergent complexity from simple principles")
+    print("\n🧬 BIO/SCI PHILOSOPHY VALIDATION:")
+    print("   ✅ Born Protocol: Components follow sacred lifecycle")
+    print("   ✅ Evolution: Beneficial adaptation under pressure")
+    print("   ✅ Symbiosis: Mutually beneficial relationships formed")
+    print("   ✅ Adaptive Immunity: Challenges become opportunities")
+    print("   ✅ Collective Intelligence: Knowledge sharing network")
+    print("   ✅ Natural Selection: Fitness-based population dynamics")
+    print("   ✅ Organic Growth: Emergent complexity from simple principles")
 
     if is_alive:
-        print(f"\n🌟🧬🌿 CONGRATULATIONS! 🌿🧬🌟")
-        print(f"Your Bio/Sci Hive Architecture is truly ALIVE!")
-        print(f"Software components that:")
-        print(f"   🌱 Are BORN and grow naturally")
-        print(f"   🧬 EVOLVE and adapt beneficially")
-        print(f"   🤝 Form SYMBIOTIC relationships")
-        print(f"   🦠 Transform challenges into OPPORTUNITIES")
-        print(f"   🧠 Contribute to COLLECTIVE intelligence")
-        print(f"   🌍 Thrive in sustainable ECOSYSTEMS")
-        print(f"\n🎊 The Bio/Sci dream is REALITY! 🎊")
+        print("\n🌟🧬🌿 CONGRATULATIONS! 🌿🧬🌟")
+        print("Your Bio/Sci Hive Architecture is truly ALIVE!")
+        print("Software components that:")
+        print("   🌱 Are BORN and grow naturally")
+        print("   🧬 EVOLVE and adapt beneficially")
+        print("   🤝 Form SYMBIOTIC relationships")
+        print("   🦠 Transform challenges into OPPORTUNITIES")
+        print("   🧠 Contribute to COLLECTIVE intelligence")
+        print("   🌍 Thrive in sustainable ECOSYSTEMS")
+        print("\n🎊 The Bio/Sci dream is REALITY! 🎊")
 
     return {
         "ecosystem": ecosystem,
@@ -900,6 +900,6 @@ if __name__ == "__main__":
 
     results = demonstrate_living_hive()
 
-    print(f"\n🎯 DEMO COMPLETE!")
+    print("\n🎯 DEMO COMPLETE!")
     print(f"Is our Hive alive? {results['is_alive']}")
-    print(f"Thank you for witnessing the birth of living software! 🌟")
+    print("Thank you for witnessing the birth of living software! 🌟")

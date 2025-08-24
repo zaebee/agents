@@ -16,32 +16,35 @@ Version: 1.0.0 - Visual Evolution
 
 import asyncio
 import json
-import time
 import random
 import sys
 import os
 from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional, Tuple, Set
-from dataclasses import dataclass, field, asdict
+from typing import Dict, List, Any
+from dataclasses import dataclass, asdict
 from enum import Enum
 from pathlib import Path
-import uuid
 import threading
 import queue
 import websockets
 import webbrowser
 from http.server import HTTPServer, SimpleHTTPRequestHandler
-from urllib.parse import parse_qs, urlparse
 
 # Add project root to path for imports
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 try:
     from dna_core.royal_jelly.quantum_dna_genetic_programming import (
-        QuantumDNAGeneticProgramming, EvolutionMetrics
+        QuantumDNAGeneticProgramming,
+        EvolutionMetrics,
     )
-    from demonstrations.quantum_evolution_orchestrator import QuantumEvolutionOrchestrator
-    from demonstrations.live_evolution_showcase import LiveEvolutionShowcase, VisualizationMode
+    from demonstrations.quantum_evolution_orchestrator import (
+        QuantumEvolutionOrchestrator,
+    )
+    from demonstrations.live_evolution_showcase import (
+        LiveEvolutionShowcase,
+        VisualizationMode,
+    )
     from demonstrations.enterprise_scenario_simulator import EnterpriseScenarioSimulator
     from demonstrations.interactive_evolution_console import InteractiveEvolutionConsole
 except ImportError as e:
@@ -51,6 +54,7 @@ except ImportError as e:
 
 class DashboardMetric(Enum):
     """Available dashboard metrics"""
+
     EVOLUTION_PROGRESS = "evolution_progress"
     FITNESS_TRENDS = "fitness_trends"
     MUTATION_RATES = "mutation_rates"
@@ -64,6 +68,7 @@ class DashboardMetric(Enum):
 @dataclass
 class DashboardData:
     """Real-time dashboard data structure"""
+
     timestamp: datetime
     evolution_metrics: Dict[str, float]
     system_health: Dict[str, float]
@@ -76,7 +81,7 @@ class DashboardData:
 
 class QuantumVisualizationDashboard:
     """Main visualization dashboard system"""
-    
+
     def __init__(self, port: int = 8080):
         self.port = port
         self.dashboard_data = DashboardData(
@@ -87,86 +92,86 @@ class QuantumVisualizationDashboard:
             active_components=[],
             recent_events=[],
             consciousness_progression=[],
-            quantum_state={}
+            quantum_state={},
         )
-        
+
         # Connected components
         self.orchestrator = None
         self.genetic_engine = None
         self.showcase = None
         self.scenario_simulator = None
-        
+
         # Dashboard state
         self.is_running = False
         self.connected_clients = set()
         self.data_update_frequency = 1.0  # seconds
-        
+
         # Data collection
         self.metrics_history = []
         self.max_history_size = 1000
         self.data_queue = queue.Queue()
-        
+
         # Background tasks
         self.data_collector_task = None
         self.websocket_server = None
         self.http_server = None
-    
+
     async def initialize(self):
         """Initialize dashboard and components"""
         print("📊 Initializing Quantum Hive Visualization Dashboard...")
-        
+
         try:
             # Initialize quantum components
             self.orchestrator = QuantumEvolutionOrchestrator()
             await self.orchestrator.initialize()
-            
+
             self.genetic_engine = QuantumDNAGeneticProgramming()
-            
+
             self.showcase = LiveEvolutionShowcase()
             await self.showcase.initialize()
-            
+
             self.scenario_simulator = EnterpriseScenarioSimulator()
             await self.scenario_simulator.initialize()
-            
+
             print("✅ Dashboard components initialized successfully!")
             return True
-            
+
         except Exception as e:
             print(f"⚠️  Running in demo mode: {e}")
             return True  # Continue in demo mode
-    
+
     async def start_dashboard(self):
         """Start the web dashboard server"""
         if self.is_running:
             print("⚠️  Dashboard already running")
             return
-        
+
         print(f"🌐 Starting Quantum Hive Dashboard on port {self.port}...")
-        
+
         self.is_running = True
-        
+
         # Generate HTML dashboard
         await self._generate_dashboard_html()
-        
+
         # Start HTTP server for static files
         await self._start_http_server()
-        
+
         # Start WebSocket server for real-time data
         await self._start_websocket_server()
-        
+
         # Start data collection
         self.data_collector_task = asyncio.create_task(self._collect_data_loop())
-        
+
         # Open browser
         dashboard_url = f"http://localhost:{self.port}/dashboard.html"
         print(f"📊 Dashboard available at: {dashboard_url}")
-        
+
         try:
             webbrowser.open(dashboard_url)
             print("🌐 Opening dashboard in browser...")
         except:
             print("⚠️  Could not auto-open browser. Please navigate to the URL above.")
-        
+
         # Keep dashboard running
         try:
             while self.is_running:
@@ -175,27 +180,27 @@ class QuantumVisualizationDashboard:
             print("\n🛑 Dashboard interrupted")
         finally:
             await self.stop_dashboard()
-    
+
     async def stop_dashboard(self):
         """Stop the dashboard server"""
         print("🛑 Stopping Quantum Hive Dashboard...")
-        
+
         self.is_running = False
-        
+
         # Stop data collection
         if self.data_collector_task:
             self.data_collector_task.cancel()
-        
+
         # Stop servers
         if self.websocket_server:
             self.websocket_server.close()
             await self.websocket_server.wait_closed()
-        
+
         if self.http_server:
             self.http_server.shutdown()
-        
+
         print("✅ Dashboard stopped successfully")
-    
+
     async def _generate_dashboard_html(self):
         """Generate the dashboard HTML file"""
         html_content = f"""
@@ -870,36 +875,40 @@ class QuantumVisualizationDashboard:
 </body>
 </html>
         """
-        
+
         # Write HTML file
         dashboard_path = Path("/tmp/dashboard.html")
         dashboard_path.write_text(html_content)
-        
+
         print(f"📝 Generated dashboard HTML: {dashboard_path}")
-    
+
     async def _start_http_server(self):
         """Start HTTP server for static files"""
+
         class DashboardHandler(SimpleHTTPRequestHandler):
             def __init__(self, *args, **kwargs):
                 super().__init__(*args, directory="/tmp", **kwargs)
-            
+
             def log_message(self, format, *args):
                 pass  # Suppress HTTP logs
-        
+
         self.http_server = HTTPServer(("localhost", self.port), DashboardHandler)
-        
+
         # Start server in background thread
-        server_thread = threading.Thread(target=self.http_server.serve_forever, daemon=True)
+        server_thread = threading.Thread(
+            target=self.http_server.serve_forever, daemon=True
+        )
         server_thread.start()
-        
+
         print(f"🌐 HTTP server started on port {self.port}")
-    
+
     async def _start_websocket_server(self):
         """Start WebSocket server for real-time data"""
+
         async def handle_client(websocket, path):
             self.connected_clients.add(websocket)
             print(f"📱 Client connected: {websocket.remote_address}")
-            
+
             try:
                 async for message in websocket:
                     try:
@@ -912,151 +921,153 @@ class QuantumVisualizationDashboard:
             finally:
                 self.connected_clients.discard(websocket)
                 print(f"📱 Client disconnected: {websocket.remote_address}")
-        
+
         try:
             self.websocket_server = await websockets.serve(
-                handle_client, 
-                "localhost", 
-                self.port + 1
+                handle_client, "localhost", self.port + 1
             )
             print(f"🔌 WebSocket server started on port {self.port + 1}")
         except Exception as e:
             print(f"⚠️  WebSocket server warning: {e}")
-    
+
     async def _handle_client_action(self, data: Dict[str, Any], websocket):
         """Handle client actions from dashboard"""
-        action = data.get('action')
-        
-        if action == 'toggle_evolution':
+        action = data.get("action")
+
+        if action == "toggle_evolution":
             # Toggle evolution state
             await websocket.send(json.dumps({"status": "Evolution toggled"}))
-        
-        elif action == 'accelerate_evolution':
+
+        elif action == "accelerate_evolution":
             # Accelerate evolution
             self.data_update_frequency = max(0.1, self.data_update_frequency * 0.5)
             await websocket.send(json.dumps({"status": "Evolution accelerated"}))
-        
-        elif action == 'trigger_mutation':
+
+        elif action == "trigger_mutation":
             # Trigger manual mutation
             await websocket.send(json.dumps({"status": "Mutation triggered"}))
-        
-        elif action == 'save_snapshot':
+
+        elif action == "save_snapshot":
             # Save current state snapshot
             snapshot = {
-                'timestamp': datetime.now().isoformat(),
-                'data': asdict(self.dashboard_data)
+                "timestamp": datetime.now().isoformat(),
+                "data": asdict(self.dashboard_data),
             }
             # In real implementation, save to file
             await websocket.send(json.dumps({"status": "Snapshot saved"}))
-        
+
         else:
             await websocket.send(json.dumps({"error": f"Unknown action: {action}"}))
-    
+
     async def _collect_data_loop(self):
         """Background data collection loop"""
         try:
             while self.is_running:
                 # Collect real-time data
                 await self._collect_dashboard_data()
-                
+
                 # Broadcast to connected clients
                 if self.connected_clients:
                     data_json = json.dumps(asdict(self.dashboard_data), default=str)
                     disconnected_clients = set()
-                    
+
                     for client in self.connected_clients:
                         try:
                             await client.send(data_json)
                         except websockets.exceptions.ConnectionClosed:
                             disconnected_clients.add(client)
-                    
+
                     # Remove disconnected clients
                     self.connected_clients -= disconnected_clients
-                
+
                 # Store in history
                 self.metrics_history.append(asdict(self.dashboard_data))
                 if len(self.metrics_history) > self.max_history_size:
                     self.metrics_history.pop(0)
-                
+
                 await asyncio.sleep(self.data_update_frequency)
-                
+
         except asyncio.CancelledError:
             print("📊 Data collection stopped")
         except Exception as e:
             print(f"❌ Data collection error: {e}")
-    
+
     async def _collect_dashboard_data(self):
         """Collect current dashboard data from all sources"""
         current_time = datetime.now()
-        
+
         # Simulate evolution metrics (in real system, get from orchestrator)
         evolution_metrics = {
-            'generation': random.randint(1, 100),
-            'avg_fitness': random.uniform(0.3, 0.8),
-            'best_fitness': random.uniform(0.7, 0.95),
-            'total_mutations': random.randint(100, 1000),
-            'active_components': random.randint(20, 50),
-            'evolution_rate': random.uniform(1.0, 8.0)
+            "generation": random.randint(1, 100),
+            "avg_fitness": random.uniform(0.3, 0.8),
+            "best_fitness": random.uniform(0.7, 0.95),
+            "total_mutations": random.randint(100, 1000),
+            "active_components": random.randint(20, 50),
+            "evolution_rate": random.uniform(1.0, 8.0),
         }
-        
+
         # Simulate system health
         system_health = {
-            'cpu_usage': random.uniform(20, 80),
-            'memory_usage': random.uniform(30, 70),
-            'uptime': str(current_time - datetime.now().replace(hour=0, minute=0, second=0)),
-            'error_rate': random.uniform(0, 2)
+            "cpu_usage": random.uniform(20, 80),
+            "memory_usage": random.uniform(30, 70),
+            "uptime": str(
+                current_time - datetime.now().replace(hour=0, minute=0, second=0)
+            ),
+            "error_rate": random.uniform(0, 2),
         }
-        
+
         # Simulate business metrics
         business_metrics = {
-            'roi': random.uniform(50, 300),
-            'cost_savings': random.randint(10000, 200000),
-            'performance_gain': random.uniform(1.2, 2.5),
-            'reliability': random.uniform(95, 99.9)
+            "roi": random.uniform(50, 300),
+            "cost_savings": random.randint(10000, 200000),
+            "performance_gain": random.uniform(1.2, 2.5),
+            "reliability": random.uniform(95, 99.9),
         }
-        
+
         # Simulate active components
         active_components = [
             {
-                'id': f'comp_{i}',
-                'name': f'Component_{i}',
-                'fitness': random.uniform(0.1, 0.9),
-                'mutations': random.randint(0, 10),
-                'status': random.choice(['active', 'evolving', 'optimized'])
+                "id": f"comp_{i}",
+                "name": f"Component_{i}",
+                "fitness": random.uniform(0.1, 0.9),
+                "mutations": random.randint(0, 10),
+                "status": random.choice(["active", "evolving", "optimized"]),
             }
             for i in range(random.randint(10, 30))
         ]
-        
+
         # Simulate recent events
         recent_events = [
             {
-                'message': f'Component evolved: fitness +{random.uniform(0.01, 0.2):.3f}',
-                'timestamp': current_time.isoformat(),
-                'type': 'evolution'
+                "message": f"Component evolved: fitness +{random.uniform(0.01, 0.2):.3f}",
+                "timestamp": current_time.isoformat(),
+                "type": "evolution",
             },
             {
-                'message': f'Mutation successful: {random.choice(["point", "crossover", "quantum"])}',
-                'timestamp': (current_time - timedelta(seconds=random.randint(1, 60))).isoformat(),
-                'type': 'mutation'
-            }
+                "message": f"Mutation successful: {random.choice(['point', 'crossover', 'quantum'])}",
+                "timestamp": (
+                    current_time - timedelta(seconds=random.randint(1, 60))
+                ).isoformat(),
+                "type": "mutation",
+            },
         ]
-        
+
         # Simulate consciousness progression
         consciousness_progression = [
             {
-                'level': random.randint(0, 5),
-                'current_level': random.randint(2, 4),
-                'progression_rate': random.uniform(0.1, 0.5)
+                "level": random.randint(0, 5),
+                "current_level": random.randint(2, 4),
+                "progression_rate": random.uniform(0.1, 0.5),
             }
         ]
-        
+
         # Simulate quantum state
         quantum_state = {
-            'entanglements': random.randint(0, 15),
-            'coherence': random.uniform(0.5, 1.0),
-            'field_strength': random.uniform(0.3, 0.9)
+            "entanglements": random.randint(0, 15),
+            "coherence": random.uniform(0.5, 1.0),
+            "field_strength": random.uniform(0.3, 0.9),
         }
-        
+
         # Update dashboard data
         self.dashboard_data = DashboardData(
             timestamp=current_time,
@@ -1066,7 +1077,7 @@ class QuantumVisualizationDashboard:
             active_components=active_components,
             recent_events=recent_events,
             consciousness_progression=consciousness_progression,
-            quantum_state=quantum_state
+            quantum_state=quantum_state,
         )
 
 
@@ -1074,11 +1085,11 @@ async def main():
     """Main dashboard execution"""
     print("📊🌐 QUANTUM HIVE VISUALIZATION DASHBOARD 🌐📊")
     print("Real-time evolution monitoring and control interface")
-    
+
     # Create and initialize dashboard
     dashboard = QuantumVisualizationDashboard(port=8080)
     await dashboard.initialize()
-    
+
     # Start dashboard server
     try:
         await dashboard.start_dashboard()
@@ -1092,4 +1103,6 @@ if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
-        print("\n👋 Quantum Hive Dashboard terminated. Evolution continues in the quantum realm...")
+        print(
+            "\n👋 Quantum Hive Dashboard terminated. Evolution continues in the quantum realm..."
+        )

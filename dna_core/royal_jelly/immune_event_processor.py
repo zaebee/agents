@@ -13,7 +13,7 @@ Integration with Sacred Codon patterns:
 - Enables evolutionary pressure and natural selection of patterns
 """
 
-from typing import List, Dict, Any, Optional, Callable, Set
+from typing import List, Dict, Any, Optional, Callable
 from dataclasses import dataclass
 from enum import Enum
 import uuid

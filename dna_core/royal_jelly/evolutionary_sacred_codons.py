@@ -17,14 +17,12 @@ Core Principles:
 5. Fitness Selection: Better patterns survive and propagate
 """
 
-from typing import List, Dict, Any, Optional, Callable, Set, Tuple, Union
+from typing import List, Dict, Any, Optional, Callable, Set, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
-from abc import ABC, abstractmethod
 import uuid
 import random
 from datetime import datetime, timezone
-import math
 
 from google.protobuf.struct_pb2 import Struct
 from google.protobuf.timestamp_pb2 import Timestamp
@@ -1102,15 +1100,15 @@ def demonstrate_evolutionary_sacred_codons():
     print(f"   Adaptation Triggers: {status['adaptation_triggers']}")
     print(f"   Evolutionary Potential: {status['evolutionary_potential']}")
 
-    print(f"\n🌟 Enhanced Sacred Codon System Summary:")
-    print(f"   ✅ Born Protocol Lifecycle: Egg → Larva → Adult → Elder → Symbiotic")
-    print(f"   ✅ Evolutionary Adaptation: Beneficial mutations under pressure")
-    print(f"   ✅ Symbiotic Relationships: Mutually beneficial partnerships")
-    print(f"   ✅ Ecological Niche Adaptation: Specialized ecosystem roles")
-    print(f"   ✅ Natural Selection: Fitness-based resource competition")
-    print(f"   ✅ Genetic Reproduction: Asexual and sexual reproduction")
-    print(f"   ✅ Enhanced Sacred Codons: Evolution-aware operations")
-    print(f"   ✅ Bio/Sci Philosophy Alignment: Organic, nature-inspired design")
+    print("\n🌟 Enhanced Sacred Codon System Summary:")
+    print("   ✅ Born Protocol Lifecycle: Egg → Larva → Adult → Elder → Symbiotic")
+    print("   ✅ Evolutionary Adaptation: Beneficial mutations under pressure")
+    print("   ✅ Symbiotic Relationships: Mutually beneficial partnerships")
+    print("   ✅ Ecological Niche Adaptation: Specialized ecosystem roles")
+    print("   ✅ Natural Selection: Fitness-based resource competition")
+    print("   ✅ Genetic Reproduction: Asexual and sexual reproduction")
+    print("   ✅ Enhanced Sacred Codons: Evolution-aware operations")
+    print("   ✅ Bio/Sci Philosophy Alignment: Organic, nature-inspired design")
 
     return organism1, organism2, offspring1, hybrid_offspring
 

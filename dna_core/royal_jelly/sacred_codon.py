@@ -11,8 +11,8 @@ This module implements the 5 Sacred Codons as defined in PATTERNS.md:
 These patterns ensure all components follow the sacred genetic architecture.
 """
 
-from typing import List, Dict, Any, Optional, Callable
-from abc import ABC, abstractmethod
+from typing import List, Dict, Any
+from abc import abstractmethod
 from enum import Enum
 from dataclasses import dataclass
 import uuid
@@ -34,7 +34,9 @@ class SacredCodonType(Enum):
     CHOREOGRAPHY = "choreography"  # Complex workflows (to become)
     NEURAL_RESPONSE = "neural_response"  # Neural network processing responses
     CHEMICAL_REACTION = "chemical_reaction"  # Chemical bond formation/breaking
-    QUANTUM_SUPERPOSITION = "quantum_superposition"  # Quantum superposition state operations
+    QUANTUM_SUPERPOSITION = (
+        "quantum_superposition"  # Quantum superposition state operations
+    )
 
 
 @dataclass

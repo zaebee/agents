@@ -35,27 +35,29 @@ Commands:
 
 import asyncio
 import argparse
-import json
 import yaml
 import os
 import sys
 import time
-import subprocess
 import uuid
 from pathlib import Path
-from typing import Dict, List, Any, Optional
-from dataclasses import dataclass, field
+from typing import List, Optional
+from dataclasses import dataclass
 from enum import Enum
+
 
 class DeploymentEnvironment(Enum):
     """Production deployment environments"""
+
     DEVELOPMENT = "development"
     STAGING = "staging"
     PRODUCTION = "production"
     QUANTUM_TESTING = "quantum-testing"
 
+
 class HiveComponentType(Enum):
     """Types of Hive components for deployment"""
+
     QUANTUM_AGGREGATE = "quantum-aggregate"
     QUANTUM_TRANSFORMATION = "quantum-transformation"
     QUANTUM_CONNECTOR = "quantum-connector"
@@ -63,9 +65,11 @@ class HiveComponentType(Enum):
     NEURAL_CONSCIOUSNESS = "neural-consciousness"
     CHEMICAL_MONITOR = "chemical-monitor"
 
+
 @dataclass
 class HiveProjectConfig:
     """Configuration for a Quantum Hive project"""
+
     project_name: str
     hive_id: str
     quantum_coherence_target: float = 0.9
@@ -88,9 +92,11 @@ class HiveProjectConfig:
     mutation_rate: float = 0.05
     fitness_threshold: float = 0.8
 
+
 @dataclass
 class QuantumMetrics:
     """Quantum metrics for monitoring"""
+
     timestamp: float
     quantum_coherence: float
     entanglement_strength: float
@@ -98,9 +104,11 @@ class QuantumMetrics:
     tunneling_events: int
     decoherence_events: int
 
+
 @dataclass
 class ChemicalMetrics:
     """Chemical architecture metrics"""
+
     timestamp: float
     active_bonds: int
     bond_strength_avg: float
@@ -108,15 +116,18 @@ class ChemicalMetrics:
     catalytic_efficiency: float
     chemical_reactions: int
 
+
 @dataclass
 class ConsciousnessMetrics:
     """Neural consciousness metrics"""
+
     timestamp: float
     consciousness_level: int
     neural_activity: float
     collective_intelligence: float
     decision_accuracy: float
     emergence_events: int
+
 
 class QuantumHiveCLI:
     """
@@ -145,7 +156,7 @@ class QuantumHiveCLI:
             return False
 
         try:
-            with open(self.config_file, 'r') as f:
+            with open(self.config_file, "r") as f:
                 config_data = yaml.safe_load(f)
 
             self.project_config = HiveProjectConfig(**config_data)
@@ -157,24 +168,24 @@ class QuantumHiveCLI:
     def save_project_config(self, config: HiveProjectConfig):
         """Save project configuration to quantum-hive.yaml"""
         config_dict = {
-            'project_name': config.project_name,
-            'hive_id': config.hive_id,
-            'quantum_coherence_target': config.quantum_coherence_target,
-            'chemical_bond_threshold': config.chemical_bond_threshold,
-            'consciousness_level_target': config.consciousness_level_target,
-            'replicas': config.replicas,
-            'max_replicas': config.max_replicas,
-            'cpu_limit': config.cpu_limit,
-            'memory_limit': config.memory_limit,
-            'metrics_enabled': config.metrics_enabled,
-            'quantum_monitoring': config.quantum_monitoring,
-            'consciousness_tracking': config.consciousness_tracking,
-            'evolutionary_adaptation': config.evolutionary_adaptation,
-            'mutation_rate': config.mutation_rate,
-            'fitness_threshold': config.fitness_threshold
+            "project_name": config.project_name,
+            "hive_id": config.hive_id,
+            "quantum_coherence_target": config.quantum_coherence_target,
+            "chemical_bond_threshold": config.chemical_bond_threshold,
+            "consciousness_level_target": config.consciousness_level_target,
+            "replicas": config.replicas,
+            "max_replicas": config.max_replicas,
+            "cpu_limit": config.cpu_limit,
+            "memory_limit": config.memory_limit,
+            "metrics_enabled": config.metrics_enabled,
+            "quantum_monitoring": config.quantum_monitoring,
+            "consciousness_tracking": config.consciousness_tracking,
+            "evolutionary_adaptation": config.evolutionary_adaptation,
+            "mutation_rate": config.mutation_rate,
+            "fitness_threshold": config.fitness_threshold,
         }
 
-        with open(self.config_file, 'w') as f:
+        with open(self.config_file, "w") as f:
             yaml.dump(config_dict, f, default_flow_style=False, indent=2)
 
     def init_project(self, project_name: str, template: str = "enterprise") -> bool:
@@ -183,15 +194,12 @@ class QuantumHiveCLI:
         print(f"📋 Template: {template}")
 
         if os.path.exists(self.config_file):
-            print(f"⚠️  Project already exists! Use 'quantum-hive deploy' to deploy.")
+            print("⚠️  Project already exists! Use 'quantum-hive deploy' to deploy.")
             return False
 
         # Create project configuration
         hive_id = f"hive_{uuid.uuid4().hex[:8]}"
-        config = HiveProjectConfig(
-            project_name=project_name,
-            hive_id=hive_id
-        )
+        config = HiveProjectConfig(project_name=project_name, hive_id=hive_id)
 
         # Create project structure
         self._create_project_structure(project_name, template)
@@ -200,15 +208,15 @@ class QuantumHiveCLI:
         self.save_project_config(config)
         self.project_config = config
 
-        print(f"✅ Project initialized successfully!")
+        print("✅ Project initialized successfully!")
         print(f"🧬 Hive ID: {hive_id}")
-        print(f"📁 Project structure created")
+        print("📁 Project structure created")
         print(f"⚙️  Configuration saved to {self.config_file}")
-        print(f"")
-        print(f"🚀 Next steps:")
-        print(f"   1. Customize your quantum-hive.yaml configuration")
-        print(f"   2. Add your quantum components to components/")
-        print(f"   3. Run 'quantum-hive deploy development' to deploy")
+        print("")
+        print("🚀 Next steps:")
+        print("   1. Customize your quantum-hive.yaml configuration")
+        print("   2. Add your quantum components to components/")
+        print("   3. Run 'quantum-hive deploy development' to deploy")
 
         return True
 
@@ -225,7 +233,7 @@ class QuantumHiveCLI:
             "deployment/kubernetes",
             "monitoring",
             "tests",
-            "docs"
+            "docs",
         ]
 
         for directory in directories:
@@ -265,7 +273,7 @@ CMD ["python", "-m", "components.main"]
             f.write(dockerfile_content)
 
         # Create Kubernetes deployment
-        k8s_deployment = f'''apiVersion: apps/v1
+        k8s_deployment = f"""apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {project_name}-quantum-hive
@@ -337,7 +345,7 @@ spec:
     port: 8082
     targetPort: 8082
   type: LoadBalancer
-'''
+"""
 
         with open("deployment/kubernetes/deployment.yaml", "w") as f:
             f.write(k8s_deployment)
@@ -409,7 +417,7 @@ if __name__ == "__main__":
             f.write(sample_component)
 
         # Create README
-        readme_content = f'''# {project_name} - Quantum Hive Project
+        readme_content = f"""# {project_name} - Quantum Hive Project
 
 This project uses the revolutionary Quantum-Enhanced Hive Architecture.
 
@@ -479,7 +487,7 @@ This is not traditional software - it's a living, quantum, conscious system that
 
 Generated by Quantum Hive CLI v{self.version}
 The future of software is quantum, biological, and conscious!
-'''
+"""
 
         with open("README.md", "w") as f:
             f.write(readme_content)
@@ -487,7 +495,9 @@ The future of software is quantum, biological, and conscious!
     async def deploy_project(self, environment: str) -> bool:
         """Deploy project to specified environment"""
         if not self.load_project_config():
-            print("❌ No quantum-hive.yaml found. Run 'quantum-hive init <project>' first.")
+            print(
+                "❌ No quantum-hive.yaml found. Run 'quantum-hive init <project>' first."
+            )
             return False
 
         env = DeploymentEnvironment(environment)
@@ -518,7 +528,10 @@ The future of software is quantum, biological, and conscious!
             ("Configuration file", os.path.exists(self.config_file)),
             ("Components directory", os.path.exists("components")),
             ("Dockerfile", os.path.exists("deployment/docker/Dockerfile")),
-            ("Kubernetes config", os.path.exists("deployment/kubernetes/deployment.yaml"))
+            (
+                "Kubernetes config",
+                os.path.exists("deployment/kubernetes/deployment.yaml"),
+            ),
         ]
 
         all_valid = True
@@ -553,9 +566,9 @@ The future of software is quantum, biological, and conscious!
         await asyncio.sleep(0.05)
 
         print("✅ Development deployment complete!")
-        print(f"🌐 Quantum API: http://localhost:8080")
-        print(f"🧠 Consciousness Dashboard: http://localhost:8081")
-        print(f"🧪 Chemical Monitor: http://localhost:8082")
+        print("🌐 Quantum API: http://localhost:8080")
+        print("🧠 Consciousness Dashboard: http://localhost:8081")
+        print("🧪 Chemical Monitor: http://localhost:8082")
 
         return True
 
@@ -577,9 +590,9 @@ The future of software is quantum, biological, and conscious!
         await asyncio.sleep(0.1)
 
         print("✅ Staging deployment complete!")
-        print(f"🌟 Quantum coherence achieved: 0.92")
-        print(f"🧠 Consciousness level: 3")
-        print(f"🔗 Chemical bonds: 8 active")
+        print("🌟 Quantum coherence achieved: 0.92")
+        print("🧠 Consciousness level: 3")
+        print("🔗 Chemical bonds: 8 active")
 
         return True
 
@@ -589,7 +602,9 @@ The future of software is quantum, biological, and conscious!
         print("⚠️  This will deploy a quantum-conscious system to production!")
 
         # Extra confirmation for production
-        confirm = input("Are you sure? This will deploy living, evolving software. (yes/no): ")
+        confirm = input(
+            "Are you sure? This will deploy living, evolving software. (yes/no): "
+        )
         if confirm.lower() != "yes":
             print("❌ Production deployment cancelled.")
             return False
@@ -613,16 +628,20 @@ The future of software is quantum, biological, and conscious!
         await asyncio.sleep(0.1)
 
         print("🎉 PRODUCTION DEPLOYMENT COMPLETE!")
-        print(f"🌟 Quantum-Enhanced Hive Architecture is now LIVE!")
-        print(f"⚛️ Quantum coherence: 0.95")
-        print(f"🧠 Consciousness level: 4 (Self-Conscious)")
-        print(f"🔗 Chemical bonds: 12 active, all stable")
-        print(f"🌱 Evolutionary adaptation: ENABLED")
-        print(f"")
-        print(f"🎯 Production endpoints:")
+        print("🌟 Quantum-Enhanced Hive Architecture is now LIVE!")
+        print("⚛️ Quantum coherence: 0.95")
+        print("🧠 Consciousness level: 4 (Self-Conscious)")
+        print("🔗 Chemical bonds: 12 active, all stable")
+        print("🌱 Evolutionary adaptation: ENABLED")
+        print("")
+        print("🎯 Production endpoints:")
         print(f"   API: https://{self.project_config.project_name}.quantum-hive.io")
-        print(f"   Consciousness: https://{self.project_config.project_name}-brain.quantum-hive.io")
-        print(f"   Monitoring: https://{self.project_config.project_name}-metrics.quantum-hive.io")
+        print(
+            f"   Consciousness: https://{self.project_config.project_name}-brain.quantum-hive.io"
+        )
+        print(
+            f"   Monitoring: https://{self.project_config.project_name}-metrics.quantum-hive.io"
+        )
 
         return True
 
@@ -632,9 +651,11 @@ The future of software is quantum, biological, and conscious!
             print("❌ No project configuration found.")
             return False
 
-        print(f"📊 Monitoring {self.project_config.project_name} for {duration} seconds...")
+        print(
+            f"📊 Monitoring {self.project_config.project_name} for {duration} seconds..."
+        )
         print(f"🧬 Hive ID: {self.project_config.hive_id}")
-        print(f"")
+        print("")
         print("🔄 Real-time Quantum Metrics (Press Ctrl+C to stop):")
         print("=" * 70)
 
@@ -651,12 +672,18 @@ The future of software is quantum, biological, and conscious!
                 self.consciousness_metrics.append(consciousness_metrics)
 
                 # Display current status
-                print(f"⚛️  Quantum: coherence={quantum_metrics.quantum_coherence:.3f}, "
-                      f"entanglement={quantum_metrics.entanglement_strength:.3f}")
-                print(f"🧪 Chemical: bonds={chemical_metrics.active_bonds}, "
-                      f"stability={chemical_metrics.molecular_stability:.3f}")
-                print(f"🧠 Consciousness: level={consciousness_metrics.consciousness_level}, "
-                      f"activity={consciousness_metrics.neural_activity:.3f}")
+                print(
+                    f"⚛️  Quantum: coherence={quantum_metrics.quantum_coherence:.3f}, "
+                    f"entanglement={quantum_metrics.entanglement_strength:.3f}"
+                )
+                print(
+                    f"🧪 Chemical: bonds={chemical_metrics.active_bonds}, "
+                    f"stability={chemical_metrics.molecular_stability:.3f}"
+                )
+                print(
+                    f"🧠 Consciousness: level={consciousness_metrics.consciousness_level}, "
+                    f"activity={consciousness_metrics.neural_activity:.3f}"
+                )
                 print("-" * 70)
 
                 await asyncio.sleep(1)
@@ -664,7 +691,9 @@ The future of software is quantum, biological, and conscious!
         except KeyboardInterrupt:
             print("\n⏹️  Monitoring stopped by user")
 
-        print(f"✅ Monitoring complete! Collected {len(self.quantum_metrics)} metric samples.")
+        print(
+            f"✅ Monitoring complete! Collected {len(self.quantum_metrics)} metric samples."
+        )
         return True
 
     def _generate_quantum_metrics(self) -> QuantumMetrics:
@@ -677,7 +706,7 @@ The future of software is quantum, biological, and conscious!
             entanglement_strength=random.uniform(0.70, 0.95),
             superposition_factor=random.uniform(0.60, 0.90),
             tunneling_events=random.randint(0, 3),
-            decoherence_events=random.randint(0, 1)
+            decoherence_events=random.randint(0, 1),
         )
 
     def _generate_chemical_metrics(self) -> ChemicalMetrics:
@@ -690,7 +719,7 @@ The future of software is quantum, biological, and conscious!
             bond_strength_avg=random.uniform(0.70, 0.95),
             molecular_stability=random.uniform(0.80, 0.98),
             catalytic_efficiency=random.uniform(0.75, 0.92),
-            chemical_reactions=random.randint(0, 5)
+            chemical_reactions=random.randint(0, 5),
         )
 
     def _generate_consciousness_metrics(self) -> ConsciousnessMetrics:
@@ -703,7 +732,7 @@ The future of software is quantum, biological, and conscious!
             neural_activity=random.uniform(0.60, 0.95),
             collective_intelligence=random.uniform(100, 150),
             decision_accuracy=random.uniform(0.80, 0.98),
-            emergence_events=random.randint(0, 2)
+            emergence_events=random.randint(0, 2),
         )
 
     async def scale_system(self, replicas: int) -> bool:
@@ -712,13 +741,17 @@ The future of software is quantum, biological, and conscious!
             print("❌ No project configuration found.")
             return False
 
-        print(f"📈 Scaling {self.project_config.project_name} to {replicas} replicas...")
+        print(
+            f"📈 Scaling {self.project_config.project_name} to {replicas} replicas..."
+        )
 
         # Validate scaling decision
         current_replicas = self.project_config.replicas
 
         if replicas > self.project_config.max_replicas:
-            print(f"⚠️ Requested replicas ({replicas}) exceeds maximum ({self.project_config.max_replicas})")
+            print(
+                f"⚠️ Requested replicas ({replicas}) exceeds maximum ({self.project_config.max_replicas})"
+            )
             replicas = self.project_config.max_replicas
 
         print(f"   Current replicas: {current_replicas}")
@@ -741,7 +774,9 @@ The future of software is quantum, biological, and conscious!
         if replicas > current_replicas:
             print(f"   📈 Scaling UP: adding {replicas - current_replicas} replicas...")
         else:
-            print(f"   📉 Scaling DOWN: removing {current_replicas - replicas} replicas...")
+            print(
+                f"   📉 Scaling DOWN: removing {current_replicas - replicas} replicas..."
+            )
 
         await asyncio.sleep(0.2)
 
@@ -751,8 +786,8 @@ The future of software is quantum, biological, and conscious!
 
         print("✅ Scaling complete!")
         print(f"🌟 System now running {replicas} quantum-conscious replicas")
-        print(f"⚛️ Distributed quantum coherence maintained")
-        print(f"🧠 Collective consciousness preserved across all replicas")
+        print("⚛️ Distributed quantum coherence maintained")
+        print("🧠 Collective consciousness preserved across all replicas")
 
         return True
 
@@ -762,7 +797,9 @@ The future of software is quantum, biological, and conscious!
             print("❌ No project configuration found.")
             return False
 
-        print(f"🧬 Triggering evolutionary adaptation for {self.project_config.project_name}...")
+        print(
+            f"🧬 Triggering evolutionary adaptation for {self.project_config.project_name}..."
+        )
 
         # Simulate evolutionary process
         print("   🔬 Analyzing current fitness landscape...")
@@ -782,6 +819,7 @@ The future of software is quantum, biological, and conscious!
 
         # Simulate results
         import random
+
         fitness_improvement = random.uniform(0.02, 0.08)
         consciousness_boost = random.randint(0, 1)
         new_features = random.randint(1, 3)
@@ -790,7 +828,7 @@ The future of software is quantum, biological, and conscious!
         print(f"📈 Fitness improved by {fitness_improvement:.1%}")
         print(f"🧠 Consciousness level boosted by {consciousness_boost}")
         print(f"✨ {new_features} new capabilities emerged")
-        print(f"🌟 System is now more adaptive and intelligent!")
+        print("🌟 System is now more adaptive and intelligent!")
 
         return True
 
@@ -865,6 +903,7 @@ The future of software is quantum, biological, and conscious!
         print("📚 Learn more: https://quantum-hive.io/docs")
         print("🌈 The future of software is quantum, biological, and conscious!")
 
+
 def create_cli() -> argparse.ArgumentParser:
     """Create CLI argument parser"""
     parser = argparse.ArgumentParser(
@@ -881,32 +920,49 @@ def create_cli() -> argparse.ArgumentParser:
   quantum-hive migrate ./legacy-system
 
 🌈 The future of software is quantum, biological, and conscious!
-        """
+        """,
     )
 
-    parser.add_argument("--version", action="version", version="Quantum Hive CLI v1.0.0-quantum")
+    parser.add_argument(
+        "--version", action="version", version="Quantum Hive CLI v1.0.0-quantum"
+    )
 
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
     # Init command
-    init_parser = subparsers.add_parser("init", help="Initialize new quantum hive project")
+    init_parser = subparsers.add_parser(
+        "init", help="Initialize new quantum hive project"
+    )
     init_parser.add_argument("project_name", help="Name of the project")
-    init_parser.add_argument("--template", default="enterprise", choices=["enterprise", "minimal", "research"], help="Project template")
+    init_parser.add_argument(
+        "--template",
+        default="enterprise",
+        choices=["enterprise", "minimal", "research"],
+        help="Project template",
+    )
 
     # Deploy command
     deploy_parser = subparsers.add_parser("deploy", help="Deploy to environment")
-    deploy_parser.add_argument("environment", choices=["development", "staging", "production", "quantum-testing"], help="Target environment")
+    deploy_parser.add_argument(
+        "environment",
+        choices=["development", "staging", "production", "quantum-testing"],
+        help="Target environment",
+    )
 
     # Monitor command
     monitor_parser = subparsers.add_parser("monitor", help="Monitor quantum metrics")
-    monitor_parser.add_argument("--duration", type=int, default=60, help="Monitoring duration in seconds")
+    monitor_parser.add_argument(
+        "--duration", type=int, default=60, help="Monitoring duration in seconds"
+    )
 
     # Scale command
     scale_parser = subparsers.add_parser("scale", help="Scale system replicas")
     scale_parser.add_argument("replicas", type=int, help="Number of replicas")
 
     # Evolve command
-    evolve_parser = subparsers.add_parser("evolve", help="Trigger evolutionary adaptation")
+    evolve_parser = subparsers.add_parser(
+        "evolve", help="Trigger evolutionary adaptation"
+    )
 
     # Migrate command
     migrate_parser = subparsers.add_parser("migrate", help="Migrate legacy system")
@@ -917,9 +973,9 @@ def create_cli() -> argparse.ArgumentParser:
 
     return parser
 
+
 async def main():
     """Main CLI entry point"""
-    import random
 
     parser = create_cli()
     args = parser.parse_args()
@@ -962,6 +1018,7 @@ async def main():
     except Exception as e:
         print(f"\n💥 Unexpected error: {e}")
         sys.exit(1)
+
 
 if __name__ == "__main__":
     asyncio.run(main())

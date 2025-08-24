@@ -6,13 +6,12 @@ and empirical validation, creating collaborative validation hooks for Sacred Cod
 operations. It bridges human intuition with AI precision in architectural decisions.
 """
 
-from typing import Dict, List, Any, Optional, Callable, Union
+from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime, timezone
 import uuid
 
-from dna_core.pollen_protocol_pb2 import PollenEnvelope
 from .sacred_codon import SacredCommand, SacredCodonType
 
 
@@ -364,11 +363,11 @@ class EmpiricalValidator:
             severity = ValidationSeverity.PASS
             confidence = overall_score
         elif overall_score >= 0.5:
-            message = f"Measurements indicate acceptable performance with room for improvement."
+            message = "Measurements indicate acceptable performance with room for improvement."
             severity = ValidationSeverity.WARNING
             confidence = overall_score
         else:
-            message = f"Empirical data suggests significant performance concerns."
+            message = "Empirical data suggests significant performance concerns."
             severity = ValidationSeverity.CONCERN
             confidence = overall_score
 

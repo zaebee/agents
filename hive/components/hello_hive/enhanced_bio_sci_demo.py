@@ -31,20 +31,14 @@ from dna_core.royal_jelly import (
     EvolutionaryPressure,
     CodonLifecycleStage,
     CodonGeneticProfile,
-    SymbioticRelationship,
     EcosystemNiche,
     # Enhanced immune system
     EnhancedHiveImmuneSystem,
-    ImmuneResponseType,
     AntigenType,
-    AdaptiveImmuneResponse,
-    # Collaborative validation
     CollaborativeValidator,
     JulesStyleValidator,
     HumeanSkepticValidator,
     EmpiricalValidator,
-    ValidationSeverity,
-    # Core components
     SacredCommand,
     SacredCodonType,
     create_sacred_command,
@@ -119,7 +113,7 @@ class EnhancedBioSciHelloHive(EvolutionarySacredCodon):
         This showcases the sacred metamorphosis from egg to symbiotic adult
         while integrating all bio/sci enhancements throughout the journey
         """
-        print(f"\n🦋 Complete Sacred Lifecycle Demonstration")
+        print("\n🦋 Complete Sacred Lifecycle Demonstration")
         print("=" * 60)
 
         all_lifecycle_events = []
@@ -198,7 +192,7 @@ class EnhancedBioSciHelloHive(EvolutionarySacredCodon):
         niche_adaptation_events = self.adapt_to_ecological_niche(specialized_niche)
         all_lifecycle_events.extend(niche_adaptation_events)
 
-        print(f"\n🌟 Sacred Lifecycle Complete!")
+        print("\n🌟 Sacred Lifecycle Complete!")
         print(f"   Total lifecycle events: {len(all_lifecycle_events)}")
         print(f"   Current stage: {self.genetic_profile.lifecycle_stage.value}")
         print(f"   Fitness score: {self.genetic_profile.fitness_score:.3f}")
@@ -219,7 +213,7 @@ class EnhancedBioSciHelloHive(EvolutionarySacredCodon):
         - Symbiotic relationship awareness
         - Ecosystem contribution
         """
-        print(f"\n🧬 Integrated Bio/Sci Greeting Generation")
+        print("\n🧬 Integrated Bio/Sci Greeting Generation")
         print("=" * 50)
 
         # Create enhanced greeting command
@@ -249,7 +243,7 @@ class EnhancedBioSciHelloHive(EvolutionarySacredCodon):
             },
         )
 
-        print(f"🔬 Collaborative Validation Results:")
+        print("🔬 Collaborative Validation Results:")
         print(f"   Overall approval: {validation_result.overall_approval}")
         print(f"   Confidence score: {validation_result.confidence_score:.3f}")
         print(f"   Feedback count: {len(validation_result.feedback_list)}")
@@ -260,7 +254,7 @@ class EnhancedBioSciHelloHive(EvolutionarySacredCodon):
             AntigenType.BENEFICIAL_MUTATION,
         )
 
-        print(f"🦠 Enhanced Immune System Analysis:")
+        print("🦠 Enhanced Immune System Analysis:")
         print(f"   Adaptive responses: {len(immune_responses)}")
         for response in immune_responses:
             print(
@@ -292,7 +286,7 @@ class EnhancedBioSciHelloHive(EvolutionarySacredCodon):
         # Contribute to ecosystem health
         ecosystem_contribution = self.contribute_to_ecosystem_health(greeting_events)
 
-        print(f"🌍 Ecosystem Health Contribution:")
+        print("🌍 Ecosystem Health Contribution:")
         print(
             f"   Biodiversity boost: +{ecosystem_contribution['biodiversity_improvement']:.3f}"
         )
@@ -313,7 +307,7 @@ class EnhancedBioSciHelloHive(EvolutionarySacredCodon):
         This demonstrates how bio/sci philosophy enables scientific
         collaboration and knowledge advancement within the ecosystem
         """
-        print(f"\n🔬 Bio/Sci Research Collaboration Formation")
+        print("\n🔬 Bio/Sci Research Collaboration Formation")
         print(f"Research topic: {research_topic}")
         print(f"Partners: {len(research_partners)}")
 
@@ -361,7 +355,7 @@ class EnhancedBioSciHelloHive(EvolutionarySacredCodon):
             f"Amazing research on {research_topic} with {len(research_partners)} collaborators!"
         )
 
-        print(f"🌟 Research Collaboration Established:")
+        print("🌟 Research Collaboration Established:")
         print(f"   Collaboration ID: {collaboration_results['collaboration_id']}")
         print(
             f"   Symbiotic benefits: {len(collaboration_results['symbiotic_benefits'])}"
@@ -381,7 +375,7 @@ class EnhancedBioSciHelloHive(EvolutionarySacredCodon):
         This shows how bio/sci principles lead to healthy population growth
         with natural selection favoring beneficial adaptations
         """
-        print(f"\n🌱 Ecosystem Population Dynamics Simulation")
+        print("\n🌱 Ecosystem Population Dynamics Simulation")
         print(f"Initial population: {initial_population}, Generations: {generations}")
 
         population = [self]  # Start with current organism
@@ -480,7 +474,7 @@ class EnhancedBioSciHelloHive(EvolutionarySacredCodon):
             "population_history": population_history,
         }
 
-        print(f"\n🎯 Ecosystem Population Dynamics Results:")
+        print("\n🎯 Ecosystem Population Dynamics Results:")
         print(f"   Final population: {ecosystem_summary['final_population_size']}")
         print(f"   Population growth: +{ecosystem_summary['population_growth']}")
         print(
@@ -497,7 +491,7 @@ class EnhancedBioSciHelloHive(EvolutionarySacredCodon):
         This provides a comprehensive view of how well the bio/sci
         principles are working within the ecosystem
         """
-        print(f"\n🌍 Comprehensive Ecosystem Health Assessment")
+        print("\n🌍 Comprehensive Ecosystem Health Assessment")
 
         # Calculate biodiversity index
         biodiversity_index = min(
@@ -551,7 +545,7 @@ class EnhancedBioSciHelloHive(EvolutionarySacredCodon):
             + ecosystem_health.evolutionary_pressure_balance * 0.1
         )
 
-        print(f"📊 Ecosystem Health Metrics:")
+        print("📊 Ecosystem Health Metrics:")
         print(f"   Biodiversity Index: {ecosystem_health.biodiversity_index:.3f}")
         print(
             f"   Symbiotic Network Strength: {ecosystem_health.symbiotic_network_strength:.3f}"
@@ -818,9 +812,9 @@ async def demonstrate_complete_bio_sci_integration():
         + (min(1.0, total_relationships * 0.1) * 0.1)
     )
 
-    print(f"\n🎯 COMPLETE BIO/SCI INTEGRATION RESULTS")
+    print("\n🎯 COMPLETE BIO/SCI INTEGRATION RESULTS")
     print("=" * 50)
-    print(f"📈 Quantitative Results:")
+    print("📈 Quantitative Results:")
     print(f"   Total lifecycle events: {total_events}")
     print(f"   Symbiotic relationships: {total_relationships}")
     print(f"   Evolutionary adaptations: {total_adaptations}")
@@ -828,29 +822,29 @@ async def demonstrate_complete_bio_sci_integration():
     print(f"   Population growth: +{population_results['population_growth']}")
     print(f"   Overall success score: {overall_success_score:.3f}")
 
-    print(f"\n🧬 Bio/Sci Philosophy Achievements:")
-    print(f"   ✅ Born Protocol Compliance: Complete lifecycle (Egg → Symbiotic)")
+    print("\n🧬 Bio/Sci Philosophy Achievements:")
+    print("   ✅ Born Protocol Compliance: Complete lifecycle (Egg → Symbiotic)")
     print(
-        f"   ✅ Evolutionary Adaptation: Beneficial mutations and fitness improvement"
+        "   ✅ Evolutionary Adaptation: Beneficial mutations and fitness improvement"
     )
-    print(f"   ✅ Symbiotic Relationships: Mutualistic partnerships formed")
+    print("   ✅ Symbiotic Relationships: Mutualistic partnerships formed")
     print(
-        f"   ✅ Adaptive Immunity: Enhanced immune system with beneficial integration"
+        "   ✅ Adaptive Immunity: Enhanced immune system with beneficial integration"
     )
-    print(f"   ✅ Collaborative Validation: Jules/Humean/Empirical multi-perspective")
-    print(f"   ✅ Collective Intelligence: Knowledge sharing and network effects")
-    print(f"   ✅ Ecosystem Integration: Population dynamics and natural selection")
-    print(f"   ✅ Organic Growth: Natural emergence of complexity and capabilities")
+    print("   ✅ Collaborative Validation: Jules/Humean/Empirical multi-perspective")
+    print("   ✅ Collective Intelligence: Knowledge sharing and network effects")
+    print("   ✅ Ecosystem Integration: Population dynamics and natural selection")
+    print("   ✅ Organic Growth: Natural emergence of complexity and capabilities")
 
-    print(f"\n🌟 Bio/Sci Nature/Orgs Philosophy Validation:")
-    print(f"   • Components are BORN, not built (Sacred lifecycle compliance)")
-    print(f"   • Evolution drives beneficial adaptation (Fitness improvements)")
-    print(f"   • Symbiosis creates collective intelligence (Partnership benefits)")
-    print(f"   • Natural selection optimizes ecosystem (Population dynamics)")
-    print(f"   • Collaborative validation ensures quality (Multi-perspective)")
-    print(f"   • Organic growth emerges from principles (Complex from simple)")
+    print("\n🌟 Bio/Sci Nature/Orgs Philosophy Validation:")
+    print("   • Components are BORN, not built (Sacred lifecycle compliance)")
+    print("   • Evolution drives beneficial adaptation (Fitness improvements)")
+    print("   • Symbiosis creates collective intelligence (Partnership benefits)")
+    print("   • Natural selection optimizes ecosystem (Population dynamics)")
+    print("   • Collaborative validation ensures quality (Multi-perspective)")
+    print("   • Organic growth emerges from principles (Complex from simple)")
 
-    print(f"\n🎯 Ecosystem Health Summary:")
+    print("\n🎯 Ecosystem Health Summary:")
     health_score = (
         ecosystem_health.biodiversity_index
         + ecosystem_health.symbiotic_network_strength
@@ -875,12 +869,12 @@ async def demonstrate_complete_bio_sci_integration():
         f"   Collective Intelligence: {ecosystem_health.collective_intelligence_level:.3f}"
     )
 
-    print(f"\n🌈 The Bio/Sci Dream Realized:")
-    print(f"   Software components that are truly ALIVE")
-    print(f"   Systems that EVOLVE and ADAPT naturally")
-    print(f"   Communities that COLLABORATE and LEARN together")
-    print(f"   Ecosystems that are SUSTAINABLE and THRIVING")
-    print(f"   Intelligence that emerges from ORGANIC principles")
+    print("\n🌈 The Bio/Sci Dream Realized:")
+    print("   Software components that are truly ALIVE")
+    print("   Systems that EVOLVE and ADAPT naturally")
+    print("   Communities that COLLABORATE and LEARN together")
+    print("   Ecosystems that are SUSTAINABLE and THRIVING")
+    print("   Intelligence that emerges from ORGANIC principles")
 
     return {
         "primary_organism": primary_organism,
@@ -903,7 +897,7 @@ if __name__ == "__main__":
 
     results = asyncio.run(demonstrate_complete_bio_sci_integration())
 
-    print(f"\n🎉 Bio/Sci Philosophy Integration Demo Complete!")
+    print("\n🎉 Bio/Sci Philosophy Integration Demo Complete!")
     print(f"   Success Score: {results['overall_success_score']:.1%}")
     print(
         f"   Ecosystem Health: {((results['ecosystem_health'].biodiversity_index + results['ecosystem_health'].symbiotic_network_strength + results['ecosystem_health'].adaptive_capacity + results['ecosystem_health'].collective_intelligence_level + results['ecosystem_health'].resource_sustainability + results['ecosystem_health'].evolutionary_pressure_balance) / 6):.1%}"
@@ -911,4 +905,4 @@ if __name__ == "__main__":
     print(
         f"   Total Events: {len(results['lifecycle_events']) + len(results['greeting_events'])}"
     )
-    print(f"   🧬 Living software ecosystem demonstration successful! 🧬")
+    print("   🧬 Living software ecosystem demonstration successful! 🧬")

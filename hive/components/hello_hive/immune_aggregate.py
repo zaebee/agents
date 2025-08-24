@@ -24,12 +24,10 @@ from dna_core.royal_jelly import (
     SacredCommand,
     SacredCodonType,
     create_sacred_command,
-    ImmuneEventProcessor,
     MutationType,
     get_immune_processor,
     process_event_with_immune_system,
 )
-from .command import HelloHiveCommand
 
 
 class HelloHiveImmuneAggregate(SacredAggregate):
@@ -158,16 +156,16 @@ class HelloHiveImmuneAggregate(SacredAggregate):
         # Process through immune system (this should trigger responses)
         immune_commands = process_event_with_immune_system(malformed_event, self)
 
-        print(f"🔬 Immune system analysis complete:")
+        print("🔬 Immune system analysis complete:")
         print(f"   Detected mutations: {len(immune_commands)}")
 
         # Convert the malformed event to immune response via Sacred Codon
         if immune_commands:
-            print(f"🏥 Executing immune responses via Sacred Codon patterns")
+            print("🏥 Executing immune responses via Sacred Codon patterns")
             immune_events = self.execute_immune_response_codon(malformed_event)
             return immune_events
         else:
-            print(f"✅ No immune response needed")
+            print("✅ No immune response needed")
             return []
 
     def get_comprehensive_health_report(self) -> Dict[str, Any]:
@@ -500,13 +498,13 @@ def demonstrate_immune_system_integration():
     # Create immune-enabled aggregate
     immune_aggregate = HelloHiveImmuneAggregate("hello-hive-immune-001")
 
-    print(f"\n📊 Initial Health Report:")
+    print("\n📊 Initial Health Report:")
     initial_health = immune_aggregate.get_comprehensive_health_report()
     print(f"   Health Score: {initial_health['health_score']:.2f}")
     print(f"   Recommendations: {initial_health['recommendations']}")
 
     # 1. Normal greeting creation (should be healthy)
-    print(f"\n1. 🌟 Creating Normal Greeting (Sacred Codon + Immune Monitoring)")
+    print("\n1. 🌟 Creating Normal Greeting (Sacred Codon + Immune Monitoring)")
     normal_events = immune_aggregate.create_greeting_with_immune_monitoring(
         {
             "message": "Hello, Sacred Hive with Immune Protection!",
@@ -532,7 +530,7 @@ def demonstrate_immune_system_integration():
         print(f"   Immune system generated {len(immune_events)} response events")
 
     # 3. Final health assessment
-    print(f"\n📊 Final Health Assessment:")
+    print("\n📊 Final Health Assessment:")
     final_health = immune_aggregate.get_comprehensive_health_report()
     print(f"   Health Score: {final_health['health_score']:.2f}")
     print(
@@ -543,7 +541,7 @@ def demonstrate_immune_system_integration():
     )
     print(f"   Immune Incidents: {len(immune_aggregate.immune_incidents)}")
 
-    print(f"\n🏥 Immune System Statistics:")
+    print("\n🏥 Immune System Statistics:")
     global_stats = final_health.get("global_immune_stats", {})
     if "total_mutations" in global_stats:
         print(f"   Total Mutations Detected: {global_stats['total_mutations']}")
@@ -552,15 +550,15 @@ def demonstrate_immune_system_integration():
         )
         print(f"   Immune Efficiency: {global_stats.get('immune_efficiency', 0.0):.2f}")
 
-    print(f"\n💡 Health Recommendations:")
+    print("\n💡 Health Recommendations:")
     for rec in final_health["recommendations"]:
         print(f"   • {rec}")
 
-    print(f"\n✅ Immune System Integration Demonstration Complete")
+    print("\n✅ Immune System Integration Demonstration Complete")
     print(
-        f"   The Hive's immune system successfully detected and responded to mutations"
+        "   The Hive's immune system successfully detected and responded to mutations"
     )
-    print(f"   while maintaining Sacred Codon architectural integrity.")
+    print("   while maintaining Sacred Codon architectural integrity.")
 
     return immune_aggregate
 

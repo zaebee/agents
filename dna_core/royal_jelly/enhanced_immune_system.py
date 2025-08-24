@@ -22,21 +22,17 @@ Core Principles:
 5. Collective Intelligence: Network-based immune responses
 """
 
-from typing import List, Dict, Any, Optional, Callable, Set, Tuple
+from typing import List, Dict, Any, Optional, Callable, Set
 from dataclasses import dataclass, field
 from enum import Enum
-from abc import ABC, abstractmethod
 import uuid
-import numpy as np
 import random
-from datetime import datetime, timezone, timedelta
-import math
+from datetime import datetime, timezone
 
 from google.protobuf.struct_pb2 import Struct
 from google.protobuf.timestamp_pb2 import Timestamp
 from dna_core.pollen_protocol_pb2 import PollenEnvelope
-from .sacred_codon import SacredAggregate, SacredCommand, SacredCodonType
-from .evolutionary_sacred_codons import EvolutionaryPressure, CodonLifecycleStage
+from .evolutionary_sacred_codons import EvolutionaryPressure
 
 
 class ImmuneResponseType(Enum):
@@ -196,7 +192,7 @@ class EnhancedHiveImmuneSystem:
             f"🧬 Enhanced Hive Immune System initialized for organism {self.organism_id}"
         )
         print(
-            f"   Bio/Sci Philosophy: Symbiosis > Destruction, Adaptation > Resistance"
+            "   Bio/Sci Philosophy: Symbiosis > Destruction, Adaptation > Resistance"
         )
         print(
             f"   Response Types: {len(self.response_generators)} adaptive response patterns"
@@ -229,7 +225,7 @@ class EnhancedHiveImmuneSystem:
             return self._execute_memory_based_response(memory_response, antigen_event)
 
         # Primary adaptive immune response
-        print(f"🌱 Primary adaptive response initiated")
+        print("🌱 Primary adaptive response initiated")
 
         # Run adaptive sensors
         sensor_insights = self._run_adaptive_sensors(antigen_event, antigen_type)
@@ -307,7 +303,7 @@ class EnhancedHiveImmuneSystem:
         fitness_boost = sum(partnership_record.mutual_benefits.values()) * 0.1
         self.immune_fitness += fitness_boost
 
-        print(f"🌟 Symbiotic immunity partnership formed")
+        print("🌟 Symbiotic immunity partnership formed")
         print(f"   Mutual benefits: {partnership_record.mutual_benefits}")
         print(f"   Immune fitness boost: +{fitness_boost:.3f}")
 
@@ -375,7 +371,7 @@ class EnhancedHiveImmuneSystem:
         )
         self.immune_fitness += total_fitness_improvement
 
-        print(f"🌟 Immune system evolution complete:")
+        print("🌟 Immune system evolution complete:")
         print(f"   Changes: {len(evolution_changes)}")
         print(f"   Fitness improvement: +{total_fitness_improvement:.3f}")
 
@@ -439,7 +435,7 @@ class EnhancedHiveImmuneSystem:
                 ),
             )
 
-        print(f"🎯 Cultivation complete:")
+        print("🎯 Cultivation complete:")
         print(
             f"   Beneficial mutations: {len(cultivation_result['beneficial_mutations_generated'])}"
         )
@@ -1238,7 +1234,7 @@ def demonstrate_enhanced_immune_system():
         all_responses.extend(responses)
 
     # Demonstrate symbiotic immunity partnership
-    print(f"\n4. 🤝 Symbiotic Immunity Partnership Formation")
+    print("\n4. 🤝 Symbiotic Immunity Partnership Formation")
     partnership = immune_system.form_symbiotic_immunity_partnership(
         "partner_organism_002",
         {
@@ -1251,7 +1247,7 @@ def demonstrate_enhanced_immune_system():
     print(f"   Mutual benefits: {list(partnership.mutual_benefits.keys())}")
 
     # Demonstrate immune system evolution
-    print(f"\n5. 🧬 Immune System Self-Evolution")
+    print("\n5. 🧬 Immune System Self-Evolution")
     evolution_changes = immune_system.undergo_immune_system_evolution(
         EvolutionaryPressure.SYMBIOTIC_OPPORTUNITY
     )
@@ -1260,7 +1256,7 @@ def demonstrate_enhanced_immune_system():
         print(f"   • {change['type']}: {change['description']}")
 
     # Demonstrate beneficial cultivation
-    print(f"\n6. 🌱 Beneficial Pattern Cultivation")
+    print("\n6. 🌱 Beneficial Pattern Cultivation")
     cultivation_result = immune_system.cultivate_beneficial_pattern(
         "beneficial_pattern_signature_123",
         {"cultivation_environment": "nurturing", "monitoring": "continuous"},
@@ -1274,7 +1270,7 @@ def demonstrate_enhanced_immune_system():
     )
 
     # Final status report
-    print(f"\n📊 Final Enhanced Immune System Status:")
+    print("\n📊 Final Enhanced Immune System Status:")
     final_status = immune_system.get_immune_system_status()
     print(f"   Immune fitness: {final_status['immune_fitness']:.3f}")
     print(f"   Memory cells: {final_status['memory_statistics']['total_memory_cells']}")
@@ -1286,7 +1282,7 @@ def demonstrate_enhanced_immune_system():
     )
     print(f"   Evolutionary enhancements: {final_status['evolutionary_enhancements']}")
 
-    print(f"\n🌟 Bio/Sci Philosophy Metrics:")
+    print("\n🌟 Bio/Sci Philosophy Metrics:")
     bio_sci_metrics = final_status["bio_sci_philosophy_metrics"]
     print(f"   Symbiosis preference: {bio_sci_metrics['symbiosis_preference']:.1%}")
     print(f"   Adaptation threshold: {bio_sci_metrics['adaptation_threshold']:.1%}")
@@ -1294,14 +1290,14 @@ def demonstrate_enhanced_immune_system():
         f"   Evolutionary sensitivity: {bio_sci_metrics['evolutionary_pressure_sensitivity']:.1%}"
     )
 
-    print(f"\n🎯 Enhanced Immune System Summary:")
-    print(f"   ✅ Bio/Sci philosophy integration: Symbiosis over destruction")
-    print(f"   ✅ Adaptive immunity: Learning and memory-based responses")
-    print(f"   ✅ Symbiotic partnerships: Collaborative immune intelligence")
-    print(f"   ✅ Evolutionary enhancement: Self-improving immune capabilities")
-    print(f"   ✅ Beneficial cultivation: Transform challenges into opportunities")
-    print(f"   ✅ Network collaboration: Distributed immune responses")
-    print(f"   ✅ Organic adaptation: Natural response to environmental changes")
+    print("\n🎯 Enhanced Immune System Summary:")
+    print("   ✅ Bio/Sci philosophy integration: Symbiosis over destruction")
+    print("   ✅ Adaptive immunity: Learning and memory-based responses")
+    print("   ✅ Symbiotic partnerships: Collaborative immune intelligence")
+    print("   ✅ Evolutionary enhancement: Self-improving immune capabilities")
+    print("   ✅ Beneficial cultivation: Transform challenges into opportunities")
+    print("   ✅ Network collaboration: Distributed immune responses")
+    print("   ✅ Organic adaptation: Natural response to environmental changes")
     print(f"   ✅ Total responses generated: {len(all_responses)}")
 
     return immune_system, all_responses

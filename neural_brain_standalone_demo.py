@@ -7,8 +7,9 @@ that works independently without protobuf dependencies.
 
 from datetime import datetime, timezone
 from dataclasses import dataclass
-from typing import Dict, Any, List
+from typing import Dict, Any
 import random
+
 
 # Mock event structure
 @dataclass
@@ -19,6 +20,7 @@ class MockEvent:
     aggregate_id: str
     timestamp: datetime
     payload: Dict[str, Any]
+
 
 # Simplified neural brain demo
 class SimplifiedNeuralBrain:
@@ -31,7 +33,7 @@ class SimplifiedNeuralBrain:
             "curiosity": 0.5,
             "satisfaction": 0.5,
             "stress": 0.0,
-            "excitement": 0.3
+            "excitement": 0.3,
         }
         self.events_processed = 0
         self.patterns_learned = {}
@@ -46,18 +48,26 @@ class SimplifiedNeuralBrain:
 
         # Update consciousness
         old_consciousness = self.consciousness_level
-        self.consciousness_level = min(1.0, self.consciousness_level + activation_strength * 0.1)
+        self.consciousness_level = min(
+            1.0, self.consciousness_level + activation_strength * 0.1
+        )
 
         # Update attention based on event type
         if "error" in event.event_type.lower():
             self.attention_focus = "error_handling"
-            self.emotional_state["stress"] = min(1.0, self.emotional_state["stress"] + 0.1)
+            self.emotional_state["stress"] = min(
+                1.0, self.emotional_state["stress"] + 0.1
+            )
         elif "success" in event.event_type.lower():
             self.attention_focus = "celebration"
-            self.emotional_state["satisfaction"] = min(1.0, self.emotional_state["satisfaction"] + 0.1)
+            self.emotional_state["satisfaction"] = min(
+                1.0, self.emotional_state["satisfaction"] + 0.1
+            )
         else:
             self.attention_focus = "pattern_analysis"
-            self.emotional_state["curiosity"] = min(1.0, self.emotional_state["curiosity"] + 0.05)
+            self.emotional_state["curiosity"] = min(
+                1.0, self.emotional_state["curiosity"] + 0.05
+            )
 
         # Learn pattern
         if event.event_type not in self.patterns_learned:
@@ -72,7 +82,7 @@ class SimplifiedNeuralBrain:
             "attention_focus": self.attention_focus,
             "emotional_state": self.emotional_state.copy(),
             "pattern_recognized": self.patterns_learned[event.event_type] > 1,
-            "total_events_processed": self.events_processed
+            "total_events_processed": self.events_processed,
         }
 
 
@@ -87,8 +97,8 @@ def create_demo_event(event_type: str) -> MockEvent:
         payload={
             "demo": True,
             "complexity": len(event_type),
-            "timestamp": datetime.now(timezone.utc).isoformat()
-        }
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        },
     )
 
 
@@ -103,7 +113,7 @@ def run_neural_brain_demo():
     # Create neural brain
     brain = SimplifiedNeuralBrain()
 
-    print(f"🧬 Initial Brain State:")
+    print("🧬 Initial Brain State:")
     print(f"   Consciousness: {brain.consciousness_level:.3f}")
     print(f"   Attention: {brain.attention_focus}")
     print(f"   Events Processed: {brain.events_processed}")
@@ -117,8 +127,8 @@ def run_neural_brain_demo():
         "DataAnalysis",
         "UserRegistration",  # Repeat for learning demo
         "SecurityAlert",
-        "PaymentSuccess",    # Repeat for pattern recognition
-        "PerformanceOptimization"
+        "PaymentSuccess",  # Repeat for pattern recognition
+        "PerformanceOptimization",
     ]
 
     print("⚡ Processing Events Through Neural Network:")
@@ -128,15 +138,17 @@ def run_neural_brain_demo():
         event = create_demo_event(event_type)
         response = brain.process_event(event)
 
-        print(f"📨 Event {i+1}: {event_type}")
+        print(f"📨 Event {i + 1}: {event_type}")
         print(f"   🧠 Activation Strength: {response['activation_strength']:.3f}")
         print(f"   📈 Consciousness Change: +{response['consciousness_change']:.3f}")
         print(f"   👁️ Attention Focus: {response['attention_focus']}")
-        print(f"   🎯 Pattern Recognized: {'Yes' if response['pattern_recognized'] else 'No'}")
+        print(
+            f"   🎯 Pattern Recognized: {'Yes' if response['pattern_recognized'] else 'No'}"
+        )
 
         # Show emotional changes
         emotions_str = []
-        for emotion, level in response['emotional_state'].items():
+        for emotion, level in response["emotional_state"].items():
             if level > 0.6:
                 emotions_str.append(f"{emotion}↑")
         if emotions_str:

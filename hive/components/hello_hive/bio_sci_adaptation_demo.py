@@ -24,12 +24,10 @@ from dna_core.royal_jelly import (
     SacredCommand,
     SacredCodonType,
     create_sacred_command,
-    HiveAdaptationEngine,
     AdaptationType,
     get_adaptation_engine,
     process_event_with_adaptation_engine,
 )
-from .command import HelloHiveCommand
 
 
 class BiophilicHelloHive(SacredAggregate):
@@ -177,12 +175,12 @@ class BiophilicHelloHive(SacredAggregate):
         # Process through adaptation engine
         adaptation_commands = process_event_with_adaptation_engine(evolved_event, self)
 
-        print(f"🔬 Bio/Sci adaptation analysis complete:")
+        print("🔬 Bio/Sci adaptation analysis complete:")
         print(f"   Adaptation opportunities detected: {len(adaptation_commands)}")
 
         # Embrace the adaptations via Sacred Codon patterns
         if adaptation_commands:
-            print(f"🌿 Embracing evolutionary adaptations via Sacred Codon patterns")
+            print("🌿 Embracing evolutionary adaptations via Sacred Codon patterns")
             adaptation_events = []
             for command in adaptation_commands:
                 # Convert adaptation commands to beneficial evolutionary events
@@ -192,7 +190,7 @@ class BiophilicHelloHive(SacredAggregate):
                 adaptation_events.append(beneficial_event)
             return adaptation_events
         else:
-            print(f"✨ Organism is already optimally adapted")
+            print("✨ Organism is already optimally adapted")
             return [evolved_event]
 
     def demonstrate_symbiotic_collaboration(self) -> Dict[str, Any]:
@@ -202,7 +200,7 @@ class BiophilicHelloHive(SacredAggregate):
 
         Bio/Sci Principle: Collaboration and mutualism drive evolution
         """
-        print(f"\n🤝 Initiating symbiotic collaboration protocols")
+        print("\n🤝 Initiating symbiotic collaboration protocols")
 
         # Simulate symbiotic relationship formation
         partner_organisms = ["chronicler_bee", "pollen_processor", "queen_orchestrator"]
@@ -432,14 +430,14 @@ def demonstrate_bio_sci_philosophy_alignment():
     # Create biophilic organism
     bio_organism = BiophilicHelloHive("bio-hive-organism-001")
 
-    print(f"📊 Initial Organism Status:")
+    print("📊 Initial Organism Status:")
     initial_status = bio_organism.get_organism_adaptation_status()
     print(f"   Health: {initial_status['health']}")
     print(f"   Fitness Score: {initial_status['fitness_score']:.2f}")
     print(f"   Evolutionary Potential: {initial_status['evolutionary_potential']}")
 
     # 1. Demonstrate adaptive greeting creation
-    print(f"\n1. 🌱 Adaptive Greeting Creation (Organic Growth)")
+    print("\n1. 🌱 Adaptive Greeting Creation (Organic Growth)")
     adaptive_events = bio_organism.create_adaptive_greeting(
         {
             "message": "Hello, evolving Hive ecosystem!",
@@ -459,14 +457,14 @@ def demonstrate_bio_sci_philosophy_alignment():
         print(f"   Evolutionary adaptations: {len(evolution_events)}")
 
     # 3. Demonstrate symbiotic collaboration
-    print(f"\n5. 🤝 Symbiotic Collaboration Formation")
+    print("\n5. 🤝 Symbiotic Collaboration Formation")
     symbiosis_results = bio_organism.demonstrate_symbiotic_collaboration()
     print(f"   Symbiotic partners: {symbiosis_results['symbiotic_partners']}")
     print(f"   Fitness improvement: +{symbiosis_results['fitness_improvement']:.2f}")
     print(f"   Ecosystem resilience: {symbiosis_results['ecosystem_resilience']}")
 
     # 4. Final organism assessment
-    print(f"\n📊 Final Organism Assessment:")
+    print("\n📊 Final Organism Assessment:")
     final_status = bio_organism.get_organism_adaptation_status()
     print(f"   Health: {final_status['health']}")
     print(f"   Fitness Score: {final_status['fitness_score']:.2f}")
@@ -475,7 +473,7 @@ def demonstrate_bio_sci_philosophy_alignment():
     print(f"   Symbiotic Relationships: {final_status['symbiotic_relationships']}")
 
     # 5. Compare with global adaptation engine
-    print(f"\n🔬 Global Hive Adaptation Engine Status:")
+    print("\n🔬 Global Hive Adaptation Engine Status:")
     try:
         engine = get_adaptation_engine()
         global_stats = engine.get_adaptation_statistics()
@@ -492,21 +490,21 @@ def demonstrate_bio_sci_philosophy_alignment():
     except Exception as e:
         print(f"   Adaptation engine status: {e}")
 
-    print(f"\n🌟 Bio/Sci Philosophy Demonstration Summary:")
-    print(f"   ✅ Replaced 'mutation' with 'adaptation' (positive framing)")
-    print(f"   ✅ Replaced 'contamination' with 'evolution' (growth-oriented)")
-    print(f"   ✅ Replaced 'quarantine' with 'cultivation' (nurturing)")
-    print(f"   ✅ Replaced 'severity' with 'fitness' (natural selection)")
-    print(f"   ✅ Added symbiotic relationship capabilities")
-    print(f"   ✅ Emphasized beneficial evolutionary adaptations")
-    print(f"   ✅ Created organic, nature-inspired language throughout")
+    print("\n🌟 Bio/Sci Philosophy Demonstration Summary:")
+    print("   ✅ Replaced 'mutation' with 'adaptation' (positive framing)")
+    print("   ✅ Replaced 'contamination' with 'evolution' (growth-oriented)")
+    print("   ✅ Replaced 'quarantine' with 'cultivation' (nurturing)")
+    print("   ✅ Replaced 'severity' with 'fitness' (natural selection)")
+    print("   ✅ Added symbiotic relationship capabilities")
+    print("   ✅ Emphasized beneficial evolutionary adaptations")
+    print("   ✅ Created organic, nature-inspired language throughout")
 
-    print(f"\n🧬 The Hive now truly embodies bio/sci philosophy:")
-    print(f"   • Embraces change as opportunity for growth")
-    print(f"   • Cultivates beneficial adaptations")
-    print(f"   • Fosters collaborative, symbiotic relationships")
-    print(f"   • Applies natural selection for fitness optimization")
-    print(f"   • Uses organic, biological terminology")
+    print("\n🧬 The Hive now truly embodies bio/sci philosophy:")
+    print("   • Embraces change as opportunity for growth")
+    print("   • Cultivates beneficial adaptations")
+    print("   • Fosters collaborative, symbiotic relationships")
+    print("   • Applies natural selection for fitness optimization")
+    print("   • Uses organic, biological terminology")
 
     return bio_organism
 

@@ -18,7 +18,6 @@ from dna_core.royal_jelly import (
     SacredCodonType,
     create_sacred_command,
 )
-from .command import HelloHiveCommand
 
 
 class HelloHiveSacredAggregate(SacredAggregate):
@@ -349,7 +348,7 @@ def demonstrate_sacred_codons():
     print(f"   Executed choreography with {len(choreography_events)} events")
 
     # Final statistics
-    print(f"\n📊 Final Sacred Codon Statistics:")
+    print("\n📊 Final Sacred Codon Statistics:")
     final_stats = hive_aggregate.get_codon_statistics()
     print(f"   Total commands executed: {final_stats['total_commands']}")
     print(f"   Sacred compliance score: {final_stats['sacred_compliance']:.2f}")
