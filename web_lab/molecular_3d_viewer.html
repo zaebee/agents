@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌟 3D Molecular Architecture Viewer</title>
+    
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Monaco', 'Menlo', monospace;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+        }
+        
+        #container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        #viewer3d {
+            width: 100%;
+            height: 100%;
+            cursor: grab;
+        }
+        
+        #viewer3d:active {
+            cursor: grabbing;
+        }
+        
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .control-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(44, 62, 80, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            min-width: 300px;
+            pointer-events: auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+        
+        .control-panel h3 {
+            color: #3498db;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .control-group {
+            margin-bottom: 15px;
+        }
+        
+        .control-group label {
+            display: block;
+            color: #ecf0f1;
+            margin-bottom: 5px;
+            font-size: 12px;
+        }
+        
+        .control-group select,
+        .control-group input {
+            width: 100%;
+            padding: 8px;
+            background: rgba(52, 73, 94, 0.8);
+            border: 1px solid #34495e;
+            border-radius: 5px;
+            color: white;
+            font-family: inherit;
+            font-size: 12px;
+        }
+        
+        .control-group button {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .control-group button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+        
+        .info-panel {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(44, 62, 80, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            min-width: 250px;
+            pointer-events: auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+        
+        .info-panel h3 {
+            color: #e67e22;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+        
+        .info-label {
+            color: #bdc3c7;
+        }
+        
+        .info-value {
+            color: #ecf0f1;
+            font-weight: bold;
+        }
+        
+        .legend-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(44, 62, 80, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 15px;
+            pointer-events: auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+        
+        .legend-panel h4 {
+            color: #f39c12;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            font-size: 11px;
+        }
+        
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            pointer-events: auto;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #34495e;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            color: #3498db;
+            font-size: 18px;
+            text-align: center;
+        }
+        
+        .performance-monitor {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(44, 62, 80, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 10px;
+            pointer-events: auto;
+            font-size: 10px;
+            min-width: 120px;
+        }
+        
+        .fps-counter {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+        
+        .render-info {
+            color: #bdc3c7;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <canvas id="viewer3d"></canvas>
+        
+        <div class="overlay">
+            <div class="control-panel">
+                <h3>🌟 3D Molecular Controls</h3>
+                
+                <div class="control-group">
+                    <label>Molecular Template:</label>
+                    <select id="templateSelect">
+                        <option value="fullerene_c60">Fullerene C60 (Container)</option>
+                        <option value="carbon_nanotube">Carbon Nanotube (Pipeline)</option>
+                        <option value="alpha_helix">α-Helix (Sequential)</option>
+                        <option value="beta_sheet">β-Sheet (Layered)</option>
+                        <option value="dna_helix">DNA Double Helix (Replication)</option>
+                        <option value="crystal_fcc">FCC Crystal (Grid)</option>
+                        <option value="custom">Custom Molecule</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label>Rendering Style:</label>
+                    <select id="renderStyle">
+                        <option value="ball_stick">Ball & Stick</option>
+                        <option value="space_filling">Space Filling (CPK)</option>
+                        <option value="wireframe">Wireframe</option>
+                        <option value="surface">Molecular Surface</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label>Quantum States:</label>
+                    <input type="range" id="quantumIntensity" min="0" max="100" value="50">
+                    <small style="color: #bdc3c7;">Quantum Effect Intensity</small>
+                </div>
+                
+                <div class="control-group">
+                    <label>Animation Speed:</label>
+                    <input type="range" id="animationSpeed" min="0" max="200" value="100">
+                </div>
+                
+                <div class="control-group">
+                    <button id="loadMolecule">🚀 Generate Molecule</button>
+                </div>
+                
+                <div class="control-group">
+                    <button id="toggleAnimation">⏸️ Pause Animation</button>
+                </div>
+                
+                <div class="control-group">
+                    <button id="resetView">🔄 Reset View</button>
+                </div>
+                
+                <div class="control-group">
+                    <button id="exportScene">💾 Export 3D Model</button>
+                </div>
+            </div>
+            
+            <div class="info-panel">
+                <h3>📊 Molecule Info</h3>
+                
+                <div class="info-item">
+                    <span class="info-label">Name:</span>
+                    <span class="info-value" id="moleculeName">Loading...</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">Formula:</span>
+                    <span class="info-value" id="moleculeFormula">-</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">Atoms:</span>
+                    <span class="info-value" id="atomCount">0</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">Bonds:</span>
+                    <span class="info-value" id="bondCount">0</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">Quantum States:</span>
+                    <span class="info-value" id="quantumCount">0</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">Energy:</span>
+                    <span class="info-value" id="totalEnergy">0.0 eV</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">Temperature:</span>
+                    <span class="info-value" id="temperature">298K</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">Phase:</span>
+                    <span class="info-value" id="thermPhase">Solid</span>
+                </div>
+            </div>
+            
+            <div class="legend-panel">
+                <h4>🧪 Element Legend</h4>
+                
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #e74c3c;"></div>
+                    <span>Aggregate (Domain Core)</span>
+                </div>
+                
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #f39c12;"></div>
+                    <span>Transformation (Logic)</span>
+                </div>
+                
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #3498db;"></div>
+                    <span>Connector (Interface)</span>
+                </div>
+                
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #9b59b6;"></div>
+                    <span>Genesis Event</span>
+                </div>
+                
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #2ecc71;"></div>
+                    <span>Quantum Coherent</span>
+                </div>
+                
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #e67e22;"></div>
+                    <span>Entangled State</span>
+                </div>
+            </div>
+            
+            <div class="performance-monitor">
+                <div class="fps-counter" id="fpsCounter">FPS: 60</div>
+                <div class="render-info">
+                    <div id="renderInfo">Triangles: 0</div>
+                    <div id="drawCalls">Draw calls: 0</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">
+                <div>🌟 Initializing 3D Molecular Viewer</div>
+                <div style="font-size: 12px; margin-top: 10px; color: #bdc3c7;">
+                    Preparing quantum-enhanced visualization...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let scene, camera, renderer, controls;
+        let currentMolecule = null;
+        let animationId = null;
+        let isAnimating = true;
+        let quantumEffects = [];
+        let moleculeGroup = null;
+        let isMouseDown = false;
+        
+        // Performance monitoring
+        let frameCount = 0;
+        let lastTime = performance.now();
+        
+        // Molecular data structures
+        const molecularTemplates = {
+            fullerene_c60: {
+                name: "Fullerene C60",
+                formula: "C60",
+                description: "Container Architecture",
+                atoms: [],
+                bonds: []
+            },
+            carbon_nanotube: {
+                name: "Carbon Nanotube",
+                formula: "C_n",
+                description: "Data Pipeline Architecture",
+                atoms: [],
+                bonds: []
+            },
+            alpha_helix: {
+                name: "Alpha Helix",
+                formula: "Service_n",
+                description: "Sequential Processing",
+                atoms: [],
+                bonds: []
+            },
+            beta_sheet: {
+                name: "Beta Sheet",
+                formula: "Layer_n",
+                description: "Layered Services",
+                atoms: [],
+                bonds: []
+            },
+            dna_helix: {
+                name: "DNA Double Helix",
+                formula: "ATCG_n",
+                description: "Replication System",
+                atoms: [],
+                bonds: []
+            },
+            crystal_fcc: {
+                name: "FCC Crystal",
+                formula: "Node_n",
+                description: "Grid Architecture",
+                atoms: [],
+                bonds: []
+            }
+        };
+        
+        // Initialize 3D viewer
+        function initViewer() {
+            const container = document.getElementById('viewer3d');
+            
+            // Scene setup
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a0a0a);
+            
+            // Camera setup
+            camera = new THREE.PerspectiveCamera(
+                75, 
+                window.innerWidth / window.innerHeight, 
+                0.1, 
+                1000
+            );
+            camera.position.set(0, 0, 50);
+            
+            // Renderer setup
+            renderer = new THREE.WebGLRenderer({ 
+                canvas: container,
+                antialias: true,
+                alpha: true
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            
+            // Lighting setup
+            setupLighting();
+            
+            // Mouse controls (simple orbit)
+            setupControls();
+            
+            // Load initial molecule
+            loadMolecularTemplate('fullerene_c60');
+            
+            // Start render loop
+            animate();
+            
+            // Hide loading overlay
+            setTimeout(() => {
+                document.getElementById('loadingOverlay').style.display = 'none';
+            }, 2000);
+        }
+        
+        function setupLighting() {
+            // Ambient light
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+            scene.add(ambientLight);
+            
+            // Directional lights
+            const light1 = new THREE.DirectionalLight(0xffffff, 0.8);
+            light1.position.set(50, 50, 50);
+            light1.castShadow = true;
+            scene.add(light1);
+            
+            const light2 = new THREE.DirectionalLight(0x3498db, 0.4);
+            light2.position.set(-50, -50, 50);
+            scene.add(light2);
+            
+            const light3 = new THREE.DirectionalLight(0xe74c3c, 0.3);
+            light3.position.set(0, 0, -50);
+            scene.add(light3);
+        }
+        
+        function setupControls() {
+            let isMouseDown = false;
+            let mouseX = 0, mouseY = 0;
+            let targetRotationX = 0, targetRotationY = 0;
+            let rotationX = 0, rotationY = 0;
+            
+            const canvas = document.getElementById('viewer3d');
+            
+            canvas.addEventListener('mousedown', (event) => {
+                isMouseDown = true;
+                mouseX = event.clientX;
+                mouseY = event.clientY;
+            });
+            
+            canvas.addEventListener('mouseup', () => {
+                isMouseDown = false;
+            });
+            
+            canvas.addEventListener('mousemove', (event) => {
+                if (isMouseDown && moleculeGroup) {
+                    const deltaX = event.clientX - mouseX;
+                    const deltaY = event.clientY - mouseY;
+                    
+                    targetRotationY += deltaX * 0.01;
+                    targetRotationX += deltaY * 0.01;
+                    
+                    mouseX = event.clientX;
+                    mouseY = event.clientY;
+                }
+            });
+            
+            canvas.addEventListener('wheel', (event) => {
+                event.preventDefault();
+                if (moleculeGroup) {
+                    const scale = event.deltaY > 0 ? 0.95 : 1.05;
+                    moleculeGroup.scale.multiplyScalar(scale);
+                }
+            });
+            
+            // Smooth rotation update
+            function updateRotation() {
+                if (moleculeGroup) {
+                    rotationX += (targetRotationX - rotationX) * 0.05;
+                    rotationY += (targetRotationY - rotationY) * 0.05;
+                    
+                    moleculeGroup.rotation.x = rotationX;
+                    moleculeGroup.rotation.y = rotationY;
+                }
+                requestAnimationFrame(updateRotation);
+            }
+            updateRotation();
+        }
+        
+        function loadMolecularTemplate(templateId) {
+            if (moleculeGroup) {
+                scene.remove(moleculeGroup);
+            }
+            
+            moleculeGroup = new THREE.Group();
+            
+            const template = molecularTemplates[templateId];
+            
+            // Update info panel
+            document.getElementById('moleculeName').textContent = template.name;
+            document.getElementById('moleculeFormula').textContent = template.formula;
+            
+            // Generate molecular structure based on template
+            generateMolecularStructure(templateId);
+            
+            scene.add(moleculeGroup);
+            
+            // Update statistics
+            updateMoleculeStatistics();
+        }
+        
+        function generateMolecularStructure(templateId) {
+            const atoms = [];
+            const bonds = [];
+            
+            switch(templateId) {
+                case 'fullerene_c60':
+                    generateFullerene(atoms, bonds);
+                    break;
+                case 'carbon_nanotube':
+                    generateNanotube(atoms, bonds);
+                    break;
+                case 'alpha_helix':
+                    generateAlphaHelix(atoms, bonds);
+                    break;
+                case 'beta_sheet':
+                    generateBetaSheet(atoms, bonds);
+                    break;
+                case 'dna_helix':
+                    generateDNAHelix(atoms, bonds);
+                    break;
+                case 'crystal_fcc':
+                    generateFCCCrystal(atoms, bonds);
+                    break;
+            }
+            
+            // Create 3D representations
+            createAtom3D(atoms);
+            createBonds3D(bonds);
+            addQuantumEffects(atoms);
+        }
+        
+        function generateFullerene(atoms, bonds) {
+            // Simplified C60 fullerene structure
+            const radius = 15;
+            const vertexCount = 60;
+            
+            // Generate vertices on a geodesic sphere
+            for (let i = 0; i < vertexCount; i++) {
+                const phi = Math.acos(1 - 2 * (i + 0.5) / vertexCount);
+                const theta = Math.PI * (1 + Math.sqrt(5)) * i;
+                
+                const x = radius * Math.sin(phi) * Math.cos(theta);
+                const y = radius * Math.sin(phi) * Math.sin(theta);
+                const z = radius * Math.cos(phi);
+                
+                atoms.push({
+                    id: i,
+                    element: 'C',
+                    position: new THREE.Vector3(x, y, z),
+                    color: 0x2c3e50,
+                    radius: 0.8,
+                    quantumState: Math.random() > 0.7 ? 'coherent' : 'ground'
+                });
+            }
+            
+            // Generate bonds (simplified nearest neighbor)
+            for (let i = 0; i < atoms.length; i++) {
+                for (let j = i + 1; j < atoms.length; j++) {
+                    const distance = atoms[i].position.distanceTo(atoms[j].position);
+                    if (distance < 3.0) {
+                        bonds.push({
+                            atom1: i,
+                            atom2: j,
+                            type: 'covalent',
+                            strength: 1.5
+                        });
+                    }
+                }
+            }
+        }
+        
+        function generateNanotube(atoms, bonds) {
+            const radius = 8;
+            const height = 30;
+            const rings = 15;
+            const atomsPerRing = 12;
+            
+            for (let ring = 0; ring < rings; ring++) {
+                const y = (ring - rings/2) * (height / rings);
+                
+                for (let i = 0; i < atomsPerRing; i++) {
+                    const angle = (2 * Math.PI * i) / atomsPerRing;
+                    const x = radius * Math.cos(angle);
+                    const z = radius * Math.sin(angle);
+                    
+                    const atomId = ring * atomsPerRing + i;
+                    
+                    atoms.push({
+                        id: atomId,
+                        element: 'C',
+                        position: new THREE.Vector3(x, y, z),
+                        color: 0x34495e,
+                        radius: 0.6,
+                        quantumState: 'coherent'
+                    });
+                    
+                    // Ring bonds
+                    if (i > 0) {
+                        bonds.push({
+                            atom1: atomId - 1,
+                            atom2: atomId,
+                            type: 'covalent',
+                            strength: 1.5
+                        });
+                    } else if (i === atomsPerRing - 1) {
+                        bonds.push({
+                            atom1: ring * atomsPerRing,
+                            atom2: atomId,
+                            type: 'covalent',
+                            strength: 1.5
+                        });
+                    }
+                    
+                    // Vertical bonds
+                    if (ring > 0) {
+                        bonds.push({
+                            atom1: (ring - 1) * atomsPerRing + i,
+                            atom2: atomId,
+                            type: 'covalent',
+                            strength: 1.5
+                        });
+                    }
+                }
+            }
+        }
+        
+        function generateAlphaHelix(atoms, bonds) {
+            const radius = 12;
+            const pitch = 2.0;
+            const turns = 8;
+            const residuesPerTurn = 3.6;
+            const totalResidues = Math.floor(turns * residuesPerTurn);
+            
+            const elementTypes = ['A', 'T', 'C', 'G'];
+            const colors = [0xe74c3c, 0xf39c12, 0x3498db, 0x9b59b6];
+            
+            for (let i = 0; i < totalResidues; i++) {
+                const t = i / residuesPerTurn;
+                const angle = 2 * Math.PI * t;
+                const y = t * pitch;
+                
+                const x = radius * Math.cos(angle);
+                const z = radius * Math.sin(angle);
+                
+                const elementIdx = i % elementTypes.length;
+                
+                atoms.push({
+                    id: i,
+                    element: elementTypes[elementIdx],
+                    position: new THREE.Vector3(x, y, z),
+                    color: colors[elementIdx],
+                    radius: 1.2,
+                    quantumState: Math.random() > 0.6 ? 'coherent' : 'ground'
+                });
+                
+                // Backbone bonds
+                if (i > 0) {
+                    bonds.push({
+                        atom1: i - 1,
+                        atom2: i,
+                        type: 'covalent',
+                        strength: 1.0
+                    });
+                }
+                
+                // Hydrogen bonds (n to n+4)
+                if (i >= 4) {
+                    bonds.push({
+                        atom1: i - 4,
+                        atom2: i,
+                        type: 'hydrogen',
+                        strength: 0.3
+                    });
+                }
+            }
+        }
+        
+        function generateBetaSheet(atoms, bonds) {
+            const strands = 4;
+            const residuesPerStrand = 8;
+            const strandSpacing = 8;
+            const residueSpacing = 3;
+            
+            const elementTypes = ['A', 'T', 'C', 'G'];
+            const colors = [0xe74c3c, 0xf39c12, 0x3498db, 0x9b59b6];
+            
+            for (let strand = 0; strand < strands; strand++) {
+                for (let residue = 0; residue < residuesPerStrand; residue++) {
+                    const x = (residue - residuesPerStrand/2) * residueSpacing;
+                    const y = 0;
+                    const z = (strand - strands/2) * strandSpacing;
+                    
+                    const atomId = strand * residuesPerStrand + residue;
+                    const elementIdx = strand % elementTypes.length;
+                    
+                    atoms.push({
+                        id: atomId,
+                        element: elementTypes[elementIdx],
+                        position: new THREE.Vector3(x, y, z),
+                        color: colors[elementIdx],
+                        radius: 1.0,
+                        quantumState: 'ground'
+                    });
+                    
+                    // Backbone bonds
+                    if (residue > 0) {
+                        bonds.push({
+                            atom1: atomId - 1,
+                            atom2: atomId,
+                            type: 'covalent',
+                            strength: 1.0
+                        });
+                    }
+                    
+                    // Inter-strand hydrogen bonds
+                    if (strand > 0) {
+                        const prevStrandAtom = (strand - 1) * residuesPerStrand + residue;
+                        bonds.push({
+                            atom1: prevStrandAtom,
+                            atom2: atomId,
+                            type: 'hydrogen',
+                            strength: 0.2
+                        });
+                    }
+                }
+            }
+        }
+        
+        function generateDNAHelix(atoms, bonds) {
+            const radius = 10;
+            const pitch = 3.4;
+            const basePairs = 20;
+            
+            const bases = ['A', 'T', 'G', 'C'];
+            const baseColors = [0xe74c3c, 0xf39c12, 0x3498db, 0x9b59b6];
+            const complement = {'A': 'T', 'T': 'A', 'G': 'C', 'C': 'G'};
+            
+            for (let i = 0; i < basePairs; i++) {
+                const angle = i * 36 * Math.PI / 180; // 36° per base pair
+                const y = i * pitch;
+                
+                // First strand
+                const x1 = radius * Math.cos(angle);
+                const z1 = radius * Math.sin(angle);
+                
+                // Second strand (opposite)
+                const x2 = radius * Math.cos(angle + Math.PI);
+                const z2 = radius * Math.sin(angle + Math.PI);
+                
+                const base1 = bases[i % bases.length];
+                const base2 = complement[base1];
+                
+                const base1Idx = bases.indexOf(base1);
+                const base2Idx = bases.indexOf(base2);
+                
+                const atom1Id = i * 2;
+                const atom2Id = i * 2 + 1;
+                
+                // Add atoms
+                atoms.push({
+                    id: atom1Id,
+                    element: base1,
+                    position: new THREE.Vector3(x1, y, z1),
+                    color: baseColors[base1Idx],
+                    radius: 1.0,
+                    quantumState: 'coherent'
+                });
+                
+                atoms.push({
+                    id: atom2Id,
+                    element: base2,
+                    position: new THREE.Vector3(x2, y, z2),
+                    color: baseColors[base2Idx],
+                    radius: 1.0,
+                    quantumState: 'coherent'
+                });
+                
+                // Hydrogen bond between base pairs
+                bonds.push({
+                    atom1: atom1Id,
+                    atom2: atom2Id,
+                    type: 'hydrogen',
+                    strength: base1 === 'G' || base1 === 'C' ? 0.4 : 0.3
+                });
+                
+                // Backbone bonds
+                if (i > 0) {
+                    bonds.push({
+                        atom1: (i-1) * 2,
+                        atom2: atom1Id,
+                        type: 'covalent',
+                        strength: 1.0
+                    });
+                    
+                    bonds.push({
+                        atom1: (i-1) * 2 + 1,
+                        atom2: atom2Id,
+                        type: 'covalent',
+                        strength: 1.0
+                    });
+                }
+            }
+        }
+        
+        function generateFCCCrystal(atoms, bonds) {
+            const latticeConstant = 6;
+            const unitCells = 3;
+            
+            for (let i = 0; i < unitCells; i++) {
+                for (let j = 0; j < unitCells; j++) {
+                    for (let k = 0; k < unitCells; k++) {
+                        const positions = [
+                            [0, 0, 0],          // Corner
+                            [0.5, 0.5, 0],      // Face centers
+                            [0.5, 0, 0.5],
+                            [0, 0.5, 0.5]
+                        ];
+                        
+                        positions.forEach((pos, idx) => {
+                            const x = (i + pos[0]) * latticeConstant - unitCells * latticeConstant / 2;
+                            const y = (j + pos[1]) * latticeConstant - unitCells * latticeConstant / 2;
+                            const z = (k + pos[2]) * latticeConstant - unitCells * latticeConstant / 2;
+                            
+                            atoms.push({
+                                id: atoms.length,
+                                element: 'Node',
+                                position: new THREE.Vector3(x, y, z),
+                                color: 0x2ecc71,
+                                radius: 1.0,
+                                quantumState: 'ground'
+                            });
+                        });
+                    }
+                }
+            }
+            
+            // Create nearest neighbor bonds
+            for (let i = 0; i < atoms.length; i++) {
+                for (let j = i + 1; j < atoms.length; j++) {
+                    const distance = atoms[i].position.distanceTo(atoms[j].position);
+                    if (distance < latticeConstant * 0.8) {
+                        bonds.push({
+                            atom1: i,
+                            atom2: j,
+                            type: 'metallic',
+                            strength: 0.5
+                        });
+                    }
+                }
+            }
+        }
+        
+        function createAtom3D(atoms) {
+            const renderStyle = document.getElementById('renderStyle').value;
+            
+            atoms.forEach(atom => {
+                let geometry, material;
+                
+                switch(renderStyle) {
+                    case 'space_filling':
+                        geometry = new THREE.SphereGeometry(atom.radius * 2, 16, 12);
+                        break;
+                    case 'wireframe':
+                        geometry = new THREE.SphereGeometry(atom.radius, 8, 6);
+                        material = new THREE.MeshBasicMaterial({ 
+                            color: atom.color, 
+                            wireframe: true 
+                        });
+                        break;
+                    default: // ball_stick
+                        geometry = new THREE.SphereGeometry(atom.radius, 12, 8);
+                }
+                
+                if (!material) {
+                    material = new THREE.MeshLambertMaterial({ 
+                        color: atom.color,
+                        transparent: atom.quantumState !== 'ground',
+                        opacity: atom.quantumState === 'coherent' ? 0.8 : 1.0
+                    });
+                }
+                
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.position.copy(atom.position);
+                mesh.castShadow = true;
+                mesh.receiveShadow = true;
+                mesh.userData = { atom: atom };
+                
+                moleculeGroup.add(mesh);
+            });
+        }
+        
+        function createBonds3D(bonds) {
+            const renderStyle = document.getElementById('renderStyle').value;
+            
+            if (renderStyle === 'space_filling') return; // No bonds in space filling
+            
+            bonds.forEach(bond => {
+                const atom1 = moleculeGroup.children[bond.atom1].userData.atom;
+                const atom2 = moleculeGroup.children[bond.atom2].userData.atom;
+                
+                const direction = new THREE.Vector3()
+                    .subVectors(atom2.position, atom1.position);
+                const length = direction.length();
+                
+                let radius, color;
+                
+                switch(bond.type) {
+                    case 'hydrogen':
+                        radius = 0.1;
+                        color = 0x3498db;
+                        break;
+                    case 'metallic':
+                        radius = 0.15;
+                        color = 0xf39c12;
+                        break;
+                    default: // covalent
+                        radius = 0.2;
+                        color = 0x34495e;
+                }
+                
+                const geometry = new THREE.CylinderGeometry(radius, radius, length, 8);
+                const material = new THREE.MeshLambertMaterial({ 
+                    color: color,
+                    transparent: bond.type === 'hydrogen',
+                    opacity: bond.type === 'hydrogen' ? 0.6 : 1.0
+                });
+                
+                const mesh = new THREE.Mesh(geometry, material);
+                
+                // Position and orient the bond
+                mesh.position.copy(atom1.position);
+                mesh.position.add(atom2.position);
+                mesh.position.multiplyScalar(0.5);
+                
+                mesh.lookAt(atom2.position);
+                mesh.rotateX(Math.PI / 2);
+                
+                moleculeGroup.add(mesh);
+            });
+        }
+        
+        function addQuantumEffects(atoms) {
+            quantumEffects = [];
+            
+            atoms.forEach((atom, index) => {
+                if (atom.quantumState === 'coherent' || atom.quantumState === 'entangled') {
+                    const geometry = new THREE.RingGeometry(atom.radius * 1.5, atom.radius * 2, 16);
+                    const material = new THREE.MeshBasicMaterial({ 
+                        color: atom.quantumState === 'coherent' ? 0x2ecc71 : 0xe67e22,
+                        transparent: true,
+                        opacity: 0.3,
+                        side: THREE.DoubleSide
+                    });
+                    
+                    const effect = new THREE.Mesh(geometry, material);
+                    effect.position.copy(atom.position);
+                    
+                    moleculeGroup.add(effect);
+                    quantumEffects.push(effect);
+                }
+            });
+        }
+        
+        function animate() {
+            animationId = requestAnimationFrame(animate);
+            
+            if (isAnimating) {
+                // Update quantum effects
+                const time = Date.now() * 0.001;
+                const speed = document.getElementById('animationSpeed').value / 100;
+                
+                quantumEffects.forEach((effect, index) => {
+                    effect.rotation.z += 0.02 * speed;
+                    effect.material.opacity = 0.2 + 0.2 * Math.sin(time * 2 + index);
+                    
+                    const scale = 1 + 0.1 * Math.sin(time * 3 + index);
+                    effect.scale.setScalar(scale);
+                });
+                
+                // Molecular rotation
+                if (moleculeGroup && !isMouseDown) {
+                    moleculeGroup.rotation.y += 0.005 * speed;
+                }
+            }
+            
+            renderer.render(scene, camera);
+            
+            // Update performance monitor
+            updatePerformanceMonitor();
+        }
+        
+        function updatePerformanceMonitor() {
+            frameCount++;
+            const currentTime = performance.now();
+            
+            if (currentTime - lastTime >= 1000) {
+                const fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
+                document.getElementById('fpsCounter').textContent = `FPS: ${fps}`;
+                
+                const info = renderer.info;
+                document.getElementById('renderInfo').textContent = `Triangles: ${info.render.triangles}`;
+                document.getElementById('drawCalls').textContent = `Draw calls: ${info.render.calls}`;
+                
+                frameCount = 0;
+                lastTime = currentTime;
+            }
+        }
+        
+        function updateMoleculeStatistics() {
+            if (!moleculeGroup) return;
+            
+            const atoms = moleculeGroup.children.filter(child => 
+                child.userData && child.userData.atom
+            );
+            
+            const quantumAtoms = atoms.filter(child => 
+                child.userData.atom.quantumState !== 'ground'
+            );
+            
+            document.getElementById('atomCount').textContent = atoms.length;
+            document.getElementById('bondCount').textContent = 
+                moleculeGroup.children.length - atoms.length - quantumEffects.length;
+            document.getElementById('quantumCount').textContent = quantumAtoms.length;
+            document.getElementById('totalEnergy').textContent = 
+                `${(quantumAtoms.length * 2.5).toFixed(1)} eV`;
+        }
+        
+        // Event listeners
+        document.getElementById('loadMolecule').addEventListener('click', () => {
+            const template = document.getElementById('templateSelect').value;
+            loadMolecularTemplate(template);
+        });
+        
+        document.getElementById('toggleAnimation').addEventListener('click', (e) => {
+            isAnimating = !isAnimating;
+            e.target.textContent = isAnimating ? '⏸️ Pause Animation' : '▶️ Start Animation';
+        });
+        
+        document.getElementById('resetView').addEventListener('click', () => {
+            if (moleculeGroup) {
+                moleculeGroup.rotation.set(0, 0, 0);
+                moleculeGroup.scale.set(1, 1, 1);
+                targetRotationX = 0;
+                targetRotationY = 0;
+            }
+        });
+        
+        document.getElementById('renderStyle').addEventListener('change', () => {
+            const template = document.getElementById('templateSelect').value;
+            loadMolecularTemplate(template);
+        });
+        
+        document.getElementById('exportScene').addEventListener('click', () => {
+            // Simple STL export would require additional library
+            alert('🚧 3D model export functionality coming soon!\n\nThis will support STL, OBJ, and GLTF formats for 3D printing and external visualization tools.');
+        });
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        // Initialize on load
+        window.addEventListener('load', initViewer);
+    </script>
+</body>
+</html>

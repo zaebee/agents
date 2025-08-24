@@ -1,4 +1,0 @@
-# A declarative definition for a new "TestBee" feature
-kind: WorkerBee
-name: TestBee
-description: "A bee created from a manifest to test the Genesis Engine."

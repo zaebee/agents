@@ -1,0 +1,479 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="920" xmlns="http://www.w3.org/2000/svg" font-family="'Fira Code', monospace" font-size="12" role="img" aria-label="Order+Fulfillment+Shipping Polycyclic Molecule">
+  <defs>
+    <!-- Gradients -->
+    <radialGradient id="coreGradientA" cx="0.5" cy="0.35">
+      <stop offset="0%" style="stop-color:#fff7e6;stop-opacity:1"></stop>
+      <stop offset="100%" style="stop-color:#f39c12;stop-opacity:0.9"></stop>
+    </radialGradient>
+    <radialGradient id="coreGradientB" cx="0.5" cy="0.35">
+      <stop offset="0%" style="stop-color:#fff8f2;stop-opacity:1"></stop>
+      <stop offset="100%" style="stop-color:#d35400;stop-opacity:0.9"></stop>
+    </radialGradient>
+    <radialGradient id="adapterGradient" cx="0.5" cy="0.3">
+      <stop offset="0%" style="stop-color:#5dade2;stop-opacity:0.95"></stop>
+      <stop offset="100%" style="stop-color:#2e86c1;stop-opacity:0.8"></stop>
+    </radialGradient>
+    <radialGradient id="externalGradient" cx="0.5" cy="0.3">
+      <stop offset="0%" style="stop-color:#58d68d;stop-opacity:0.95"></stop>
+      <stop offset="100%" style="stop-color:#28b463;stop-opacity:0.8"></stop>
+    </radialGradient>
+    <radialGradient id="toxicGradient" cx="0.5" cy="0.3">
+      <stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:0.95"></stop>
+      <stop offset="100%" style="stop-color:#e74c3c;stop-opacity:0.8"></stop>
+    </radialGradient>
+    <linearGradient id="bgGradient" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#f4fbf9"></stop>
+      <stop offset="100%" stop-color="#f6f9ff"></stop>
+    </linearGradient>
+    <linearGradient id="stabilityGradient" x1="0" x2="1">
+      <stop offset="0%" stop-color="#58d68d" />
+      <stop offset="100%" stop-color="#d35400" />
+    </linearGradient>
+
+    <!-- Filters -->
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="3" dy="3" stdDeviation="4" flood-color="rgba(0,0,0,0.28)"></feDropShadow>
+    </filter>
+    <filter id="toxicGlow">
+      <feGaussianBlur stdDeviation="3" result="blur"></feGaussianBlur>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"></feComposite>
+    </filter>
+    <filter id="pulse">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur"></feGaussianBlur>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"></feComposite>
+    </filter>
+    <filter id="resonanceGlow">
+      <feGaussianBlur stdDeviation="2" result="blur"></feGaussianBlur>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"></feComposite>
+    </filter>
+
+    <!-- Styles -->
+    <style>
+      .background { fill: url(#bgGradient); }
+      .coreA { fill: url(#coreGradientA); stroke:#c07210; stroke-width:3; filter: url(#shadow); }
+      .coreB { fill: url(#coreGradientB); stroke:#b24a0d; stroke-width:3; filter: url(#shadow); }
+      .adapter { fill: url(#adapterGradient); stroke:#1f4e79; stroke-width:2; filter: url(#shadow); }
+      .toxic { fill: url(#toxicGradient); stroke:#c0392b; stroke-width:2; filter: url(#toxicGlow); }
+      .external { fill: url(#externalGradient); stroke:#1e8449; stroke-width:2; filter: url(#shadow); }
+      .bond { stroke: #34495e; stroke-width:2; stroke-linecap: round; opacity:0.9; }
+      .strong-bond { stroke: #34495e; stroke-width:4; stroke-linecap: round; opacity:0.9; }
+      .weak-bond { stroke: #34495e; stroke-width:1; stroke-linecap: round; opacity:0.6; stroke-dasharray: 3,2; }
+      .aromatic { stroke: #d4a017; stroke-width:2; stroke-dasharray: 8,4; opacity:0.95; stroke-linecap: round; }
+      .resonance { stroke: #d4a017; stroke-width:2; stroke-dasharray: 5,3; opacity:0.7; stroke-linecap: round; }
+      .label { text-anchor: middle; fill: #2c3e50; font-weight: bold; font-size:12px; }
+      .core-label { text-anchor: middle; fill: #6b2f00; font-weight: bold; font-size:13px; }
+      .title { text-anchor: middle; fill: #2c3e50; font-size:22px; font-weight:bold; }
+      .formula { text-anchor: middle; fill: #d4a017; font-size:18px; font-weight:bold; }
+      .stats { fill: #34495e; font-size:12px; }
+      .small { font-size:11px; fill:#2c3e50; }
+      .legend { fill: rgba(255,255,255,0.95); stroke:#bdc3c7; stroke-width:1; }
+      .toxic-label { fill: #e74c3c; font-size:10px; font-weight:bold; }
+      .evolution { stroke: #d4a017; stroke-width:1; stroke-dasharray: 5,3; opacity:0.7; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="920" class="background"></rect>
+
+  <!-- Title -->
+  <text x="600" y="38" class="title">🧪 Order+Fulfillment+Shipping — Polycyclic Molecule (A21T15C15)</text>
+  <text x="600" y="64" class="formula">A21T15C15</text>
+
+  <!-- Aromatic Ring Structures -->
+  <g transform="translate(430,400)">
+    <line x1="0" y1="-120" x2="51.9" y2="-60" class="aromatic"></line>
+    <line x1="51.9" y1="-60" x2="51.9" y2="60" class="aromatic"></line>
+    <line x1="51.9" y1="60" x2="0" y2="120" class="aromatic"></line>
+    <line x1="0" y1="120" x2="-51.9" y2="60" class="aromatic"></line>
+    <line x1="-51.9" y1="60" x2="-51.9" y2="-60" class="aromatic"></line>
+    <line x1="-51.9" y1="-60" x2="0" y2="-120" class="aromatic"></line>
+  </g>
+  <g transform="translate(430.0,340.0)">
+    <line x1="0" y1="-120" x2="51.9" y2="-60" class="aromatic"></line>
+    <line x1="51.9" y1="-60" x2="51.9" y2="60" class="aromatic"></line>
+    <line x1="51.9" y1="60" x2="0" y2="120" class="aromatic"></line>
+    <line x1="0" y1="120" x2="-51.9" y2="60" class="aromatic"></line>
+    <line x1="-51.9" y1="60" x2="-51.9" y2="-60" class="aromatic"></line>
+    <line x1="-51.9" y1="-60" x2="0" y2="-120" class="aromatic"></line>
+  </g>
+
+  <!-- Molecular Bonds -->
+  <line x1="430.0" y1="340.0" x2="481.9615242270663" y2="370.0" class="aromatic">
+  </line>
+  <line x1="481.9615242270663" y1="370.0" x2="481.9615242270663" y2="430.0" class="aromatic">
+  </line>
+  <line x1="481.9615242270663" y1="430.0" x2="430.0" y2="460.0" class="aromatic">
+  </line>
+  <line x1="430.0" y1="460.0" x2="378.0384757729337" y2="430.0" class="aromatic">
+  </line>
+  <line x1="378.0384757729337" y1="430.0" x2="378.0384757729337" y2="370.0" class="aromatic">
+  </line>
+  <line x1="378.0384757729337" y1="370.0" x2="430.0" y2="340.0" class="aromatic">
+  </line>
+  <line x1="550.0" y1="340.0" x2="601.9615242270663" y2="370.0" class="aromatic">
+  </line>
+  <line x1="601.9615242270663" y1="370.0" x2="601.9615242270663" y2="430.0" class="aromatic">
+  </line>
+  <line x1="601.9615242270663" y1="430.0" x2="550.0" y2="460.0" class="aromatic">
+  </line>
+  <line x1="550.0" y1="460.0" x2="498.0384757729337" y2="430.0" class="aromatic">
+  </line>
+  <line x1="498.0384757729337" y1="430.0" x2="498.0384757729337" y2="370.0" class="aromatic">
+  </line>
+  <line x1="498.0384757729337" y1="370.0" x2="550.0" y2="340.0" class="aromatic">
+  </line>
+  <line x1="670.0" y1="340.0" x2="721.9615242270663" y2="370.0" class="aromatic">
+  </line>
+  <line x1="721.9615242270663" y1="370.0" x2="721.9615242270663" y2="430.0" class="aromatic">
+  </line>
+  <line x1="721.9615242270663" y1="430.0" x2="670.0" y2="460.0" class="aromatic">
+  </line>
+  <line x1="670.0" y1="460.0" x2="618.0384757729337" y2="430.0" class="aromatic">
+  </line>
+  <line x1="618.0384757729337" y1="430.0" x2="618.0384757729337" y2="370.0" class="aromatic">
+  </line>
+  <line x1="618.0384757729337" y1="370.0" x2="670.0" y2="340.0" class="aromatic">
+  </line>
+  <line x1="430" y1="400" x2="550" y2="400" class="aromatic">
+      <animate attributeName="stroke-width" values="2;4;2" dur="2s" repeatCount="indefinite"></animate>
+  </line>
+  <line x1="550" y1="400" x2="670" y2="400" class="aromatic">
+      <animate attributeName="stroke-width" values="2;4;2" dur="2s" repeatCount="indefinite"></animate>
+  </line>
+  <line x1="670" y1="400" x2="850.0" y2="400.0" class="bond">
+  </line>
+  <line x1="850.0" y1="400.0" x2="910.0" y2="400.0" class="weak-bond">
+  </line>
+  <line x1="670" y1="400" x2="824.0636372927802" y2="522.0209929227401" class="strong-bond">
+      <animate attributeName="stroke-width" values="2;4;2" dur="2s" repeatCount="indefinite"></animate>
+  </line>
+  <line x1="824.0636372927802" y1="522.0209929227401" x2="878.8763647513363" y2="546.4251915072881" class="weak-bond">
+  </line>
+  <line x1="670" y1="400" x2="750.7391819076574" y2="622.9434476432182" class="strong-bond">
+      <animate attributeName="stroke-width" values="2;4;2" dur="2s" repeatCount="indefinite"></animate>
+  </line>
+  <line x1="750.7391819076574" y1="622.9434476432182" x2="790.887018289189" y2="667.5321371718618" class="weak-bond">
+  </line>
+  <line x1="670" y1="400" x2="642.7050983124842" y2="685.316954888546" class="strong-bond">
+      <animate attributeName="stroke-width" values="2;4;2" dur="2s" repeatCount="indefinite"></animate>
+  </line>
+  <line x1="642.7050983124842" y1="685.316954888546" x2="661.2461179749811" y2="742.3803458662552" class="weak-bond">
+  </line>
+  <line x1="550" y1="400" x2="518.641461019704" y2="698.3565686104821" class="aromatic">
+  </line>
+  <line x1="518.641461019704" y1="698.3565686104821" x2="512.3697532236448" y2="758.0278823325785" class="weak-bond">
+  </line>
+  <line x1="430" y1="400" x2="400.00000000000006" y2="659.8076211353316" class="aromatic">
+  </line>
+  <line x1="400.00000000000006" y1="659.8076211353316" x2="370.00000000000006" y2="711.7691453623979" class="weak-bond">
+  </line>
+  <line x1="430" y1="400" x2="307.2949016875158" y2="576.335575687742" class="strong-bond">
+      <animate attributeName="stroke-width" values="2;4;2" dur="2s" repeatCount="indefinite"></animate>
+  </line>
+  <line x1="307.2949016875158" y1="576.335575687742" x2="258.7538820250189" y2="611.6026908252904" class="weak-bond">
+  </line>
+  <line x1="430" y1="400" x2="256.5557197798583" y2="462.3735072453278" class="aromatic">
+      <animate attributeName="stroke-width" values="2;4;2" dur="2s" repeatCount="indefinite"></animate>
+  </line>
+  <line x1="256.5557197798583" y1="462.3735072453278" x2="197.86686373582995" y2="474.84820869439335" class="weak-bond">
+  </line>
+  <line x1="430" y1="400" x2="256.5557197798583" y2="337.62649275467226" class="aromatic">
+  </line>
+  <line x1="256.5557197798583" y1="337.62649275467226" x2="197.86686373582995" y2="325.1517913056067" class="weak-bond">
+  </line>
+  <line x1="430" y1="400" x2="307.29490168751573" y2="223.6644243122581" class="bond">
+  </line>
+  <line x1="307.29490168751573" y1="223.6644243122581" x2="258.75388202501887" y2="188.3973091747097" class="weak-bond">
+  </line>
+  <line x1="430" y1="400" x2="399.9999999999999" y2="140.1923788646685" class="bond">
+  </line>
+  <line x1="399.9999999999999" y1="140.1923788646685" x2="369.9999999999999" y2="88.2308546376022" class="weak-bond">
+  </line>
+  <line x1="550" y1="400" x2="518.641461019704" y2="101.64343138951796" class="bond">
+  </line>
+  <line x1="518.641461019704" y1="101.64343138951796" x2="512.3697532236448" y2="41.97211766742156" class="weak-bond">
+  </line>
+  <line x1="670" y1="400" x2="642.7050983124842" y2="114.68304511145391" class="weak-bond">
+  </line>
+  <line x1="642.7050983124842" y1="114.68304511145391" x2="661.2461179749811" y2="57.61965413374469" class="weak-bond">
+  </line>
+  <line x1="670" y1="400" x2="750.7391819076573" y2="177.05655235678162" class="bond">
+  </line>
+  <line x1="750.7391819076573" y1="177.05655235678162" x2="790.8870182891887" y2="132.46786282813795" class="weak-bond">
+  </line>
+  <line x1="670" y1="400" x2="824.0636372927803" y2="277.97900707725995" class="bond">
+  </line>
+  <line x1="824.0636372927803" y1="277.97900707725995" x2="878.8763647513364" y2="253.57480849271195" class="weak-bond">
+  </line>
+
+  <!-- Molecular Atoms -->
+  <g>
+    <circle cx="430" cy="400" r="40.0" class="coreB"></circle>
+    <text x="430" y="394" class="core-label">Order</text>
+    <text x="430" y="414" class="core-label">Core</text>
+  </g>
+  <g>
+    <circle cx="430.0" cy="340.0" r="40.0" class="coreB"></circle>
+    <text x="430.0" y="334.0" class="core-label">Order</text>
+    <text x="430.0" y="354.0" class="core-label">Core</text>
+  </g>
+  <g>
+    <circle cx="481.9615242270663" cy="370.0" r="40.0" class="coreB"></circle>
+    <text x="481.9615242270663" y="364.0" class="core-label">Order</text>
+    <text x="481.9615242270663" y="384.0" class="core-label">Core</text>
+  </g>
+  <g>
+    <circle cx="481.9615242270663" cy="430.0" r="40.0" class="coreB"></circle>
+    <text x="481.9615242270663" y="424.0" class="core-label">Order</text>
+    <text x="481.9615242270663" y="444.0" class="core-label">Core</text>
+  </g>
+  <g>
+    <circle cx="430.0" cy="460.0" r="40.0" class="coreB"></circle>
+    <text x="430.0" y="454.0" class="core-label">Order</text>
+    <text x="430.0" y="474.0" class="core-label">Core</text>
+  </g>
+  <g>
+    <circle cx="378.0384757729337" cy="430.0" r="40.0" class="coreB"></circle>
+    <text x="378.0384757729337" y="424.0" class="core-label">Order</text>
+    <text x="378.0384757729337" y="444.0" class="core-label">Core</text>
+  </g>
+  <g>
+    <circle cx="378.0384757729337" cy="370.0" r="40.0" class="coreB"></circle>
+    <text x="378.0384757729337" y="364.0" class="core-label">Order</text>
+    <text x="378.0384757729337" y="384.0" class="core-label">Core</text>
+  </g>
+  <g>
+    <circle cx="550" cy="400" r="40.0" class="coreB"></circle>
+    <text x="550" y="394" class="core-label">Fulfillment</text>
+    <text x="550" y="414" class="core-label">Core</text>
+  </g>
+  <g>
+    <circle cx="550.0" cy="340.0" r="40.0" class="coreB"></circle>
+    <text x="550.0" y="334.0" class="core-label">Fulfillment</text>
+    <text x="550.0" y="354.0" class="core-label">Core</text>
+  </g>
+  <g>
+    <circle cx="601.9615242270663" cy="370.0" r="40.0" class="coreB"></circle>
+    <text x="601.9615242270663" y="364.0" class="core-label">Fulfillment</text>
+    <text x="601.9615242270663" y="384.0" class="core-label">Core</text>
+  </g>
+  <g>
+    <circle cx="601.9615242270663" cy="430.0" r="40.0" class="coreB"></circle>
+    <text x="601.9615242270663" y="424.0" class="core-label">Fulfillment</text>
+    <text x="601.9615242270663" y="444.0" class="core-label">Core</text>
+  </g>
+  <g>
+    <circle cx="550.0" cy="460.0" r="40.0" class="coreB"></circle>
+    <text x="550.0" y="454.0" class="core-label">Fulfillment</text>
+    <text x="550.0" y="474.0" class="core-label">Core</text>
+  </g>
+  <g>
+    <circle cx="498.0384757729337" cy="430.0" r="40.0" class="coreB"></circle>
+    <text x="498.0384757729337" y="424.0" class="core-label">Fulfillment</text>
+    <text x="498.0384757729337" y="444.0" class="core-label">Core</text>
+  </g>
+  <g>
+    <circle cx="498.0384757729337" cy="370.0" r="40.0" class="coreB"></circle>
+    <text x="498.0384757729337" y="364.0" class="core-label">Fulfillment</text>
+    <text x="498.0384757729337" y="384.0" class="core-label">Core</text>
+  </g>
+  <g>
+    <circle cx="670" cy="400" r="40.0" class="coreB"></circle>
+    <text x="670" y="394" class="core-label">Shipping</text>
+    <text x="670" y="414" class="core-label">Core</text>
+  </g>
+  <g>
+    <circle cx="670.0" cy="340.0" r="40.0" class="coreB"></circle>
+    <text x="670.0" y="334.0" class="core-label">Shipping</text>
+    <text x="670.0" y="354.0" class="core-label">Core</text>
+  </g>
+  <g>
+    <circle cx="721.9615242270663" cy="370.0" r="40.0" class="coreB"></circle>
+    <text x="721.9615242270663" y="364.0" class="core-label">Shipping</text>
+    <text x="721.9615242270663" y="384.0" class="core-label">Core</text>
+  </g>
+  <g>
+    <circle cx="721.9615242270663" cy="430.0" r="40.0" class="coreB"></circle>
+    <text x="721.9615242270663" y="424.0" class="core-label">Shipping</text>
+    <text x="721.9615242270663" y="444.0" class="core-label">Core</text>
+  </g>
+  <g>
+    <circle cx="670.0" cy="460.0" r="40.0" class="coreB"></circle>
+    <text x="670.0" y="454.0" class="core-label">Shipping</text>
+    <text x="670.0" y="474.0" class="core-label">Core</text>
+  </g>
+  <g>
+    <circle cx="618.0384757729337" cy="430.0" r="40.0" class="coreB"></circle>
+    <text x="618.0384757729337" y="424.0" class="core-label">Shipping</text>
+    <text x="618.0384757729337" y="444.0" class="core-label">Core</text>
+  </g>
+  <g>
+    <circle cx="618.0384757729337" cy="370.0" r="40.0" class="coreB"></circle>
+    <text x="618.0384757729337" y="364.0" class="core-label">Shipping</text>
+    <text x="618.0384757729337" y="384.0" class="core-label">Core</text>
+  </g>
+  <g>
+    <circle cx="850.0" cy="400.0" r="25.0" class="adapter"></circle>
+    <text x="850.0" y="394.0" class="label">Cart</text>
+  </g>
+  <g>
+    <circle cx="910.0" cy="400.0" r="25.0" class="external"></circle>
+    <text x="910.0" y="394.0" class="label">WebStore</text>
+  </g>
+  <g>
+    <circle cx="824.0636372927802" cy="522.0209929227401" r="25.0" class="adapter"></circle>
+    <text x="824.0636372927802" y="516.0209929227401" class="label">Inventory</text>
+  </g>
+  <g>
+    <circle cx="878.8763647513363" cy="546.4251915072881" r="25.0" class="external"></circle>
+    <text x="878.8763647513363" y="540.4251915072881" class="label">WMS</text>
+  </g>
+  <g>
+    <circle cx="750.7391819076574" cy="622.9434476432182" r="25.0" class="adapter"></circle>
+    <text x="750.7391819076574" y="616.9434476432182" class="label">Payment</text>
+  </g>
+  <g>
+    <circle cx="790.887018289189" cy="667.5321371718618" r="25.0" class="external"></circle>
+    <text x="790.887018289189" y="661.5321371718618" class="label">PaymentGW</text>
+  </g>
+  <g>
+    <circle cx="642.7050983124842" cy="685.316954888546" r="25.0" class="adapter"></circle>
+    <text x="642.7050983124842" y="679.316954888546" class="label">Warehouse</text>
+  </g>
+  <g>
+    <circle cx="661.2461179749811" cy="742.3803458662552" r="25.0" class="external"></circle>
+    <text x="661.2461179749811" y="736.3803458662552" class="label">WarehouseAPI</text>
+  </g>
+  <g>
+    <circle cx="518.641461019704" cy="698.3565686104821" r="25.0" class="adapter"></circle>
+    <text x="518.641461019704" y="692.3565686104821" class="label">Pick</text>
+  </g>
+  <g>
+    <circle cx="512.3697532236448" cy="758.0278823325785" r="25.0" class="external"></circle>
+    <text x="512.3697532236448" y="752.0278823325785" class="label">PickingSystem</text>
+  </g>
+  <g>
+    <circle cx="400.00000000000006" cy="659.8076211353316" r="25.0" class="adapter"></circle>
+    <text x="400.00000000000006" y="653.8076211353316" class="label">Pack</text>
+  </g>
+  <g>
+    <circle cx="370.00000000000006" cy="711.7691453623979" r="25.0" class="external"></circle>
+    <text x="370.00000000000006" y="705.7691453623979" class="label">PackingStation</text>
+  </g>
+  <g>
+    <circle cx="307.2949016875158" cy="576.335575687742" r="25.0" class="adapter"></circle>
+    <text x="307.2949016875158" y="570.335575687742" class="label">UPS</text>
+  </g>
+  <g>
+    <circle cx="258.7538820250189" cy="611.6026908252904" r="25.0" class="external"></circle>
+    <text x="258.7538820250189" y="605.6026908252904" class="label">UPSService</text>
+  </g>
+  <g>
+    <circle cx="256.5557197798583" cy="462.3735072453278" r="25.0" class="adapter"></circle>
+    <text x="256.5557197798583" y="456.3735072453278" class="label">FedEx</text>
+  </g>
+  <g>
+    <circle cx="197.86686373582995" cy="474.84820869439335" r="25.0" class="external"></circle>
+    <text x="197.86686373582995" y="468.84820869439335" class="label">FedExService</text>
+  </g>
+  <g>
+    <circle cx="256.5557197798583" cy="337.62649275467226" r="25.0" class="adapter"></circle>
+    <text x="256.5557197798583" y="331.62649275467226" class="label">USPS</text>
+  </g>
+  <g>
+    <circle cx="197.86686373582995" cy="325.1517913056067" r="25.0" class="external"></circle>
+    <text x="197.86686373582995" y="319.1517913056067" class="label">USPSService</text>
+  </g>
+  <g>
+    <circle cx="307.29490168751573" cy="223.6644243122581" r="25.0" class="adapter"></circle>
+    <text x="307.29490168751573" y="217.6644243122581" class="label">Track</text>
+  </g>
+  <g>
+    <circle cx="258.75388202501887" cy="188.3973091747097" r="25.0" class="external"></circle>
+    <text x="258.75388202501887" y="182.3973091747097" class="label">TrackingDB</text>
+  </g>
+  <g>
+    <circle cx="399.9999999999999" cy="140.1923788646685" r="25.0" class="adapter"></circle>
+    <text x="399.9999999999999" y="134.1923788646685" class="label">Returns</text>
+  </g>
+  <g>
+    <circle cx="369.9999999999999" cy="88.2308546376022" r="25.0" class="external"></circle>
+    <text x="369.9999999999999" y="82.2308546376022" class="label">RMASystem</text>
+  </g>
+  <g>
+    <circle cx="518.641461019704" cy="101.64343138951796" r="25.0" class="adapter"></circle>
+    <text x="518.641461019704" y="95.64343138951796" class="label">CustomerService</text>
+  </g>
+  <g>
+    <circle cx="512.3697532236448" cy="41.97211766742156" r="25.0" class="external"></circle>
+    <text x="512.3697532236448" y="35.97211766742156" class="label">SupportTicket</text>
+  </g>
+  <g>
+    <circle cx="642.7050983124842" cy="114.68304511145391" r="25.0" class="adapter"></circle>
+    <text x="642.7050983124842" y="108.68304511145391" class="label">Analytics</text>
+  </g>
+  <g>
+    <circle cx="661.2461179749811" cy="57.61965413374469" r="25.0" class="external"></circle>
+    <text x="661.2461179749811" y="51.61965413374469" class="label">OrderMetrics</text>
+  </g>
+  <g>
+    <circle cx="750.7391819076573" cy="177.05655235678162" r="25.0" class="adapter"></circle>
+    <text x="750.7391819076573" y="171.05655235678162" class="label">Notification</text>
+  </g>
+  <g>
+    <circle cx="790.8870182891887" cy="132.46786282813795" r="25.0" class="external"></circle>
+    <text x="790.8870182891887" y="126.46786282813795" class="label">SMS</text>
+  </g>
+  <g>
+    <circle cx="824.0636372927803" cy="277.97900707725995" r="25.0" class="adapter"></circle>
+    <text x="824.0636372927803" y="271.97900707725995" class="label">ERP</text>
+  </g>
+  <g>
+    <circle cx="878.8763647513364" cy="253.57480849271195" r="25.0" class="external"></circle>
+    <text x="878.8763647513364" y="247.57480849271195" class="label">ERPSystem</text>
+  </g>
+
+  <!-- Molecular Statistics -->
+  <rect x="20" y="560" width="260" height="130" class="legend" rx="10"></rect>
+  <text x="40" y="585" class="stats" font-weight="bold">🔬 Molecular Analysis</text>
+  <text x="40" y="605" class="stats">Formula: A21T15C15</text>
+  <text x="40" y="620" class="stats">Stability: 95.0 / 100 (Polycyclic aromatic)</text>
+  <text x="40" y="635" class="stats">Bond Energy: 2951 kJ/mol</text>
+  <text x="40" y="650" class="stats">Atoms: 51 | Bonds: 50</text>
+
+  <rect x="620" y="560" width="260" height="130" class="legend" rx="10"></rect>
+  <text x="640" y="585" class="stats" font-weight="bold">⚗️ Synthesis Details</text>
+  <text x="640" y="605" class="stats">Catalyst: Royal Jelly + Policy Council</text>
+  <text x="640" y="620" class="stats">Temperature: 310K</text>
+  <text x="640" y="635" class="stats">Pattern: Fused Hexagonal Core (Naphthalene-like)</text>
+  <text x="640" y="650" class="stats">Generated: 2025-08-24 12:11:57 UTC</text>
+
+  <!-- Stability Heatmap -->
+  <rect x="500" y="50" width="100" height="20" fill="url(#stabilityGradient)"></rect>
+  <text x="550" y="65" class="small" text-anchor="middle">Stability: 95%</text>
+
+  <!-- Legend -->
+  <rect x="20" y="90" width="220" height="160" rx="8" class="legend"></rect>
+  <text x="40" y="110" class="stats" font-weight="bold">🧪 Legend</text>
+  <circle cx="40" cy="130" r="8" class="coreA"></circle>
+  <text x="60" y="135" class="small">Aromatic Core (Domain)</text>
+  <circle cx="40" cy="150" r="8" class="adapter"></circle>
+  <text x="60" y="155" class="small">Adapters (Connectors)</text>
+  <circle cx="40" cy="170" r="8" class="toxic"></circle>
+  <text x="60" y="175" class="small">Toxic Adapters</text>
+  <circle cx="40" cy="190" r="8" class="external"></circle>
+  <text x="60" y="195" class="small">External Systems</text>
+  <line x1="30" y1="210" x2="70" y2="210" class="aromatic"></line>
+  <text x="80" y="215" class="small">Aromatic bond (stability)</text>
+  <line x1="30" y1="230" x2="70" y2="230" class="strong-bond"></line>
+  <text x="80" y="235" class="small">Strong bond (high traffic)</text>
+  <line x1="30" y1="250" x2="70" y2="250" class="weak-bond"></line>
+  <text x="80" y="255" class="small">Weak bond (low traffic)</text>
+
+  <!-- Footer -->
+  <text x="600" y="880" class="small" text-anchor="middle">
+    🧬 Polycyclic Architecture: Fused bounded contexts with shared molecular orbitals and aromatic stability.
+    Generated by Genesis Engine Molecular Architecture System.
+  </text>
+</svg>
