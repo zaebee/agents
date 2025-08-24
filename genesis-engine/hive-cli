@@ -1,73 +1,104 @@
-#!/bin/bash
+#!/usr/bin/env python3
 
-# The Genesis Engine: a CLI for managing the Hive codebase.
-# This tool acts as the "Connector" (C) between the developer and the codebase.
+import argparse
+import os
+import pathlib
+import string
 
 # --- Configuration ---
-HIVE_ROOT="hive/components"
+HIVE_ROOT = "hive/components"
+TEMPLATE_ROOT = "genesis-engine/templates"
 
-# --- Helper Functions ---
-function show_usage() {
-    echo "The Genesis Engine - The 'Connector' to the Hive."
-    echo "Usage: $0 hatch <codon_type> <component_name>"
-    echo ""
-    echo "Codon Types:"
-    echo "  command   - Scaffolds a 'Handle Command' pattern (C -> A -> G)."
-    echo "  query     - Scaffolds a 'Query Data' pattern (C -> T -> C)."
-    echo "  event     - Scaffolds a 'React to Event' pattern (G -> C -> A -> G)."
-}
+def show_usage():
+    """Prints a more detailed usage message."""
+    print("The Genesis Engine - The 'Connector' to the Hive.")
+    print("This tool scaffolds new components from templates.")
+    print("\nExample:")
+    print(f"  ./{os.path.basename(__file__)} hatch command create-new-order")
+    print("")
 
-# --- Command Parsing ---
-COMMAND=$1
-CODON_TYPE=$2
-COMPONENT_NAME=$3
+def snake_to_pascal(snake_case_string: str) -> str:
+    """Converts snake_case or kebab-case to PascalCase."""
+    return snake_case_string.replace("-", "_").replace("_", " ").title().replace(" ", "")
 
-if [ "$COMMAND" != "hatch" ] || [ -z "$CODON_TYPE" ] || [ -z "$COMPONENT_NAME" ]; then
-    show_usage
-    exit 1
-fi
+def hatch_component(codon_type: str, component_name: str):
+    """
+    Generates a new component from templates.
+    """
+    print(f"Hatching new '{codon_type}' codon named '{component_name}'...")
 
-COMPONENT_PATH="$HIVE_ROOT/$COMPONENT_NAME"
-echo "Hatching new '$CODON_TYPE' codon named '$COMPONENT_NAME'..."
+    # Ensure the directory name is a valid Python package name
+    component_dir_name = component_name.replace("-", "_")
+    component_path = pathlib.Path(HIVE_ROOT) / component_dir_name
+    if component_path.exists():
+        print(f"Error: Component '{component_name}' already exists at {component_path}.")
+        exit(1)
 
-if [ -d "$COMPONENT_PATH" ]; then
-    echo "Error: Component '$COMPONENT_NAME' already exists at $COMPONENT_PATH."
-    exit 1
-fi
+    template_dir = pathlib.Path(TEMPLATE_ROOT) / codon_type
+    if not template_dir.is_dir():
+        print(f"Error: No templates found for codon type '{codon_type}' at {template_dir}.")
+        print("This functionality has not been implemented yet.")
+        exit(1)
 
-# --- Scaffolding Logic ---
-mkdir -p "$COMPONENT_PATH"
-echo "Created directory: $COMPONENT_PATH"
+    # Create the component directory
+    component_path.mkdir(parents=True)
+    print(f"Created directory: {component_path}")
 
-case $CODON_TYPE in
-    command)
-        echo "Scaffolding 'Handle Command' pattern (C -> A -> G)..."
-        touch "$COMPONENT_PATH/connector.py"
-        touch "$COMPONENT_PATH/command.py"
-        touch "$COMPONENT_PATH/aggregate.py"
-        touch "$COMPONENT_PATH/event.py"
-        ;;
-    query)
-        echo "Scaffolding 'Query Data' pattern (C -> T -> C)..."
-        touch "$COMPONENT_PATH/connector.py"
-        touch "$COMPONENT_PATH/query.py"
-        touch "$COMPONENT_PATH/transformer.py"
-        touch "$COMPONENT_PATH/dto.py"
-        ;;
-    event)
-        echo "Scaffolding 'React to Event' pattern (G -> C -> A -> G)..."
-        touch "$COMPONENT_PATH/listening_connector.py"
-        touch "$COMPONENT_PATH/command.py"
-        touch "$COMPONENT_PATH/aggregate.py"
-        touch "$COMPONENT_PATH/new_event.py"
-        ;;
-    *)
-        echo "Error: Unknown codon type '$CODON_TYPE'."
-        rm -rf "$COMPONENT_PATH" # Clean up created directory
-        show_usage
-        exit 1
-        ;;
-esac
+    # --- Template Rendering ---
+    class_name = snake_to_pascal(component_name)
+    substitutions = {
+        "ComponentName": component_name,
+        "ClassName": class_name,
+    }
 
-echo "Success! New '$CODON_TYPE' codon hatched at: $COMPONENT_PATH"
-echo "Next steps: 'spin cocoon' to add tests."
+    for template_file in template_dir.glob("*.tpl"):
+        with open(template_file, "r") as f:
+            template_content = f.read()
+
+        template = string.Template(template_content)
+        rendered_content = template.safe_substitute(substitutions)
+
+        # a.py.tpl -> a.py
+        output_filename = template_file.stem
+        output_path = component_path / output_filename
+
+        with open(output_path, "w") as f:
+            f.write(rendered_content)
+
+        print(f"  -> Generated {output_path}")
+
+    # Create an empty __init__.py to make it a package
+    (component_path / "__init__.py").touch()
+    print(f"  -> Generated {component_path / '__init__.py'}")
+
+    print("\nSuccess! New codon hatched.")
+    print("Next steps: Implement the business logic and 'spin cocoon' to add tests.")
+
+
+def main():
+    """Main entry point for the CLI."""
+    parser = argparse.ArgumentParser(
+        description="The Genesis Engine: a CLI for managing the Hive codebase.",
+        add_help=False, # We use a custom help message
+    )
+    parser.add_argument("command", choices=["hatch"], help="The action to perform.")
+    parser.add_argument(
+        "codon_type",
+        choices=["command", "query", "event", "chronicler"],
+        help="The type of codon to scaffold.",
+    )
+    parser.add_argument("component_name", help="The name of the new component (e.g., 'create-order').")
+
+    # Manually check for help flag to show detailed usage
+    if '-h' in os.sys.argv or '--help' in os.sys.argv:
+        show_usage()
+        parser.print_help()
+        exit(0)
+
+    args = parser.parse_args()
+
+    if args.command == "hatch":
+        hatch_component(args.codon_type, args.component_name)
+
+if __name__ == "__main__":
+    main()

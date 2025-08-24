@@ -1,0 +1,125 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: quantum-hive-core
+  namespace: quantum-hive
+  labels:
+    app: quantum-hive
+    component: core
+  annotations:
+    quantum.io/load-balancer-type: "quantum-aware"
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9090"
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  - port: 9090
+    targetPort: 9090
+    protocol: TCP
+    name: metrics
+  selector:
+    app: quantum-hive
+    component: core
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: quantum-hive-core-internal
+  namespace: quantum-hive
+  labels:
+    app: quantum-hive
+    component: core-internal
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+    name: http-internal
+  selector:
+    app: quantum-hive
+    component: core
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: quantum-genetic-workers
+  namespace: quantum-hive
+  labels:
+    app: quantum-hive
+    component: genetic-worker
+spec:
+  type: ClusterIP
+  clusterIP: None  # Headless service for genetic workers
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+    name: worker
+  selector:
+    app: quantum-hive
+    component: genetic-worker
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: quantum-monitoring
+  namespace: quantum-hive
+  labels:
+    app: quantum-hive
+    component: monitoring
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9090"
+spec:
+  type: ClusterIP
+  ports:
+  - port: 9090
+    targetPort: 9090
+    protocol: TCP
+    name: prometheus
+  selector:
+    app: quantum-hive
+    component: monitoring
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: quantum-hive-ingress
+  namespace: quantum-hive
+  labels:
+    app: quantum-hive
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    quantum.io/coherence-preservation: "true"
+spec:
+  tls:
+  - hosts:
+    - quantum-hive.yourdomain.com
+    secretName: quantum-hive-tls
+  rules:
+  - host: quantum-hive.yourdomain.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: quantum-hive-core
+            port:
+              number: 80
+      - path: /metrics
+        pathType: Prefix
+        backend:
+          service:
+            name: quantum-monitoring
+            port:
+              number: 9090

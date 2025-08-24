@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: quantum-hive
+  labels:
+    name: quantum-hive
+    quantum.io/coherence-target: "0.9"
+    quantum.io/consciousness-enabled: "true"
+    quantum.io/evolutionary-adaptation: "true"
+  annotations:
+    quantum.io/description: "Quantum-enhanced microservices hive orchestration"
+    quantum.io/version: "1.0.0"
+    quantum.io/contact: "hive-admin@quantum.io"
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: quantum-hive-quota
+  namespace: quantum-hive
+spec:
+  hard:
+    requests.cpu: "10"
+    requests.memory: 20Gi
+    limits.cpu: "20"
+    limits.memory: 40Gi
+    persistentvolumeclaims: "10"
+    pods: "50"
+    services: "20"
+    secrets: "20"
+    configmaps: "30"
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: quantum-hive-limits
+  namespace: quantum-hive
+spec:
+  limits:
+  - default:
+      cpu: "1000m"
+      memory: "1Gi"
+    defaultRequest:
+      cpu: "100m"
+      memory: "128Mi"
+    type: Container
+  - default:
+      storage: "10Gi"
+    type: PersistentVolumeClaim

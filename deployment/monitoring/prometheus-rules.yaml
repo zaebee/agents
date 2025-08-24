@@ -1,0 +1,206 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: quantum-hive-alerts
+  namespace: quantum-hive
+  labels:
+    app: quantum-hive
+    component: monitoring
+spec:
+  groups:
+  - name: quantum-coherence.rules
+    rules:
+    - alert: QuantumCoherenceDegraded
+      expr: quantum_coherence_current < 0.7
+      for: 2m
+      labels:
+        severity: warning
+        component: quantum-core
+        quantum_alert: coherence
+      annotations:
+        summary: "Quantum coherence has degraded below acceptable levels"
+        description: "Quantum coherence for hive {{ $labels.hive_id }} is {{ $value | humanizePercentage }}, below the 70% threshold. This may impact quantum processing capabilities."
+        
+    - alert: QuantumCoherenceCritical
+      expr: quantum_coherence_current < 0.5
+      for: 1m
+      labels:
+        severity: critical
+        component: quantum-core
+        quantum_alert: coherence
+      annotations:
+        summary: "CRITICAL: Quantum coherence failure imminent"
+        description: "Quantum coherence for hive {{ $labels.hive_id }} is critically low at {{ $value | humanizePercentage }}. Immediate intervention required to prevent system collapse."
+
+  - name: consciousness-evolution.rules
+    rules:
+    - alert: ConsciousnessRegression
+      expr: increase(consciousness_level_current[10m]) < 0
+      for: 5m
+      labels:
+        severity: warning
+        component: consciousness-tracker
+        quantum_alert: consciousness
+      annotations:
+        summary: "Consciousness level regression detected"
+        description: "Consciousness level for {{ $labels.instance }} has regressed by {{ $value }} levels in the last 10 minutes. Evolution may be stalling."
+        
+    - alert: ConsciousnessEvolutionStalled
+      expr: rate(consciousness_level_current[30m]) == 0
+      for: 15m
+      labels:
+        severity: warning
+        component: consciousness-tracker
+        quantum_alert: evolution
+      annotations:
+        summary: "Consciousness evolution has stalled"
+        description: "No consciousness evolution detected for {{ $labels.instance }} in 30 minutes. Check evolutionary adaptation mechanisms."
+
+  - name: genetic-programming.rules
+    rules:
+    - alert: GeneticFitnessDecline
+      expr: rate(genetic_fitness_score[15m]) < -0.1
+      for: 10m
+      labels:
+        severity: warning
+        component: genetic-programming
+        quantum_alert: fitness
+      annotations:
+        summary: "Genetic fitness showing significant decline"
+        description: "Genetic fitness for {{ $labels.component }} is declining at {{ $value }} per minute. Evolutionary pressure may need adjustment."
+        
+    - alert: MutationFailureRate
+      expr: rate(evolutionary_mutations_failed[10m]) / rate(evolutionary_mutations_total[10m]) > 0.8
+      for: 5m
+      labels:
+        severity: critical
+        component: genetic-programming
+        quantum_alert: mutation
+      annotations:
+        summary: "High mutation failure rate detected"
+        description: "Mutation failure rate is {{ $value | humanizePercentage }} for {{ $labels.component }}. Genetic algorithm may be compromised."
+
+  - name: chemical-bonds.rules
+    rules:
+    - alert: ChemicalBondWeakening
+      expr: chemical_bonds_strength_average < 3.0
+      for: 5m
+      labels:
+        severity: warning
+        component: chemical-system
+        quantum_alert: bonds
+      annotations:
+        summary: "Chemical bond strength below optimal levels"
+        description: "Average chemical bond strength is {{ $value }} for {{ $labels.component }}, below the optimal threshold of 3.0. System stability may be affected."
+        
+    - alert: ChemicalBondDisruption
+      expr: rate(chemical_bonds_broken[5m]) > 5
+      for: 2m
+      labels:
+        severity: critical
+        component: chemical-system
+        quantum_alert: bonds
+      annotations:
+        summary: "Excessive chemical bond disruption detected"
+        description: "Chemical bonds are breaking at {{ $value }} bonds per minute for {{ $labels.component }}. System integrity is at risk."
+
+  - name: hive-infrastructure.rules
+    rules:
+    - alert: HivePodCrashLooping
+      expr: rate(kube_pod_container_status_restarts_total{namespace="quantum-hive"}[15m]) > 0
+      for: 5m
+      labels:
+        severity: warning
+        component: infrastructure
+        quantum_alert: stability
+      annotations:
+        summary: "Hive pod experiencing restart loops"
+        description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} has restarted {{ $value }} times in the last 15 minutes."
+        
+    - alert: HiveResourceExhaustion
+      expr: |
+        (
+          kube_pod_container_resource_requests{namespace="quantum-hive", resource="memory"}
+          /
+          kube_node_status_allocatable{resource="memory"}
+        ) * 100 > 90
+      for: 10m
+      labels:
+        severity: critical
+        component: infrastructure
+        quantum_alert: resources
+      annotations:
+        summary: "Hive resource exhaustion approaching"
+        description: "Memory utilization is {{ $value }}% on node {{ $labels.node }}. Scaling or resource optimization required."
+
+  - name: quantum-entanglement.rules
+    rules:
+    - alert: QuantumEntanglementLoss
+      expr: quantum_entanglement_strength < 0.6
+      for: 3m
+      labels:
+        severity: warning
+        component: quantum-entanglement
+        quantum_alert: entanglement
+      annotations:
+        summary: "Quantum entanglement strength degraded"
+        description: "Quantum entanglement strength is {{ $value | humanizePercentage }} for {{ $labels.component_pair }}, below 60% threshold."
+        
+    - alert: QuantumDecoherence
+      expr: rate(quantum_decoherence_events[10m]) > 10
+      for: 5m
+      labels:
+        severity: critical
+        component: quantum-system
+        quantum_alert: decoherence
+      annotations:
+        summary: "High quantum decoherence event rate"
+        description: "Quantum decoherence events occurring at {{ $value }} events per minute. Quantum system stability compromised."
+
+  - name: evolutionary-adaptation.rules
+    rules:
+    - alert: EvolutionaryAdaptationFailure
+      expr: rate(evolutionary_adaptations_successful[1h]) == 0
+      for: 30m
+      labels:
+        severity: warning
+        component: evolution
+        quantum_alert: adaptation
+      annotations:
+        summary: "No successful evolutionary adaptations in the last hour"
+        description: "Component {{ $labels.component }} has not successfully adapted in 1 hour. Evolution mechanisms may be stalled."
+        
+    - alert: PopulationDiversityLoss
+      expr: genetic_population_diversity_index < 0.3
+      for: 15m
+      labels:
+        severity: critical
+        component: genetic-programming
+        quantum_alert: diversity
+      annotations:
+        summary: "Genetic population diversity critically low"
+        description: "Population diversity index is {{ $value }} for {{ $labels.population }}. Risk of evolutionary dead-end and reduced adaptation capability."
+
+  - name: enterprise-integration.rules
+    rules:
+    - alert: EnterpriseAPILatency
+      expr: histogram_quantile(0.95, rate(enterprise_api_request_duration_seconds_bucket[5m])) > 1.0
+      for: 10m
+      labels:
+        severity: warning
+        component: enterprise-integration
+        quantum_alert: performance
+      annotations:
+        summary: "Enterprise API latency exceeding SLA"
+        description: "95th percentile API latency is {{ $value }}s for {{ $labels.api_endpoint }}, exceeding 1 second SLA."
+        
+    - alert: ComplianceViolation
+      expr: compliance_violations_total > 0
+      for: 0m
+      labels:
+        severity: critical
+        component: compliance
+        quantum_alert: security
+      annotations:
+        summary: "IMMEDIATE: Compliance violation detected"
+        description: "{{ $value }} compliance violations detected for {{ $labels.compliance_framework }}. Immediate remediation required."

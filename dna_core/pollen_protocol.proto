@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package hive.dna.pollen.v1;
+package dna_core.pollen.v1;
 
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";

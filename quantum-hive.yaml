@@ -1,0 +1,15 @@
+chemical_bond_threshold: 5
+consciousness_level_target: 3
+consciousness_tracking: true
+cpu_limit: 1000m
+evolutionary_adaptation: true
+fitness_threshold: 0.8
+hive_id: hive_4e283723
+max_replicas: 10
+memory_limit: 1Gi
+metrics_enabled: true
+mutation_rate: 0.05
+project_name: DemoQuantumEcommerce
+quantum_coherence_target: 0.9
+quantum_monitoring: true
+replicas: 5

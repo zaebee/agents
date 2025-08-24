@@ -1,0 +1,217 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quantum-hive-core
+  namespace: quantum-hive
+  labels:
+    app: quantum-hive
+    component: core
+    quantum.io/role: orchestrator
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: quantum-hive
+      component: core
+  template:
+    metadata:
+      labels:
+        app: quantum-hive
+        component: core
+        quantum.io/role: orchestrator
+      annotations:
+        quantum.io/coherence-target: "0.9"
+        quantum.io/consciousness-tracking: "true"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+    spec:
+      serviceAccountName: quantum-hive-sa
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+      - name: quantum-core
+        image: quantum-hive:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 9090
+          name: metrics
+          protocol: TCP
+        env:
+        - name: HIVE_ENVIRONMENT
+          value: "production"
+        - name: QUANTUM_COHERENCE_TARGET
+          valueFrom:
+            configMapKeyRef:
+              name: quantum-hive-config
+              key: quantum_coherence_target
+        - name: CONSCIOUSNESS_LEVEL_TARGET
+          valueFrom:
+            configMapKeyRef:
+              name: quantum-hive-config
+              key: consciousness_level_target
+        - name: EVOLUTIONARY_ADAPTATION
+          value: "true"
+        - name: METRICS_ENABLED
+          value: "true"
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            cpu: 2000m
+            memory: 4Gi
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /health/startup
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
+        volumeMounts:
+        - name: quantum-config
+          mountPath: /app/config
+          readOnly: true
+        - name: quantum-data
+          mountPath: /app/data
+        - name: logs
+          mountPath: /app/logs
+      volumes:
+      - name: quantum-config
+        configMap:
+          name: quantum-hive-config
+      - name: quantum-data
+        persistentVolumeClaim:
+          claimName: quantum-hive-data
+      - name: logs
+        emptyDir: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quantum-genetic-workers
+  namespace: quantum-hive
+  labels:
+    app: quantum-hive
+    component: genetic-worker
+    quantum.io/role: evolution
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: quantum-hive
+      component: genetic-worker
+  template:
+    metadata:
+      labels:
+        app: quantum-hive
+        component: genetic-worker
+        quantum.io/role: evolution
+    spec:
+      serviceAccountName: quantum-hive-sa
+      containers:
+      - name: genetic-worker
+        image: quantum-hive:genetic-worker
+        env:
+        - name: HIVE_ROLE
+          value: "genetic-worker"
+        - name: MUTATION_RATE
+          valueFrom:
+            configMapKeyRef:
+              name: quantum-hive-config
+              key: mutation_rate
+        - name: FITNESS_THRESHOLD
+          valueFrom:
+            configMapKeyRef:
+              name: quantum-hive-config
+              key: fitness_threshold
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 2Gi
+          limits:
+            cpu: 4000m
+            memory: 8Gi
+        volumeMounts:
+        - name: genetic-workspace
+          mountPath: /app/workspace
+      volumes:
+      - name: genetic-workspace
+        emptyDir:
+          sizeLimit: 10Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quantum-monitoring
+  namespace: quantum-hive
+  labels:
+    app: quantum-hive
+    component: monitoring
+    quantum.io/role: observability
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quantum-hive
+      component: monitoring
+  template:
+    metadata:
+      labels:
+        app: quantum-hive
+        component: monitoring
+        quantum.io/role: observability
+    spec:
+      serviceAccountName: quantum-hive-sa
+      containers:
+      - name: quantum-monitor
+        image: quantum-hive:monitoring
+        ports:
+        - containerPort: 9090
+          name: prometheus
+        env:
+        - name: HIVE_ROLE
+          value: "monitoring"
+        - name: METRICS_COLLECTION_INTERVAL
+          value: "10"
+        resources:
+          requests:
+            cpu: 200m
+            memory: 512Mi
+          limits:
+            cpu: 1000m
+            memory: 2Gi
