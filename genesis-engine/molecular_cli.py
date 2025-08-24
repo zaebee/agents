@@ -13,14 +13,19 @@ import json
 from pathlib import Path
 
 # Import our molecular components
-from .aggregates.queen_bee import QueenBee
-from .transformations.honeyprint_generator import (
+from aggregates.queen_bee import QueenBee
+from transformations.honeyprint_generator import (
     HoneyprintGenerator,
     create_example_honeyprint,
 )
-from .transformations.reaction_engine import ReactionEngine
-from .aggregates.molecular_analyzer import MolecularAnalyzer
-from .connectors.chemical_registry import (
+from transformations.polycyclic_generator import (
+    PolycyclicMoleculeGenerator,
+    PolycyclicStructure,
+)
+from aggregates.chemical_blueprints import ChemicalBlueprintLibrary
+from transformations.reaction_engine import ReactionEngine
+from aggregates.molecular_analyzer import MolecularAnalyzer
+from connectors.chemical_registry import (
     ChemicalRegistry,
     SearchQuery,
     ComponentStability,
@@ -29,6 +34,8 @@ from .connectors.chemical_registry import (
 # Global instances (initialized on first use)
 _queen_bee: QueenBee = None
 _honeyprint_generator: HoneyprintGenerator = None
+_polycyclic_generator: PolycyclicMoleculeGenerator = None
+_blueprint_library: ChemicalBlueprintLibrary = None
 _reaction_engine: ReactionEngine = None
 _molecular_analyzer: MolecularAnalyzer = None
 _chemical_registry: ChemicalRegistry = None
@@ -48,6 +55,22 @@ def get_honeyprint_generator() -> HoneyprintGenerator:
     if _honeyprint_generator is None:
         _honeyprint_generator = HoneyprintGenerator()
     return _honeyprint_generator
+
+
+def get_polycyclic_generator() -> PolycyclicMoleculeGenerator:
+    """Get or create Polycyclic Molecule Generator instance"""
+    global _polycyclic_generator
+    if _polycyclic_generator is None:
+        _polycyclic_generator = PolycyclicMoleculeGenerator()
+    return _polycyclic_generator
+
+
+def get_blueprint_library() -> ChemicalBlueprintLibrary:
+    """Get or create Chemical Blueprint Library instance"""
+    global _blueprint_library
+    if _blueprint_library is None:
+        _blueprint_library = ChemicalBlueprintLibrary()
+    return _blueprint_library
 
 
 def get_reaction_engine() -> ReactionEngine:
@@ -244,6 +267,207 @@ def example():
         f.write(svg_content)
 
     click.echo("✅ Example honeyprint saved to example_honeyprint.svg")
+
+
+# --- POLYCYCLIC MOLECULE COMMANDS ---
+
+
+@molecular.group()
+def polycyclic():
+    """🧬 Polycyclic Molecules - Advanced fused-ring architecture generation"""
+    pass
+
+
+@polycyclic.command()
+def blueprints():
+    """List all available polycyclic architectural blueprints"""
+    library = get_blueprint_library()
+    catalog = library.get_blueprint_catalog()
+
+    click.echo("🧪 Available Polycyclic Architecture Blueprints")
+    click.echo("=" * 55)
+
+    for name, info in catalog.items():
+        click.echo(f"\n🧬 {info['name']}")
+        click.echo(f"   Pattern: {info['pattern']} ({info['structure']})")
+        click.echo(
+            f"   Cores: {info['core_count']} | Adapters: {info['adapter_count']}"
+        )
+        click.echo(
+            f"   Complexity: {info['complexity']} | Stability: {info['stability']}"
+        )
+
+        if info["has_toxic_adapters"]:
+            click.echo("   ⚠️  Contains toxic adapters requiring attention")
+        if info["evolution_paths"] > 0:
+            click.echo(f"   🔄 {info['evolution_paths']} evolution pathways")
+
+
+@polycyclic.command()
+@click.argument("blueprint_name")
+@click.argument("output_name", required=False)
+@click.option("--output", "-o", help="Output SVG filename")
+@click.option("--cores", help="Custom core names (comma-separated)")
+@click.option(
+    "--format",
+    type=click.Choice(["svg", "md", "both"]),
+    default="svg",
+    help="Output format",
+)
+def generate(blueprint_name, output_name, output, cores, format):
+    """Generate a polycyclic molecule from a blueprint"""
+    library = get_blueprint_library()
+    generator = get_polycyclic_generator()
+
+    # Get blueprint
+    blueprint = library.get_blueprint(blueprint_name)
+    if not blueprint:
+        available = ", ".join(library.list_blueprints())
+        click.echo(f"❌ Blueprint '{blueprint_name}' not found")
+        click.echo(f"Available blueprints: {available}")
+        return
+
+    # Parse custom cores if provided
+    core_names = blueprint.core_domains
+    if cores:
+        core_names = [name.strip() for name in cores.split(",")]
+
+    # Generate molecule based on blueprint structure
+    adapters = blueprint.get_adapter_configs()
+
+    if blueprint.chemical_structure == PolycyclicStructure.NAPHTHALENE:
+        if len(core_names) >= 2:
+            molecule = generator.create_fused_dual_core(
+                core_names[0], core_names[1], adapters
+            )
+        else:
+            click.echo("❌ Naphthalene structure requires at least 2 core names")
+            return
+    elif blueprint.chemical_structure == PolycyclicStructure.ANTHRACENE:
+        if len(core_names) >= 3:
+            molecule = generator.create_triple_core_linear(core_names[:3], adapters)
+        else:
+            click.echo("❌ Anthracene structure requires at least 3 core names")
+            return
+    else:
+        # Default to fused dual core
+        molecule = generator.create_fused_dual_core(
+            core_names[0], core_names[1] if len(core_names) > 1 else "Domain", adapters
+        )
+
+    # Determine output filename
+    if not output:
+        if not output_name:
+            output_name = f"{blueprint.name.replace(' ', '_')}"
+        output = f"{output_name}.svg"
+
+    # Generate SVG
+    if format in ["svg", "both"]:
+        svg_content = generator.generate_advanced_svg(molecule)
+
+        with open(output, "w") as f:
+            f.write(svg_content)
+
+        click.echo(f"✅ Polycyclic molecule saved to: {output}")
+        click.echo(f"📊 Formula: {molecule.molecular_formula}")
+        click.echo(f"🔗 Atoms: {len(molecule.atoms)} | Bonds: {len(molecule.bonds)}")
+
+    # Generate Markdown documentation
+    if format in ["md", "both"]:
+        md_filename = output.replace(".svg", ".md")
+        md_content = generate_molecule_documentation(molecule, blueprint)
+
+        with open(md_filename, "w") as f:
+            f.write(md_content)
+
+        click.echo(f"📚 Documentation saved to: {md_filename}")
+
+
+@polycyclic.command()
+def samples():
+    """Generate sample polycyclic molecules for all blueprints"""
+    library = get_blueprint_library()
+    generator = get_polycyclic_generator()
+
+    click.echo("🧬 Generating sample polycyclic molecules...")
+
+    blueprints_to_generate = [
+        ("fused_identity_access", "A2C10_Identity_Access"),
+        ("payment_billing", "A2C12_Payment_Billing"),
+        ("order_fulfillment_shipping", "A3C15_Order_Fulfillment_Shipping"),
+        ("user_content_social", "A3C14_User_Content_Social"),
+    ]
+
+    for blueprint_name, filename in blueprints_to_generate:
+        blueprint = library.get_blueprint(blueprint_name)
+        if not blueprint:
+            continue
+
+        click.echo(f"🔬 Generating {filename}...")
+
+        adapters = blueprint.get_adapter_configs()
+
+        if blueprint.chemical_structure == PolycyclicStructure.NAPHTHALENE:
+            molecule = generator.create_fused_dual_core(
+                blueprint.core_domains[0], blueprint.core_domains[1], adapters
+            )
+        elif blueprint.chemical_structure == PolycyclicStructure.ANTHRACENE:
+            molecule = generator.create_triple_core_linear(
+                blueprint.core_domains[:3], adapters
+            )
+        else:
+            molecule = generator.create_fused_dual_core(
+                blueprint.core_domains[0],
+                blueprint.core_domains[1]
+                if len(blueprint.core_domains) > 1
+                else "Domain",
+                adapters,
+            )
+
+        # Generate SVG
+        svg_content = generator.generate_advanced_svg(molecule)
+        output_file = f"{filename}.svg"
+
+        with open(output_file, "w") as f:
+            f.write(svg_content)
+
+        click.echo(f"   ✅ {output_file}")
+
+    click.echo("🎉 Sample generation complete!")
+
+
+def generate_molecule_documentation(molecule, blueprint) -> str:
+    """Generate Markdown documentation for a molecule"""
+    return f"""# 🧬 {molecule.name} - Polycyclic Architecture Molecule
+
+## Molecular Properties
+- **Formula**: {molecule.molecular_formula}
+- **Structure Type**: {blueprint.chemical_structure.value}
+- **Pattern**: {blueprint.polycyclic_pattern.value}
+- **Atoms**: {len(molecule.atoms)}
+- **Bonds**: {len(molecule.bonds)}
+
+## Architecture Description
+{blueprint.description}
+
+## Core Domains
+{chr(10).join(f"- **{domain}**: Domain logic and business rules" for domain in blueprint.core_domains)}
+
+## Adapter Configuration
+{chr(10).join(f"- **{config['name']}**: {config.get('external', 'Internal adapter')}" for config in blueprint.adapter_configs)}
+
+## Chemical Properties
+- **Stability Level**: {blueprint.stability_level}
+- **Fusion Bonds**: {len(blueprint.fusion_bonds)} shared domain boundaries
+- **Toxic Adapters**: {len(blueprint.toxic_adapters)} components requiring attention
+- **Evolution Paths**: {len(blueprint.evolution_paths)} planned migrations
+
+## Usage
+This molecular architecture can be used as a blueprint for implementing complex software systems with fused bounded contexts and aromatic stability patterns.
+
+---
+*Generated by Genesis Engine Polycyclic Molecule System* 🧪
+"""
 
 
 # --- REACTION COMMANDS ---

@@ -2,13 +2,13 @@
 import click
 
 # Import the "organelles" of our Genesis Engine
-from .aggregates.compiler_aggregate import CompilerAggregate, HatchCommand
-from .transformations.code_generator import CodeGenerationTransformation
-from .connectors.cli_connector import CliConnector
-from .connectors.file_writer_connector import FileWriterConnector
+from aggregates.compiler_aggregate import CompilerAggregate, HatchCommand
+from transformations.code_generator import CodeGenerationTransformation
+from connectors.cli_connector import CliConnector
+from connectors.file_writer_connector import FileWriterConnector
 
 # Import molecular chemistry CLI commands
-from .molecular_cli import molecular
+from molecular_cli import molecular
 
 # --- Configuration ---
 HIVE_ROOT = "hive/components"
