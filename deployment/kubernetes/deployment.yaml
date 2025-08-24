@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: DemoQuantumEcommerce-quantum-hive
+  labels:
+    app: DemoQuantumEcommerce
+    type: quantum-hive
+    architecture: quantum-enhanced
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: DemoQuantumEcommerce
+  template:
+    metadata:
+      labels:
+        app: DemoQuantumEcommerce
+        type: quantum-hive
+    spec:
+      containers:
+      - name: quantum-hive
+        image: DemoQuantumEcommerce:latest
+        ports:
+        - containerPort: 8080
+          name: quantum-api
+        - containerPort: 8081
+          name: consciousness
+        - containerPort: 8082
+          name: chemical
+        env:
+        - name: QUANTUM_COHERENCE_TARGET
+          value: "0.9"
+        - name: CONSCIOUSNESS_LEVEL_TARGET
+          value: "3"
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /health/quantum
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health/consciousness
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: DemoQuantumEcommerce-service
+spec:
+  selector:
+    app: DemoQuantumEcommerce
+  ports:
+  - name: quantum-api
+    port: 80
+    targetPort: 8080
+  - name: consciousness
+    port: 8081
+    targetPort: 8081
+  - name: chemical
+    port: 8082
+    targetPort: 8082
+  type: LoadBalancer
