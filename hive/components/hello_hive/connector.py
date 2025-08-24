@@ -2,6 +2,7 @@ import uuid
 from .command import HelloHiveCommand
 from .aggregate import HelloHiveAggregate
 
+
 class HelloHiveConnector:
     """
     The connector for the hello-hive component.

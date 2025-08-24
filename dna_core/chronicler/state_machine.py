@@ -1,6 +1,7 @@
 from typing import List
 from .quest import Quest, Action, State
 
+
 class StateMachine:
     """
     Manages the state of a running quest instance.
@@ -18,11 +19,15 @@ class StateMachine:
 
         initial_state_name = self._quest.initial_state
         if initial_state_name not in self._quest.states:
-            raise ValueError(f"Initial state '{initial_state_name}' not found in quest definition.")
+            raise ValueError(
+                f"Initial state '{initial_state_name}' not found in quest definition."
+            )
 
         self.current_state = self._quest.states[initial_state_name]
         self.is_started = True
-        print(f"Quest '{self._quest.quest_name}' started. Current state: {self.current_state.name}")
+        print(
+            f"Quest '{self._quest.quest_name}' started. Current state: {self.current_state.name}"
+        )
 
     def transition(self, on_event: str) -> bool:
         """
@@ -36,13 +41,19 @@ class StateMachine:
             if trans.on == on_event:
                 next_state_name = trans.to
                 if next_state_name not in self._quest.states:
-                    raise ValueError(f"Transition target state '{next_state_name}' not found.")
+                    raise ValueError(
+                        f"Transition target state '{next_state_name}' not found."
+                    )
 
                 self.current_state = self._quest.states[next_state_name]
-                print(f"Transitioned on event '{on_event}'. New state: {self.current_state.name}")
+                print(
+                    f"Transitioned on event '{on_event}'. New state: {self.current_state.name}"
+                )
                 return True
 
-        print(f"No transition found for event '{on_event}' from state '{self.current_state.name}'.")
+        print(
+            f"No transition found for event '{on_event}' from state '{self.current_state.name}'."
+        )
         return False
 
     def get_on_enter_actions(self) -> List[Action]:

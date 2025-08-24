@@ -1,5 +1,6 @@
 from abc import ABC
 
+
 class Connector(ABC):
     """
     Base class for a Connector.
@@ -13,4 +14,5 @@ class Connector(ABC):
     2. Secondary/Driven Connectors: Adapt domain needs into calls to external systems
        (e.g., a repository implementation that talks to a database).
     """
+
     pass

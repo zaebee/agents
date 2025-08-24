@@ -2,6 +2,7 @@ from typing import List
 from abc import ABC, abstractmethod
 from dna_core.pollen_protocol_pb2 import PollenEnvelope
 
+
 class Aggregate(ABC):
     """
     The base class for an Aggregate.

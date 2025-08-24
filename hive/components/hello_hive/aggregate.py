@@ -6,6 +6,7 @@ from dna_core.pollen_protocol_pb2 import PollenEnvelope
 from dna_core.royal_jelly import Aggregate
 from .command import HelloHiveCommand
 
+
 class HelloHiveAggregate(Aggregate):
     """
     The aggregate for the hello-hive component.

@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import Dict, Any
 from .quest import Quest, State, Action, Transition
 
+
 class QuestParser:
     """
     Parses a quest.yaml file into a structured Quest object.
@@ -15,7 +16,7 @@ class QuestParser:
         if not file_path.is_file():
             raise FileNotFoundError(f"Quest file not found at: {file_path}")
 
-        with open(file_path, 'r') as f:
+        with open(file_path, "r") as f:
             raw_data = yaml.safe_load(f)
 
         return self._create_quest_from_raw(raw_data)
@@ -27,22 +28,28 @@ class QuestParser:
         # Parse states
         parsed_states = {}
         for state_name, state_data in raw_data.get("states", {}).items():
-            on_enter_actions = [Action(**action) for action in state_data.get("on_enter", [])]
+            on_enter_actions = [
+                Action(**action) for action in state_data.get("on_enter", [])
+            ]
 
-            transitions = [Transition(**trans) for trans in state_data.get("transitions", []) if trans is not None]
+            transitions = [
+                Transition(**trans)
+                for trans in state_data.get("transitions", [])
+                if trans is not None
+            ]
 
             parsed_states[state_name] = State(
                 name=state_name,
                 description=state_data.get("description", ""),
                 on_enter=on_enter_actions,
-                transitions=transitions
+                transitions=transitions,
             )
 
         # Create the final Quest object
         quest = Quest(
             quest_name=raw_data["quest_name"],
             initial_state=raw_data["initial_state"],
-            states=parsed_states
+            states=parsed_states,
         )
 
         return quest

@@ -1,5 +1,6 @@
 from abc import ABC
 
+
 class Transformation(ABC):
     """
     Base class for a Transformation.
@@ -11,4 +12,5 @@ class Transformation(ABC):
     Think of it as a collection of pure functions for a specific domain concept
     (e.g., a PricingCalculator).
     """
+
     pass

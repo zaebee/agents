@@ -1,6 +1,7 @@
 from pathlib import Path
 from dna_core.chronicler import QuestParser, StateMachine
 
+
 class TestQuestChroniclerChronicler:
     """
     A Chronicler Bee that manages the 'test-quest-chronicler' quest.

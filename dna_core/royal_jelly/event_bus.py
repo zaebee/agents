@@ -4,6 +4,7 @@ from dna_core.pollen_protocol_pb2 import PollenEnvelope
 # A type hint for an event handler function
 EventHandler = Callable[[PollenEnvelope], None]
 
+
 class IEventBus(Protocol):
     """
     A Protocol for an event bus, defining the contract for publishing events
@@ -20,6 +21,7 @@ class IEventBus(Protocol):
     def subscribe(self, event_type: str, handler: EventHandler) -> None:
         """Subscribes a handler to a specific event type string."""
         ...
+
 
 class EventBus(IEventBus):
     """

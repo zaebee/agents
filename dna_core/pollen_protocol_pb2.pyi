@@ -10,7 +10,14 @@ from typing import ClassVar as _ClassVar, Optional as _Optional, Union as _Union
 DESCRIPTOR: _descriptor.FileDescriptor
 
 class PollenEnvelope(_message.Message):
-    __slots__ = ("event_id", "event_type", "event_version", "timestamp", "aggregate_id", "payload")
+    __slots__ = (
+        "event_id",
+        "event_type",
+        "event_version",
+        "timestamp",
+        "aggregate_id",
+        "payload",
+    )
     EVENT_ID_FIELD_NUMBER: _ClassVar[int]
     EVENT_TYPE_FIELD_NUMBER: _ClassVar[int]
     EVENT_VERSION_FIELD_NUMBER: _ClassVar[int]
@@ -23,4 +30,14 @@ class PollenEnvelope(_message.Message):
     timestamp: _timestamp_pb2.Timestamp
     aggregate_id: str
     payload: _struct_pb2.Struct
-    def __init__(self, event_id: _Optional[str] = ..., event_type: _Optional[str] = ..., event_version: _Optional[str] = ..., timestamp: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ..., aggregate_id: _Optional[str] = ..., payload: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ...) -> None: ...
+    def __init__(
+        self,
+        event_id: _Optional[str] = ...,
+        event_type: _Optional[str] = ...,
+        event_version: _Optional[str] = ...,
+        timestamp: _Optional[
+            _Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]
+        ] = ...,
+        aggregate_id: _Optional[str] = ...,
+        payload: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ...,
+    ) -> None: ...
