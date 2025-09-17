@@ -53,3 +53,28 @@ graph LR
     style A fill:#fff3cd,stroke:#d4a017,stroke-width:2px
     style G_Out fill:#ffeb99,stroke:#d4a017,stroke-width:2px,stroke-dasharray: 5 5
 ```
+
+### 4. The "Choreography" Codon
+"Finally, there is the spell of 'becoming'," the Beekeeper said, her voice filled with a quiet reverence. "It is not a single action, but a story unfolding. It is how a larva becomes a bee, or how a series of small steps becomes a grand journey. This is the 'Choreography' codon."
+
+This pattern is for managing long-running, multi-step business processes (also known as Sagas). It is coordinated by a stateful **Chronicler Bee** that remembers the progress of the quest. It listens for events that signal the completion of one step and dispatches commands to begin the next.
+
+```mermaid
+graph TD
+    subgraph "Codon: Choreography"
+        direction LR
+        G_Start[G: Quest Started] --> O[O: Chronicler Bee];
+        O -- "dispatches command for step 1" --> C1[C: Connector];
+        C1 --> A1[A: Aggregate];
+        A1 --> G1[G: Step 1 Complete];
+        G1 -- "informs chronicler" --> O;
+        O -- "dispatches command for step 2" --> C2[C: Connector];
+        C2 --> A2[A: Aggregate];
+        A2 --> G_End[G: Quest Complete];
+    end
+    style G_Start fill:#ffeb99,stroke:#d4a017,stroke-width:2px,stroke-dasharray: 5 5
+    style O fill:#e67e22,stroke:#a84300,stroke-width:2px
+    style C1,C2 fill:#f1c40f,stroke:#333,stroke-width:2px
+    style A1,A2 fill:#fff3cd,stroke:#d4a017,stroke-width:2px
+    style G1,G_End fill:#ffeb99,stroke:#d4a017,stroke-width:2px,stroke-dasharray: 5 5
+```
