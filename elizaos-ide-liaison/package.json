@@ -1,0 +1,119 @@
+{
+  "name": "elizaos-ide-liaison",
+  "displayName": "ElizaOS IDE Liaison",
+  "description": "Interact with ElizaOS agents directly from your IDE.",
+  "version": "0.0.1",
+  "publisher": "elizaos-project",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onView:elizaosSadsPanel"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "elizaos-ide-liaison.askJulesToExplain",
+        "title": "ElizaOS: Ask Jules to Explain Code",
+        "category": "ElizaOS"
+      },
+      {
+        "command": "elizaos-ide-liaison.askEddyForDocs",
+        "title": "ElizaOS: Ask Eddy for Docs on API",
+        "category": "ElizaOS"
+      },
+      {
+        "command": "elizaos-ide-liaison.askJulesToRefactor",
+        "title": "ElizaOS: Ask Jules for Refactor Suggestion",
+        "category": "ElizaOS"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "editorHasSelection",
+          "command": "elizaos-ide-liaison.askJulesToExplain",
+          "group": "elizaos@1"
+        },
+        {
+          "when": "editorHasSelection",
+          "command": "elizaos-ide-liaison.askEddyForDocs",
+          "group": "elizaos@2"
+        },
+        {
+          "when": "editorHasSelection",
+          "command": "elizaos-ide-liaison.askJulesToRefactor",
+          "group": "elizaos@3"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "elizaos-sidebar",
+          "title": "ElizaOS",
+          "icon": "media/elizaos-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "elizaos-sidebar": [
+        {
+          "id": "elizaosSadsPanel",
+          "name": "Agent Chat",
+          "type": "webview"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "ElizaOS IDE Liaison",
+      "properties": {
+        "elizaos.mcpServerEndpoint": {
+          "type": "string",
+          "default": "http://localhost:8000",
+          "description": "DEPRECATED: Use specific request/event endpoints. Base URL for the ElizaOS MCP server (e.g., for SSE event source)."
+        },
+        "elizaos.mcpRequestEndpoint": {
+          "type": "string",
+          "default": "http://localhost:8000/mcp-request",
+          "description": "URL for sending MCP REQUEST messages to the ElizaOS server."
+        },
+        "elizaos.mcpEventsEndpoint": {
+          "type": "string",
+          "default": "http://localhost:8000/mcp-events",
+          "description": "URL for the ElizaOS MCP SSE event stream."
+        },
+        "elizaos.codingAgentId": {
+          "type": "string",
+          "default": "jules",
+          "description": "Target agent ID for coding-related tasks."
+        },
+        "elizaos.docsAgentId": {
+          "type": "string",
+          "default": "eddy",
+          "description": "Target agent ID for documentation-related tasks."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.80.0",
+    "@types/node": "18.x",
+    "@types/eventsource": "^1.1.15",
+    "typescript": "^5.0.0",
+    "eslint": "^8.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "eventsource": "^2.0.2"
+  }
+}
