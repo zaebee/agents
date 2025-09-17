@@ -1,0 +1,55 @@
+# The definition for a Chronicler Bee that manages a long-running process.
+kind: ChroniclerBee
+name: OrderFulfillmentQuest
+description: "A bee that chronicles the quest of fulfilling a customer's order from placement to shipment."
+
+# The event that begins the quest.
+# The Chronicler Bee will be born when this event is heard.
+starts_on:
+  eventType: OrderPlaced
+  eventVersion: 1.0
+
+# The sequence of steps in the quest.
+# The Chronicler Bee will proceed through these steps in order.
+steps:
+  - name: ProcessPayment
+    description: "Charge the customer's card."
+    # The command to dispatch to begin this step.
+    command_to_dispatch: ProcessPaymentCommand
+    # The event that signals this step was successful.
+    awaits_on_success: PaymentProcessedEvent
+    # The event that signals this step failed.
+    awaits_on_failure: PaymentFailedEvent
+
+  - name: UpdateInventory
+    description: "Reserve the items from stock."
+    # This step is triggered by the success of the previous step.
+    triggered_by: PaymentProcessedEvent
+    command_to_dispatch: UpdateInventoryCommand
+    awaits_on_success: InventoryUpdatedEvent
+    awaits_on_failure: InventoryUpdateFailedEvent
+
+  - name: ShipOrder
+    description: "Create the shipment and notify the customer."
+    triggered_by: InventoryUpdatedEvent
+    command_to_dispatch: ShipOrderCommand
+    awaits_on_success: OrderShippedEvent
+    awaits_on_failure: OrderShippingFailedEvent
+
+# The event that signals the successful completion of the entire quest.
+# The Chronicler Bee considers its work done when this event is heard.
+ends_on:
+  eventType: OrderShipped
+
+# Defines how to handle failures. This is the compensation logic.
+# If any of these failure events are heard, the Chronicler Bee will dispatch
+# the corresponding compensation command to undo what has been done.
+compensations:
+  - on_failure: PaymentFailedEvent
+    dispatch_command: LogPaymentFailureCommand
+
+  - on_failure: InventoryUpdateFailedEvent
+    dispatch_command: RefundPaymentCommand # We must refund if we can't ship.
+
+  - on_failure: OrderShippingFailedEvent
+    dispatch_command: NotifyCustomerOfShippingIssueCommand
