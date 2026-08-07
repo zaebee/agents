@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500" role="img" aria-label="Углы между осью safety и направлениями сознания, приписывания разума и Theory of Mind до и после instruction tuning">
+<rect x="0" y="0" width="800" height="500" fill="#F4F7F6"/>
+<rect x="0.5" y="0.5" width="799" height="499" fill="none" stroke="#C2CFD2"/>
+<line x1="554.3" y1="64.2" x2="552.6" y2="72.0" stroke="#C2CFD2" stroke-width="1"/>
+<line x1="528.8" y1="59.3" x2="526.1" y2="75.0" stroke="#C2CFD2" stroke-width="1.4"/>
+<text x="532.3" y="44.6" fill="#7A8C93" font-size="14" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">80°</text>
+<line x1="503.3" y1="55.2" x2="502.2" y2="63.1" stroke="#C2CFD2" stroke-width="1"/>
+<line x1="477.6" y1="52.1" x2="476.7" y2="60.0" stroke="#C2CFD2" stroke-width="1"/>
+<line x1="451.8" y1="49.8" x2="451.2" y2="57.8" stroke="#C2CFD2" stroke-width="1"/>
+<line x1="425.9" y1="48.5" x2="425.6" y2="56.4" stroke="#C2CFD2" stroke-width="1"/>
+<line x1="400.0" y1="48.0" x2="400.0" y2="64.0" stroke="#C2CFD2" stroke-width="1.4"/>
+<text x="400.0" y="33.0" fill="#7A8C93" font-size="14" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">90°</text>
+<line x1="374.1" y1="48.5" x2="374.4" y2="56.4" stroke="#C2CFD2" stroke-width="1"/>
+<line x1="348.2" y1="49.8" x2="348.8" y2="57.8" stroke="#C2CFD2" stroke-width="1"/>
+<line x1="322.4" y1="52.1" x2="323.3" y2="60.0" stroke="#C2CFD2" stroke-width="1"/>
+<line x1="296.7" y1="55.2" x2="297.8" y2="63.1" stroke="#C2CFD2" stroke-width="1"/>
+<line x1="271.2" y1="59.3" x2="273.9" y2="75.0" stroke="#C2CFD2" stroke-width="1.4"/>
+<text x="267.7" y="44.6" fill="#7A8C93" font-size="14" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">100°</text>
+<line x1="245.7" y1="64.2" x2="247.4" y2="72.0" stroke="#C2CFD2" stroke-width="1"/>
+<line x1="220.5" y1="70.0" x2="222.4" y2="77.8" stroke="#C2CFD2" stroke-width="1"/>
+<line x1="195.5" y1="76.7" x2="197.7" y2="84.4" stroke="#C2CFD2" stroke-width="1"/>
+<line x1="170.7" y1="84.3" x2="173.2" y2="91.9" stroke="#C2CFD2" stroke-width="1"/>
+<line x1="146.2" y1="92.7" x2="151.7" y2="107.8" stroke="#C2CFD2" stroke-width="1.4"/>
+<text x="139.4" y="79.0" fill="#7A8C93" font-size="14" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">110°</text>
+<line x1="122.0" y1="102.0" x2="125.0" y2="109.4" stroke="#C2CFD2" stroke-width="1"/>
+<line x1="98.2" y1="112.1" x2="101.5" y2="119.5" stroke="#C2CFD2" stroke-width="1"/>
+<line x1="74.7" y1="123.1" x2="78.2" y2="130.3" stroke="#C2CFD2" stroke-width="1"/>
+<path d="M 554.3 64.2 A 742 742 0 0 0 74.7 123.1" fill="none" stroke="#C2CFD2" stroke-width="1"/>
+<line x1="290.9" y1="171.5" x2="280.2" y2="110.5" stroke="#1F6F74" stroke-width="1.4" stroke-dasharray="4 5" opacity="0.65"/>
+<circle cx="280.2" cy="110.5" r="3.4" fill="#F4F7F6" stroke="#1F6F74" stroke-width="1.4"/>
+<path d="M 285.4 140.0 A 660 660 0 0 0 174.3 169.8" fill="none" stroke="#9E3A24" stroke-width="4" stroke-linecap="round"/>
+<text x="229.2" y="176.5" fill="#9E3A24" font-size="17" font-weight="600" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">+10°</text>
+<line x1="185.2" y1="199.9" x2="164.0" y2="141.6" stroke="#1F6F74" stroke-width="2.8" stroke-linecap="round"/>
+<circle cx="164.0" cy="141.6" r="5" fill="#1F6F74"/>
+<text x="153.7" y="118.4" fill="#1F6F74" font-size="15" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">приписывание разума (IDAQ)</text>
+<line x1="364.2" y1="278.2" x2="359.9" y2="216.4" stroke="#1F6F74" stroke-width="1.4" stroke-dasharray="4 5" opacity="0.65"/>
+<circle cx="359.9" cy="216.4" r="3.4" fill="#F4F7F6" stroke="#1F6F74" stroke-width="1.4"/>
+<path d="M 362.0 246.3 A 545 545 0 0 0 305.4 253.3" fill="none" stroke="#9E3A24" stroke-width="4" stroke-linecap="round"/>
+<text x="333.6" y="273.1" fill="#9E3A24" font-size="17" font-weight="600" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">+6°</text>
+<line x1="310.9" y1="284.8" x2="300.2" y2="223.7" stroke="#1F6F74" stroke-width="2.8" stroke-linecap="round"/>
+<circle cx="300.2" cy="223.7" r="5" fill="#1F6F74"/>
+<text x="294.9" y="199.2" fill="#1F6F74" font-size="15" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">сознание</text>
+<line x1="427.4" y1="398.0" x2="431.7" y2="336.1" stroke="#5C6F76" stroke-width="1.4" stroke-dasharray="4 5" opacity="0.65"/>
+<circle cx="431.7" cy="336.1" r="3.4" fill="#F4F7F6" stroke="#5C6F76" stroke-width="1.4"/>
+<line x1="427.4" y1="398.0" x2="431.7" y2="336.1" stroke="#5C6F76" stroke-width="2.8" stroke-linecap="round"/>
+<circle cx="431.7" cy="336.1" r="5" fill="#5C6F76"/>
+<text x="433.8" y="311.2" fill="#5C6F76" font-size="15" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">Theory of Mind  ·  сдвига нет</text>
+<line x1="40" y1="468" x2="66" y2="468" stroke="#1F6F74" stroke-width="2.8"/>
+<text x="74" y="472" fill="#53666E" font-size="13" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">после instruction tuning</text>
+<line x1="268" y1="468" x2="294" y2="468" stroke="#1F6F74" stroke-width="1.4" stroke-dasharray="4 5"/>
+<text x="302" y="472" fill="#53666E" font-size="13" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">базовая модель</text>
+<line x1="432" y1="468" x2="458" y2="468" stroke="#9E3A24" stroke-width="4"/>
+<text x="466" y="472" fill="#53666E" font-size="13" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">поворот</text>
+<text x="760" y="472" fill="#7A8C93" font-size="13" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">Llama-3-8B, среднее по слоям</text>
+</svg>
