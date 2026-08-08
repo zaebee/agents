@@ -34,19 +34,27 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Stage the published site
-        # The whole repository used to go up, so anything committed at the root
-        # was published the moment it landed on main — drafts included. This is
-        # an explicit list rather than a glob with exceptions: adding a file to
-        # the repository should not publish it, and publishing one should be a
-        # visible edit here.
+        # Everything except a short deny list. The first attempt at this was an
+        # allow list of root files, which was wrong twice over: it silently
+        # dropped every subdirectory the site used to serve — dna-core/,
+        # genesis-engine/, hive/ — and, running under `bash -e`, it turned any
+        # rename of a listed file into a failed deploy that froze the whole site
+        # on its previous build.
+        #
+        # Denying is the weaker guarantee: a new private file has to be added
+        # below or it goes public. That is the same rule the repository had
+        # before, it is what CLAUDE.md documents, and it fails in the direction
+        # that is visible rather than the one that 404s quietly.
         run: |
           mkdir -p _site
-          cp article.html article.ru.html genesis-animation.html _site/
-          cp article.md article.ru.md _site/
-          cp HIVE_CONSTITUTION.md GRIMOIRE.md codons.md _site/
-          cp cover.md journey-diagram.md MCP_DRAFT.md gardener.md _site/
-          cp README.md CONTRIBUTING.md _site/
-          ls -1 _site
+          rsync -a ./ _site/ \
+            --exclude '.git' \
+            --exclude '.github' \
+            --exclude '_site' \
+            --exclude 'drafts' \
+            --exclude 'CLAUDE.md'
+          echo "Published tree:"
+          find _site -maxdepth 2 -not -path '_site' | sort
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

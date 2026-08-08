@@ -27,7 +27,9 @@ npx prettier --write <files>
 mmdc -i cover.md -o cover.svg
 ```
 
-There is no test runner. CI (`.github/workflows/`) only builds a Jekyll site and deploys the **entire repo root** to GitHub Pages — every file added at the top level is published.
+There is no test runner. `static.yml` publishes the repository to GitHub Pages on every push to `main`, **minus a short deny list** — currently `drafts/`, `CLAUDE.md`, `.github/` and `.git`. Anything else you add, at the root or in a subdirectory, goes public on merge. Adding something private means adding it to that list in the same commit.
+
+Note the deploy does **not** run Jekyll: `upload-pages-artifact` tars the staged tree verbatim, so YAML front matter is served as literal text and `_config.yml` would do nothing. `jekyll-docker.yml` builds a Jekyll site but never deploys it.
 
 ## The Hive architecture (what you need to hold in your head)
 
