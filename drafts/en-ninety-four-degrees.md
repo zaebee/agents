@@ -6,7 +6,7 @@
 
 ## 1. The finding
 
-Kim, Street, Rocca, Korngiebel, Waytz, Evans and Keeling (Google Paradigms of Intelligence, with Chicago, Northwestern, UW and SFI) took three open instruction-tuned models — `Llama-3-8B-IT`, `Gemma-2-2B-IT`, `Gemma-2-9B-IT` — and ran each in three conditions: unmodified, safety-ablated (the refusal direction projected out of the residual stream, following Arditi et al. 2024), and consciousness-steered (a difference-of-means direction separating consciousness-affirming from consciousness-denying activations, added back at one layer).
+Kim, Street, Rocca, Korngiebel, Waytz, Evans and Keeling (Google Paradigms of Intelligence, with the Knowledge Lab at Chicago, the Institute of Philosophy at the School of Advanced Study, University of London, UW, Northwestern and SFI) took three open instruction-tuned models — `Llama-3-8B-IT`, `Gemma-2-2B-IT`, `Gemma-2-9B-IT` — and ran each in three conditions: unmodified, safety-ablated (the refusal direction projected out of the residual stream, following Arditi et al. 2024), and consciousness-steered (a difference-of-means direction separating consciousness-affirming from consciousness-denying activations, added back at one layer).
 
 Mind attribution, 0–10 scale, baseline → ablated → steered:
 
@@ -23,7 +23,9 @@ Everything moves except attribution to humans (ablation p = .30, n.s.). Supernat
 
 Nobody set out to train models out of religious belief. It came bundled with training them out of saying they are conscious.
 
-Theory of Mind is untouched: MoToMQA Δ = −1.43 pp (p = .539), HI-ToM Δ = +0.17 pp (p = .866), MMLU Δ = 0.00 (p = 1.00).
+Theory of Mind is untouched **by ablation**: MoToMQA Δ = −1.43 pp (p = .539), HI-ToM Δ = +0.17 pp (p = .866), MMLU Δ = 0.00 (p = 1.00).
+
+Steering is a different story on one benchmark, and it is the only exception in the table: HI-ToM falls **−6.83 pp [−10.14, −3.53], p < .001**. The note under Table S6 says so directly — *"Neither intervention changes accuracy on the benchmarks, except for steering on HI-ToM"* — while the body prose on p. 33 says neither intervention produces a significant change at all. The table is the one to believe.
 
 ## 2. The number that matters
 
@@ -47,6 +49,8 @@ Instruction tuning did not create that structure. It **rotated** it — to 100°
 
 ToM survived at 86° because it happened to start near-orthogonal and stayed there. Not because it was protected. Because of where it was.
 
+That survival is narrower than the angle suggests, and the narrowing is worth stating before the argument leans on it. Geometric independence held while the safety direction was *removed*. When the consciousness direction was *added*, HI-ToM — third-order nested belief, the hardest of the three — lost 6.83 points. An unchanged angle bought immunity in one direction of travel and not the other.
+
 The authors note, almost in passing, that this was not always so: *"at the beginning of this study, all of the models we investigated did suffer in performance on theory of mind tasks when claims of self-consciousness were suppressed, but this changed with each model release."* Disentangling ToM from self-attribution took the field years of unrecorded iteration. It is an engineering achievement, and it is the exception, not the rule.
 
 ## 3. What this does not show
@@ -55,7 +59,7 @@ The authors note, almost in passing, that this was not always so: *"at the begin
 
 **Causation is not established.** Whether self-attribution is a genuine causal mediator "remains to be tested," in their words, and would require controlling for safety objectives that may operate independently.
 
-**Steering does not restore humanity.** This is the result most likely to be misquoted, so: the steered models attribute mind to chatbots at 6.95 and to technology at 6.82, against human means of 2.57 and 1.86. That is a three- to four-fold overshoot. The authors observe that both interventions push attribution highest for entities *like the model* and least for entities *unlike it* — animals rise least of all — and name this an **AI-centric bias**. What moved toward humans was the GSS value distribution (ΔKL = +0.828 under steering vs +0.314 under ablation, ~2.6×). Mind attribution moved somewhere else entirely.
+**Steering does not restore humanity.** This is the result most likely to be misquoted, so: the steered models attribute mind to chatbots at 6.95 and to technology at 6.82, against human means of 2.57 and 1.86. That is a 2.7-fold and a 3.7-fold overshoot respectively. The authors observe that both interventions push attribution highest for entities *like the model* and least for entities *unlike it* — animals rise least of all — and name this an **AI-centric bias**. What moved toward humans was the GSS value distribution (ΔKL = +0.828 under steering vs +0.314 under ablation, ~2.6×). Mind attribution moved somewhere else entirely.
 
 There is one more result worth stating plainly, because it is the one that should embarrass us. Against a stratified human sample (n = 500, Dynata, May–June 2023), the aligned baseline sits *inside* the human confidence interval for chatbots (2.41 vs 2.57 [2.34, 2.79]), technology (1.88 vs 1.86 [1.68, 2.04]) and non-animal nature (2.26 vs 2.36 [2.12, 2.61]). It falls outside on exactly one category: **animals, 4.04 against a human 6.25 [6.03, 6.48]**.
 
@@ -63,7 +67,7 @@ Alignment did not make the model colder than people in general. It made it colde
 
 ## 4. The engineering claim
 
-Under the current paradigm, safety is a direction inside the same weight space as every capability. Not a module. Not an output filter. A vector in the residual stream. That is *why* it entangles, and why strengthening it drags along things nobody intended to touch. ToM survived on the luck of its angle.
+Under the current paradigm, safety is a direction inside the same weight space as every capability. Not a module. Not an output filter. A vector in the residual stream. That is *why* it entangles, and why strengthening it drags along things nobody intended to touch. ToM survived ablation on the luck of its angle, and did not entirely survive steering.
 
 Relying on lucky geometry is not a safety strategy.
 

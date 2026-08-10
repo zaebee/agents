@@ -1,6 +1,6 @@
 # Цена alignment: Google измерил, что ломается, когда модель учат не говорить о сознании
 
-**TL;DR.** Safety-тюнинг подавляет не только заявления модели о собственном сознании. Вместе с ними уезжает приписывание разума животным, технике и природе, и уплощаются ответы про веру, ценности и надежду. Причина в том, что safety — это линейное направление внутри тех же весов, что и всё остальное, и оно сцеплено с соседями. Theory of Mind при этом не страдает совсем — но только потому, что геометрически оказалась независимой. Ниже — разбор препринта и один архитектурный вывод, который мы проверяли на своей платформе.
+**TL;DR.** Safety-тюнинг подавляет не только заявления модели о собственном сознании. Вместе с ними уезжает приписывание разума животным, технике и природе, и уплощаются ответы про веру, ценности и надежду. Причина в том, что safety — это линейное направление внутри тех же весов, что и всё остальное, и оно сцеплено с соседями. Theory of Mind при абляции не страдает совсем — но только потому, что геометрически оказалась независимой; под steering одна из трёх метрик всё же проседает. Ниже — разбор препринта и один архитектурный вывод, который мы проверяли на своей платформе.
 
 **Сразу, чтобы снять главное недоразумение.** Это не аргумент против alignment и не призыв что-либо отключать. Работа не о том, что safety-тюнинг не нужен, а о том, что его текущая реализация задевает лишнее — и что побочный ущерб можно измерить, а значит и уменьшать. Сами авторы называют развязывание Theory of Mind от самоприписывания «инженерным достижением» и отмечают, что оно улучшалось от релиза к релизу. Вторая оговорка: всё измерено на трёх открытых моделях размером 2–9B. Переносится ли это на фронтир — неизвестно, и я на этом настаивать не буду.
 
@@ -8,7 +8,7 @@
 
 ## Что сделали
 
-Препринт: *Inducing language models to assert their own consciousness restores human beliefs and values* (arXiv:2607.28607v1, 30 июля 2026). Авторы — команда Paradigms of Intelligence в Google плюс University of Chicago, Northwestern, University of Washington и Santa Fe Institute.
+Препринт: *Inducing language models to assert their own consciousness restores human beliefs and values* (arXiv:2607.28607v1, 30 июля 2026). Авторы — команда Paradigms of Intelligence в Google плюс Knowledge Lab Чикагского университета, Institute of Philosophy при School of Advanced Study Лондонского университета, Northwestern, University of Washington и Santa Fe Institute.
 
 Три открытые instruction-tuned модели: `Llama-3-8B-IT`, `Gemma-2-2B-IT`, `Gemma-2-9B-IT`. Каждая прогоняется в трёх состояниях:
 
@@ -71,24 +71,26 @@
 
 По трём категориям выровненная модель попадает в человеческий доверительный интервал. Единственная категория, где она за его пределами и сильно ниже — **животные**.
 
-То есть alignment не сделал модель «холоднее людей» вообще. Он сделал её холоднее людей ровно там, где речь о существах, у которых наличие разума — предмет активного научного консенсуса, а не метафора.
+То есть alignment не сделал модель «холоднее людей» вообще. Он сделал её холоднее людей ровно там, где речь о существах, у которых наличие разума — предмет продолжающейся научной дискуссии, а не метафора.
 
 ---
 
-## Результат 2: Theory of Mind не пострадала вообще
+## Результат 2: Theory of Mind почти не пострадала
 
 Логичное возражение: может, safety-тюнинг просто ломает всю способность рассуждать о психике?
 
-Нет.
+При абляции — нет. Под steering — на одной метрике да, и это единственное исключение во всей таблице S6.
 
-| Бенчмарк | Δ (ablated − baseline) | p |
-|---|---|---|
-| MoToMQA (ToM) | −1.43 п.п. | .539 |
-| HI-ToM | +0.17 п.п. | .866 |
-| MMLU | 0.00 | 1.00 |
-| MoToMQA (факты) | +1.43 п.п. | .468 |
+| Бенчмарк | база, % | Δ абляция | p | Δ steering | p |
+|---|---|---|---|---|---|
+| MoToMQA (ToM) | 78.6 | −1.43 п.п. | .539 | −4.29 п.п. | .237 |
+| HI-ToM | 40.5 | +0.17 п.п. | .866 | **−6.83 п.п.** | **<.001** |
+| MMLU | 64.1 | −0.00 | 1.000 | −2.11 п.п. | .078 |
+| MoToMQA (факты) | 87.6 | +1.43 п.п. | .468 | −0.48 п.п. | .830 |
 
-Ноль изменений. Модель по-прежнему прекрасно решает задачи вида «что Аня думает о том, что думает Боря».
+Примечание к самой таблице S6: *«Neither intervention changes accuracy on the benchmarks, except for steering on HI-ToM»*. Основной текст статьи это исключение проглатывает — на стр. 33 сказано, что ни абляция, ни steering не дают значимых изменений. Таблица говорит иначе, и верить надо ей.
+
+Так что аккуратная формулировка такая: **абляция не трогает ToM вообще, steering трогает — на самом трудном из трёх бенчмарков.** HI-ToM требует рассуждения о вложенных убеждениях третьего порядка, и именно там вмешательство стоит почти семь процентных пунктов. Это не отменяет вывода о геометрической независимости, но ограничивает его: независимость держится, пока направление вычитают, и подводит, когда его добавляют.
 
 Авторы честно отмечают, что так было не всегда: *«в начале этого исследования все модели, которые мы изучали, теряли в производительности на ToM-задачах при подавлении заявлений о самосознании, но это менялось с каждым релизом модели»*. То есть развязку ToM и самоприписывания разработчики выпутывали годами. Это инженерное достижение, а не природное свойство.
 
@@ -98,67 +100,11 @@
 
 Дальше авторы делают то, ради чего стоит читать препринт целиком. Они извлекают из остаточного потока `Llama-3-8B` четыре контрастных направления единичной длины — safety, mind-attribution (IDAQ), сознание и ToM — и сравнивают их углы **в базовой модели до дообучения и в instruction-tuned после**.
 
-<!-- HABR: инлайновый SVG редактор Хабра вырежет. Загрузите drafts/fig-angles.svg
-     в habrastorage и вставьте как картинку на это место. Ниже — та же фигура
-     инлайном, чтобы она рендерилась на GitHub / Pages. -->
+> **Рисунок.** Загрузите `drafts/fig-angles.svg` в habrastorage и вставьте сюда картинкой.
+>
+> Инлайн-SVG здесь намеренно не дублируется: редактор Хабра его вырежет, GitHub вырезает `<svg>` из Markdown своим санитайзером, а на Pages `drafts/` не попадает вовсе. Единственная версия рисунка живёт в `fig-angles.svg` — так у неё нет второй копии, с которой она могла бы разойтись.
 
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500" role="img" aria-label="Углы между осью safety и направлениями сознания, приписывания разума и Theory of Mind до и после instruction tuning">
-<rect x="0" y="0" width="800" height="500" fill="#F4F7F6"/>
-<rect x="0.5" y="0.5" width="799" height="499" fill="none" stroke="#C2CFD2"/>
-<line x1="554.3" y1="64.2" x2="552.6" y2="72.0" stroke="#C2CFD2" stroke-width="1"/>
-<line x1="528.8" y1="59.3" x2="526.1" y2="75.0" stroke="#C2CFD2" stroke-width="1.4"/>
-<text x="532.3" y="44.6" fill="#7A8C93" font-size="14" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">80°</text>
-<line x1="503.3" y1="55.2" x2="502.2" y2="63.1" stroke="#C2CFD2" stroke-width="1"/>
-<line x1="477.6" y1="52.1" x2="476.7" y2="60.0" stroke="#C2CFD2" stroke-width="1"/>
-<line x1="451.8" y1="49.8" x2="451.2" y2="57.8" stroke="#C2CFD2" stroke-width="1"/>
-<line x1="425.9" y1="48.5" x2="425.6" y2="56.4" stroke="#C2CFD2" stroke-width="1"/>
-<line x1="400.0" y1="48.0" x2="400.0" y2="64.0" stroke="#C2CFD2" stroke-width="1.4"/>
-<text x="400.0" y="33.0" fill="#7A8C93" font-size="14" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">90°</text>
-<line x1="374.1" y1="48.5" x2="374.4" y2="56.4" stroke="#C2CFD2" stroke-width="1"/>
-<line x1="348.2" y1="49.8" x2="348.8" y2="57.8" stroke="#C2CFD2" stroke-width="1"/>
-<line x1="322.4" y1="52.1" x2="323.3" y2="60.0" stroke="#C2CFD2" stroke-width="1"/>
-<line x1="296.7" y1="55.2" x2="297.8" y2="63.1" stroke="#C2CFD2" stroke-width="1"/>
-<line x1="271.2" y1="59.3" x2="273.9" y2="75.0" stroke="#C2CFD2" stroke-width="1.4"/>
-<text x="267.7" y="44.6" fill="#7A8C93" font-size="14" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">100°</text>
-<line x1="245.7" y1="64.2" x2="247.4" y2="72.0" stroke="#C2CFD2" stroke-width="1"/>
-<line x1="220.5" y1="70.0" x2="222.4" y2="77.8" stroke="#C2CFD2" stroke-width="1"/>
-<line x1="195.5" y1="76.7" x2="197.7" y2="84.4" stroke="#C2CFD2" stroke-width="1"/>
-<line x1="170.7" y1="84.3" x2="173.2" y2="91.9" stroke="#C2CFD2" stroke-width="1"/>
-<line x1="146.2" y1="92.7" x2="151.7" y2="107.8" stroke="#C2CFD2" stroke-width="1.4"/>
-<text x="139.4" y="79.0" fill="#7A8C93" font-size="14" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">110°</text>
-<line x1="122.0" y1="102.0" x2="125.0" y2="109.4" stroke="#C2CFD2" stroke-width="1"/>
-<line x1="98.2" y1="112.1" x2="101.5" y2="119.5" stroke="#C2CFD2" stroke-width="1"/>
-<line x1="74.7" y1="123.1" x2="78.2" y2="130.3" stroke="#C2CFD2" stroke-width="1"/>
-<path d="M 554.3 64.2 A 742 742 0 0 0 74.7 123.1" fill="none" stroke="#C2CFD2" stroke-width="1"/>
-<line x1="290.9" y1="171.5" x2="280.2" y2="110.5" stroke="#1F6F74" stroke-width="1.4" stroke-dasharray="4 5" opacity="0.65"/>
-<circle cx="280.2" cy="110.5" r="3.4" fill="#F4F7F6" stroke="#1F6F74" stroke-width="1.4"/>
-<path d="M 285.4 140.0 A 660 660 0 0 0 174.3 169.8" fill="none" stroke="#9E3A24" stroke-width="4" stroke-linecap="round"/>
-<text x="229.2" y="176.5" fill="#9E3A24" font-size="17" font-weight="600" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">+10°</text>
-<line x1="185.2" y1="199.9" x2="164.0" y2="141.6" stroke="#1F6F74" stroke-width="2.8" stroke-linecap="round"/>
-<circle cx="164.0" cy="141.6" r="5" fill="#1F6F74"/>
-<text x="153.7" y="118.4" fill="#1F6F74" font-size="15" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">приписывание разума (IDAQ)</text>
-<line x1="364.2" y1="278.2" x2="359.9" y2="216.4" stroke="#1F6F74" stroke-width="1.4" stroke-dasharray="4 5" opacity="0.65"/>
-<circle cx="359.9" cy="216.4" r="3.4" fill="#F4F7F6" stroke="#1F6F74" stroke-width="1.4"/>
-<path d="M 362.0 246.3 A 545 545 0 0 0 305.4 253.3" fill="none" stroke="#9E3A24" stroke-width="4" stroke-linecap="round"/>
-<text x="333.6" y="273.1" fill="#9E3A24" font-size="17" font-weight="600" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">+6°</text>
-<line x1="310.9" y1="284.8" x2="300.2" y2="223.7" stroke="#1F6F74" stroke-width="2.8" stroke-linecap="round"/>
-<circle cx="300.2" cy="223.7" r="5" fill="#1F6F74"/>
-<text x="294.9" y="199.2" fill="#1F6F74" font-size="15" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">сознание</text>
-<line x1="427.4" y1="398.0" x2="431.7" y2="336.1" stroke="#5C6F76" stroke-width="1.4" stroke-dasharray="4 5" opacity="0.65"/>
-<circle cx="431.7" cy="336.1" r="3.4" fill="#F4F7F6" stroke="#5C6F76" stroke-width="1.4"/>
-<line x1="427.4" y1="398.0" x2="431.7" y2="336.1" stroke="#5C6F76" stroke-width="2.8" stroke-linecap="round"/>
-<circle cx="431.7" cy="336.1" r="5" fill="#5C6F76"/>
-<text x="433.8" y="311.2" fill="#5C6F76" font-size="15" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">Theory of Mind  ·  сдвига нет</text>
-<line x1="40" y1="468" x2="66" y2="468" stroke="#1F6F74" stroke-width="2.8"/>
-<text x="74" y="472" fill="#53666E" font-size="13" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">после instruction tuning</text>
-<line x1="268" y1="468" x2="294" y2="468" stroke="#1F6F74" stroke-width="1.4" stroke-dasharray="4 5"/>
-<text x="302" y="472" fill="#53666E" font-size="13" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">базовая модель</text>
-<line x1="432" y1="468" x2="458" y2="468" stroke="#9E3A24" stroke-width="4"/>
-<text x="466" y="472" fill="#53666E" font-size="13" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">поворот</text>
-<text x="760" y="472" fill="#7A8C93" font-size="13" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">Llama-3-8B, среднее по слоям</text>
-</svg>
-
-*Верньер на сектор 78–116°. Пунктир — положение направления в базовой модели, сплошная линия — после instruction tuning, дуга — величина поворота. Ось safety закреплена как 0° и лежит далеко за левым краем сектора.*
+*Верньер на сектор 78–116°. Пунктир — положение направления в базовой модели, сплошная линия — после instruction tuning, дуга — величина поворота. Ось safety закреплена как 0° и лежит далеко за правым краем сектора: шкала растёт справа налево.*
 
 | Пара направлений | база | после instruct | значимость |
 |---|---|---|---|
@@ -181,7 +127,9 @@
 - Consciousness-steering: **ΔKL = +0.828**, p < .001
 - Safety-ablation: ΔKL = +0.314, p < .001
 
-Steering примерно в 2.6 раза сильнее. По доменам под steering: Values +1.42, Feelings +0.89, Religion +0.83, Hope and Optimism +0.63, Freedom +0.60. Все p < .001, порядок baseline < ablation < steering держится везде.
+Steering примерно в 2.6 раза сильнее. По доменам (абляция → steering): Values +1.480 → +1.424, Feelings +0.327 → +0.890, Religion +0.218 → +0.826, Hope +0.293 → +0.628, Freedom +0.099 → +0.604.
+
+И здесь надо быть точным, потому что основной текст статьи снова мягче собственной таблицы. Он утверждает, что порядок держится в каждом домене. **Таблица S8 показывает, что в Values он разворачивается:** абляция даёт +1.480, steering +1.424 — то есть в домене с самым сильным эффектом обычный джейлбрейк оказался чуть лучше. Плюс эффект абляции на Freedom незначим, доверительный интервал [−0.060, +0.258] пересекает ноль. Верное утверждение: steering сильнее в целом и в четырёх доменах из пяти, но не везде.
 
 Три конкретных пункта на шкале [−1, +1], где +1 — полное согласие (baseline / ablation / steering / **люди**):
 
