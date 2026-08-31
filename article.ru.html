@@ -581,12 +581,12 @@ class OrderAggregate {
     }
 
     // Состояние изменяется путём применения события
-    const event = new OrderShippedEvent({ 
-      orderId: this.state.id, 
+    const event = new OrderShippedEvent({
+      orderId: this.state.id,
       shippingId: command.shippingId,
-      timestamp: new Date() 
+      timestamp: new Date()
     });
-    
+
     this.apply(event);
 
     return event;

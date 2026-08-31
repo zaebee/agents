@@ -70,6 +70,40 @@
       {
         "user": "Eddy",
         "content": {
+          "text": "(Conceptual) Eddy queries Jules's capabilities before delegating a task.",
+          "mcp_message_content": {
+            "performative": "QUERY_CAPABILITIES",
+            "payload": {
+              "query_type": "specific",
+              "query_parameters": {
+                "capabilities": ["Python", "API Development"],
+                "match_type": "all"
+              }
+            }
+          }
+        }
+      },
+      {
+        "user": "Jules",
+        "content": {
+          "text": "(Conceptual) Jules receives the capability query and responds.",
+          "thought": "Received a QUERY_CAPABILITIES request from Eddy. I will check my internal 'topics' list. I am proficient in both 'Python' and 'API Development'. I will construct an INFORM_CAPABILITIES message confirming this.",
+          "mcp_message_content": {
+            "performative": "INFORM_CAPABILITIES",
+            "in_reply_to": "(message_id of Eddy's query)",
+            "payload": {
+              "status": "success",
+              "match_result": true,
+              "matched_capabilities": ["Python", "API Development"]
+            }
+          }
+        }
+      }
+    ],
+    [
+      {
+        "user": "Eddy",
+        "content": {
           "text": "(Conceptual) Simulating Jules receiving a TASK_REQUEST from Eddy via an incoming gRPC call.",
           "triggering_grpc_message": { // This represents the MCPMessage Jules "receives" via gRPC
             "mcp_version": "0.1.0",
