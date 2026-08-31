@@ -1,0 +1,20 @@
+# The genetic signature of this digital organism
+name: NewOrderProcessor
+purpose: "Handles the initial creation and validation of a customer order."
+
+# The organism's fundamental nature, from the Periodic Table
+primitive_type: A # Aggregate
+
+# The organism's inherent abilities and energy profile
+genetic_traits:
+  nectar_production_rate: 5
+  max_nectar: 1500
+
+# The social contract: which signals it sends and receives
+bonds:
+  consumes:
+    - command: CreateNewOrder
+      handler: handle_creation_command
+  produces:
+    - event: OrderCreated
+    - event: OrderRejected

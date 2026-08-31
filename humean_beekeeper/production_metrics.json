@@ -1,0 +1,23 @@
+{
+  "timestamp": "2025-08-22T22:42:00Z",
+  "components": [
+    {
+      "name": "NewOrderProcessor",
+      "metrics": {
+        "cpu_usage": 0.75,
+        "memory_usage_mb": 512,
+        "latency_ms_p95": 250.0,
+        "error_rate": 0.05
+      }
+    },
+    {
+      "name": "ScoutBee",
+      "metrics": {
+        "cpu_usage": 0.15,
+        "memory_usage_mb": 128,
+        "latency_ms_p95": 50.0,
+        "error_rate": 0.01
+      }
+    }
+  ]
+}
