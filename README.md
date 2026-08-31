@@ -11,6 +11,11 @@ This repository contains configuration files for AI agents, Eddy and Eliza, desi
 - `Eddy.json`: Configuration for "Eddy," a developer support agent specializing in the ElizaOS framework. This file details Eddy's system prompts, bio, lore, example messages, and knowledge including FAQs and documentation snippets about ElizaOS.
 - `Eliza.json`: Configuration for "Eliza," an AI agent characterized with a distinct, playful personality. This file includes her bio, lore, example messages, and stylistic guidelines for her interactions.
 - `Jules.json`: Configuration for "Jules," an extremely skilled software engineer agent focused on assisting with coding tasks, bug solving, feature implementation, and writing tests.
+- `ano_governance/ANO.md`: Устав (Charter) of the ANO "КТО с СВО".
+- `ano_governance/Protocol_Founding_Meeting.md`: Minutes of the founding meeting of ANO "КТО с СВО".
+- `ano_governance/contract_v2.tact`: Tact smart contract for ANO governance.
+- `ano_governance/anokto_ontology.jsonld`: Digital ontology for ANO "КТО с СВО".
+- `ano_governance/ano_definitions.proto`: Protobuf definitions for ANO data structures.
 - `LICENSE`: The project is licensed under the MIT License.
 
 ## Purpose
@@ -45,6 +50,121 @@ elizaos project start --agents "Eddy.json,Eliza.json,Jules.json"
 ```
 
 For detailed and accurate usage instructions, please refer to the official [ElizaOS Documentation](https://eliza.how/docs/quickstart). <!-- Placeholder link -->
+
+## ANO KTO s SVO: Governance and Semantic Framework
+
+This project operates under the governance framework of the **Автономная некоммерческая организация "Культурно-творческих объединения Сёл Вологодской Области" (АНО "КТО с СВО")** (Autonomous Non-Profit Organization "Cultural-Creative Associations of Villages of Vologda Oblast"). This framework provides the foundational legal and operational structure for the project's activities and goals.
+
+Key components of this framework relevant to the project's technical implementation and data management include:
+
+*   **Устав (Charter) (`ano_governance/ANO.md`):** The official charter of the ANO "КТО с СВО". This document outlines the organization's goals, structure, governance mechanisms (including roles like Учредитель (Founder), Участник (Member), Председатель Правления (Chairman of the Board), and Общее собрание (General Meeting)), and other legal provisions.
+*   **Протокол учредительного собрания (`ano_governance/Protocol_Founding_Meeting.md`):** The minutes of the founding meeting, detailing the formal establishment of the ANO, approval of the Ustav, and initial appointments. This serves as an example of key organizational decision-making records.
+*   **Smart Contract (`ano_governance/contract_v2.tact`):** A Tact smart contract designed to operationalize aspects of the ANO's governance on the TON blockchain. This includes managing members, proposals, voting, and other functions as defined by the Ustav. The contract aims to bring transparency and efficiency to organizational processes.
+*   **Digital Ontology (`ano_governance/anokto_ontology.jsonld`):** A semantic web ontology in JSON-LD format that formally describes the entities, roles, relationships, and processes within the ANO KTO s SVO. It is derived from the Ustav and other official documents, providing a machine-readable representation of the organization's structure and rules. This ontology helps ensure clarity, consistency, and interoperability of data related to the ANO.
+*   **Protobuf Definitions (`ano_governance/ano_definitions.proto`):** Protocol Buffer definitions that specify the structure for data messages used in backend services, APIs, and potentially for communication with the smart contract or for serializing off-chain data. These definitions are aligned with the ontology and the smart contract data structures.
+
+These components work together to provide a robust and transparent framework for the project's operations, development, and community engagement. The digital ontology and Protobuf definitions, in particular, are foundational for building tools and services that understand and interact with the ANO's governance model.
+
+### Smart Contract Structure (`ano_governance/contract_v2.tact`)
+
+The `ano_governance/contract_v2.tact` smart contract is central to the on-chain governance of the ANO. Below is a diagram illustrating its main structure, state variables, and key functions:
+
+```mermaid
+classDiagram
+    direction LR
+
+    class AnoKtoV2 {
+        #Address owner // from OwnableTransferable
+        #Address chairman
+        #map~Address, Bool~ founders
+        #map~Address, Int~ members
+        #Int totalMemberVotingPower
+        #map~Int, Proposal~ proposals
+        #Int nextProposalId
+        #VotingProcessConfig votingConfig
+        #map~Int, AnoktoGoal~ anoktoGoals
+        #Int nextGoalId
+        #map~Int, AnoktoActivity~ anoktoActivities
+        #Int nextActivityId
+        #Stats (trait state)
+
+        +init(initialChairman, quorumPercentage, defaultVoteDurationDays)
+        +addMember(memberAddr, votingPower)
+        +removeMember(memberAddr)
+        +updateMemberVotingPower(memberAddr, newVotingPower)
+        +createProposal(description, votingDurationDaysOverride)
+        +vote(proposalId, castVoteFor)
+        +markProposalExecuted(proposalId)
+        +addAnoktoGoal(description)
+        +addAnoktoActivity(description)
+        +updateChairman(newChairman)
+        +updateVotingConfig(newQuorumPercent, newDefaultVoteDurationDays)
+        +getMemberVotingPower(memberAddr) Int?
+        +isMember(memberAddr) Bool
+        +getTotalMemberVotingPower() Int
+        +isFounder(addr) Bool
+        +getProposal(proposalId) Proposal?
+        +getProposalStatus(proposalId) String
+        +getAnoktoGoal(goalId) AnoktoGoal?
+        +getAnoktoActivity(activityId) AnoktoActivity?
+        +getVotingConfig() VotingProcessConfig
+        +getChairman() Address
+        +receive(String)
+        +receive("Repeat")
+        +receive("Return")
+    }
+
+    class Proposal {
+        +String description
+        +Address proposer
+        +Int creationTime
+        +Int votingDeadline
+        +Int votesFor
+        +Int votesAgainst
+        +Bool isExecuted
+    }
+
+    class VotingProcessConfig {
+        +Int quorumPercent
+        +Int defaultVotingDurationDays
+    }
+
+    class AnoktoGoal {
+        +Int goalId
+        +String description
+    }
+
+    class AnoktoActivity {
+        +Int activityId
+        +String description
+    }
+
+    class Stats {
+        <<Trait>>
+        #Int counter // Trait fields are part of contract's storage
+        #String? last_message
+        #Address? last_sender
+        #Address? last_receiver
+        +get_count() Int
+        +get_last() LastMessage
+    }
+
+    class LastMessage {
+      +String? last_message
+      +Address? last_sender
+      +Address? last_receiver
+    }
+
+    AnoKtoV2 --|> Deployable
+    AnoKtoV2 --|> OwnableTransferable
+    AnoKtoV2 ..* Stats : uses_trait
+    AnoKtoV2 *-- Proposal : proposals_map
+    AnoKtoV2 *-- VotingProcessConfig : voting_config_struct
+    AnoKtoV2 *-- AnoktoGoal : anokto_goals_map
+    AnoKtoV2 *-- AnoktoActivity : anokto_activities_map
+    Stats ..> LastMessage : returns
+```
+This diagram provides a visual overview of the contract's architecture.
 
 ## Advanced Agent Collaboration Proof of Concept (PoC)
 
